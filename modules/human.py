@@ -9,3 +9,5 @@ class CombatTurtleHuman(CombatTurtle):
 
         Sets up listeners for keyboard input.
         """
+
+        pass

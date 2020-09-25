@@ -1,5 +1,26 @@
 """Defines the modules used throughout the Turtle Combat game."""
 
+###
+# Implementation notes:
+# Each turtle should maintain an internal timer event that goes off several
+# times per second.
+# The step() method of the turtle is executed every time this timer goes off,
+# and is meant to be overwritten by the AI subclasses to determine what to do
+# in every step.
+# The subclasses should not overwrite any of the direct movement methods, and
+# the normal movement methods are instead overwritten to set internal
+# attributes for what the turtle "wants" to do. After running the step()
+# method, a bunch of code is automatically run to actuall evaluate the effects
+# of those changes.
+
+# Methods to be called:
+# forward (and aliases), backward (and aliases), left/right (and aliases)
+# fire
+
+# Methods to be overwritten:
+# setup
+# step
+
 import turtle
 
 #=============================================================================
@@ -14,25 +35,38 @@ class CombatTurtle(turtle.Turtle):
 
     #-------------------------------------------------------------------------
 
-    def __init__(self, name, coords, other):
+    def __init__(self, name, coords, facing, other):
         """CombatTurtle(name, coords, other) -> CombatTurtle
         Combat Turtle parent constructor.
+
+        User visibility:
+            should call -- no
+            should overwrite -- no
 
         Requires the following positional arguments:
             name (str) -- name of turtle
             coords (tuple (float, float)) -- initial coordinates
+            facing (float) -- initial orientation (degrees)
             other (CombatTurtle) -- opponent combat turtle object
         """
+
+        # Set turtle speed
+        self.speed(0) # movement handled in steps
 
         # Assign given attributes
         self.name = name
         (self.x, self.y) = coords
+        self.left(facing)
         self.other = other
 
-        # Assign automatic attributes
+        # Define constant attributes
+        self.max_spd = 5 # maximum movement speed (px/step)
+        self.max_turn = 5 # maximum turning speed (deg/step)
+
+        # Define variable attributes
+        self.spd = 0 # target movement speed (px/step, negative for backwards)
+        self.spd_turn = 0 # target CCW turn speed (deg/step, negative for CW)
         self.health = 100 # health points (turtle dies when health is zero)
-        self.maxspeed = 10 # maximum movement speed (px/sec)
-        self.maxturn = 90 # maximum turning speed (deg/sec)
 
         # Call setup function (contains setup code for specific submodule)
         self.setup()
@@ -42,6 +76,10 @@ class CombatTurtle(turtle.Turtle):
     def __str__(self):
         """CombatTurtle.__str__() -> str
         String conversion returns Combat Turtle's name.
+
+        User visibility:
+            should call -- no
+            should overwrite -- no
         """
 
         return self.name
@@ -51,6 +89,10 @@ class CombatTurtle(turtle.Turtle):
     def setup(self):
         """CombatTurtle.setup() -> None
         Placeholder for Combat Turtle setup procedures.
+
+        User visibility:
+            should call -- no
+            should overwrite -- yes
 
         This method is meant to be overwritten in the submodules of
         CombatTurtle. It is called at the end of the constructor. Its purpose
@@ -63,9 +105,59 @@ class CombatTurtle(turtle.Turtle):
 
     #-------------------------------------------------------------------------
 
+    def step(self):
+        """CombatTurtle.step() -> None
+        The main step event of the Combat Turtle.
+
+        User visibility:
+            should call -- no
+            should overwrite -- yes
+
+        This method is meant to be overwritten in the submodules of
+        CombatTurtle. It is called each step (every 10 ms), after which any
+        movement and firing events are actually executed.
+        """
+
+        pass
+
+    #-------------------------------------------------------------------------
+
+    def _step(self):
+        """CombatTurtle._step() -> None
+        The driver for all step events of the Combat Turtle.
+
+        User visibility:
+            should call -- no
+            should overwrite -- no
+
+        This is a hidden method to act as the driver for everything that the
+        Combat Turtle does during a step. It calls the step() method, during
+        which the internal movement and firing attributes should be set, and
+        then actually evaluates their effects, moving the turtle and firing
+        missiles as necessary.
+        """
+
+        # Call the user-defined step method
+        self.step()
+
+        # Turn turtle
+        self._turn()
+
+        # Move turtle
+        self._move()
+
+        ###
+        # movement, missiles, cooldown, timer
+
+    #-------------------------------------------------------------------------
+
     def fire(self):
         """CombatTurtle.fire() -> None
         Fires a missile in the turtle's current direction.
+
+        User visibility:
+            should call -- yes
+            should overwrite -- no
 
         Creates a Missile object which begins to automatically move in the
         turtle's current direction.
@@ -76,6 +168,241 @@ class CombatTurtle(turtle.Turtle):
 
         ###
         pass
+
+    #-------------------------------------------------------------------------
+
+    def forward(self, rate):
+        """CombatTurtle.forward(rate) -> None
+        Tells a turtle to move forward at a given fraction of its max speed.
+
+        Aliases: forward, fd
+
+        User visibility:
+            should call -- yes
+            should overwrite -- no
+
+        Requires the following positional arguments:
+            rate (float) -- movement rate, as a float between -1 and 1, with 0
+                meaning no movement, 1 meaning maximum forward speed, -1
+                meaning maximum backward speed, and intermediate values
+                meaning a fraction of the maximum speed
+        """
+
+        # Determine movement speed (with rate clamped between 0 and 1)
+        self.spd = self.max_spd * max(min(rate, 1), 0)
+
+    #-------------------------------------------------------------------------
+
+    def fd(self, rate):
+        """CombatTurtle.fd(rate) -> None
+        Tells a turtle to move forward at a given fraction of its max speed.
+
+        Aliases: forward, fd
+
+        User visibility:
+            should call -- yes
+            should overwrite -- no
+
+        Requires the following positional arguments:
+            rate (float) -- movement rate, as a float between -1 and 1, with 0
+                meaning no movement, 1 meaning maximum forward speed, -1
+                meaning maximum backward speed, and intermediate values
+                meaning a fraction of the maximum speed
+        """
+
+        self.forward(rate)
+
+    #-------------------------------------------------------------------------
+
+    def backward(self, rate):
+        """CombatTurtle.backward(rate) -> None
+        Tells a turtle to move backward at a given fraction of its max speed.
+
+        Aliases: backward, back, bk
+
+        User visibility:
+            should call -- yes
+            should overwrite -- no
+
+        Requires the following positional arguments:
+            rate (float) -- movement rate, as a float between -1 and 1, with 0
+                meaning no movement, 1 meaning maximum backward speed, -1
+                meaning maximum forward speed, and intermediate values
+                meaning a fraction of the maximum speed
+        """
+
+        # Equivalent to forward of negative rate
+        self.forward(-rate)
+
+    #-------------------------------------------------------------------------
+
+    def back(self, rate):
+        """CombatTurtle.back(rate) -> None
+        Tells a turtle to move backward at a given fraction of its max speed.
+
+        Aliases: backward, back, bk
+
+        User visibility:
+            should call -- yes
+            should overwrite -- no
+
+        Requires the following positional arguments:
+            rate (float) -- movement rate, as a float between -1 and 1, with 0
+                meaning no movement, 1 meaning maximum backward speed, -1
+                meaning maximum forward speed, and intermediate values
+                meaning a fraction of the maximum speed
+        """
+
+        self.backward(rate)
+
+    #-------------------------------------------------------------------------
+
+    def bk(self, rate):
+        """CombatTurtle.bk(rate) -> None
+        Tells a turtle to move backward at a given fraction of its max speed.
+
+        Aliases: backward, back, bk
+
+        User visibility:
+            should call -- yes
+            should overwrite -- no
+
+        Requires the following positional arguments:
+            rate (float) -- movement rate, as a float between -1 and 1, with 0
+                meaning no movement, 1 meaning maximum backward speed, -1
+                meaning maximum forward speed, and intermediate values
+                meaning a fraction of the maximum speed
+        """
+
+        self.backward(rate)
+
+    #-------------------------------------------------------------------------
+
+    def _move(self):
+        """CombatTurtle._move() -> None
+        Moves a turtle according to its spd attribute.
+
+        User visibility:
+            should call -- no
+            should overwrite -- no
+
+        This is a hidden method called during the step event to handle any
+        speed changes that the submodule has enacted using the visible
+        forward() and backward() methods (or their aliases).
+        """
+
+        ###
+        # Add collision checks for walls. We could use the goto method and
+        # explicitly calculate the target coordinate, and then call the
+        # contains() method for all blocks to see whether it's free; if not,
+        # iteratively reduce speed until it is free.
+
+        # Call standard turtle forward method (pixel version)
+        super().forward(int(self.spd))
+
+    #-------------------------------------------------------------------------
+
+    def left(self, rate):
+        """CombatTurtle.left(angle) -> None
+        Tells a turtle to turn left by a given fraction of its turning speed.
+
+        Aliases: left, lt
+
+        User visibility:
+            should call -- yes
+            should overwrite -- no
+
+        Requires the following positional arguments:
+            rate (float) -- turning rate, as a float between -1 and 1, with 0
+                meaning no turning, 1 meaning maximum counterclockwise speed,
+                -1 meaning maximum clockwise speed, and intermediate values
+                meaning a fraction of the turning speed
+        """
+
+        # Determine turning speed (with rate clamped between 0 and 1)
+        self.spd_turn = self.max_turn * max(min(rate, 1), 0)
+
+    #-------------------------------------------------------------------------
+
+    def lt(self, rate):
+        """CombatTurtle.lt(angle) -> None
+        Tells a turtle to turn left by a given fraction of its turning speed.
+
+        Aliases: left, lt
+
+        User visibility:
+            should call -- yes
+            should overwrite -- no
+
+        Requires the following positional arguments:
+            rate (float) -- turning rate, as a float between -1 and 1, with 0
+                meaning no turning, 1 meaning maximum counterclockwise speed,
+                -1 meaning maximum clockwise speed, and intermediate values
+                meaning a fraction of the turning speed
+        """
+
+        self.left(rate)
+
+    #-------------------------------------------------------------------------
+
+    def right(self, rate):
+        """CombatTurtle.right(angle) -> None
+        Tells a turtle to turn right by a given fraction of its turning speed.
+
+        Aliases: right, rt
+
+        User visibility:
+            should call -- yes
+            should overwrite -- no
+
+        Requires the following positional arguments:
+            rate (float) -- turning rate, as a float between -1 and 1, with 0
+                meaning no turning, 1 meaning maximum clockwise speed, -1
+                meaning maximum counterclockwise speed, and intermediate values
+                meaning a fraction of the turning speed
+        """
+
+        # Equivalent to left of negative rate
+        self.left(-rate)
+
+    #-------------------------------------------------------------------------
+
+    def rt(self, rate):
+        """CombatTurtle.right(angle) -> None
+        Tells a turtle to turn right by a given fraction of its turning speed.
+
+        Aliases: right, rt
+
+        User visibility:
+            should call -- yes
+            should overwrite -- no
+
+        Requires the following positional arguments:
+            rate (float) -- turning rate, as a float between -1 and 1, with 0
+                meaning no turning, 1 meaning maximum clockwise speed, -1
+                meaning maximum counterclockwise speed, and intermediate values
+                meaning a fraction of the turning speed
+        """
+
+        self.right(rate)
+
+    #-------------------------------------------------------------------------
+
+    def _turn(self):
+        """CombatTurtle._turn() -> None
+        Turns a turtle according to its spd_turn attribute.
+
+        User visibility:
+            should call -- no
+            should overwrite -- no
+
+        This is a hidden method called during the step event to handle any
+        turning speed changes that the submodule has enacted using the visible
+        left() and right() methods (or their aliases).
+        """
+
+        # Call standard turtle left method
+        super().left(int(self.spd_turn))
 
     ###
     # Need more methods for movement, turning, and how to handle commands
