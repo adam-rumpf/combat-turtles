@@ -11,10 +11,10 @@ This module loads all submodules in the folder and allows the user to choose
 pairs of submodules to play against each other.
 """
 
-import modules.master as tc
+import tc
 
 def play_game():
     """Main driver for the Turtle Combat game."""
 
-    p1 = tc.CombatTurtle("Turt", (2,1), None)
+    p1 = tc.master.CombatTurtle("Turt", (2,1), None)
     print(p1.x)
