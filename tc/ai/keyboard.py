@@ -20,7 +20,7 @@ class KeyboardTurtle(tc.ct.CombatTurtle):
 
     #=========================================================================
 
-    def setup():
+    def setup(self):
         """KeyboardTurtle.setup() -> None
         Initialization code for human-controlled Combat Turtle.
 
@@ -31,11 +31,66 @@ class KeyboardTurtle(tc.ct.CombatTurtle):
 
     #-------------------------------------------------------------------------
 
-    def step():
+    def step(self):
         """KeyboardTurtle.setup() -> None
         Step event code for human-controlled Combat Turtle.
 
-        Listens for keyboard input to activate movement and firing.
+        Listens for keyboard input to control movement and firing.
+        """
+
+        pass
+    
+    #-------------------------------------------------------------------------
+
+    def _up_key(self):
+        """KeyboardTurtle._up_key() -> None
+        Event handler for the [Up] key.
+
+        [Up] should move the turtle forward.
+        """
+
+        pass
+    
+    #-------------------------------------------------------------------------
+
+    def _down_key(self):
+        """KeyboardTurtle._down_key() -> None
+        Event handler for the [Down] key.
+
+        [Down] should move the turtle backward.
+        """
+
+        pass
+    
+    #-------------------------------------------------------------------------
+
+    def _left_key(self):
+        """KeyboardTurtle._left_key() -> None
+        Event handler for the [Left] key.
+
+        [Left] should turn the turtle left.
+        """
+
+        pass
+    
+    #-------------------------------------------------------------------------
+
+    def _right_key(self):
+        """KeyboardTurtle._right_key() -> None
+        Event handler for the [Right] key.
+
+        [Right] should turn the turtle right.
+        """
+
+        pass
+    
+    #-------------------------------------------------------------------------
+
+    def _space_bar(self):
+        """KeyboardTurtle._space_bar() -> None
+        Event handler for the [Space] bar.
+
+        [Space] should attempt to fire a missile.
         """
 
         pass

@@ -19,14 +19,15 @@
 # time-dependent game objects in sync.
 
 import turtle
+import math
 from tc.game.missile import Missile
 
 class CombatTurtle(turtle.Turtle):
     """Parent class for combat turtle AI players.
 
     Consists mostly of placeholders for methods to be overloaded by the
-    subclasses that define the different players, as well as a variety of
-    hidden utility methods.
+    subclasses that define the different players, visible frontend methods for
+    use in defining AI subclasses, and a variety of hidden utility methods.
 
     All attributes and methods are meant to be considered private.
     User-defined subclasses should not attempt to access the attributes or
@@ -49,7 +50,7 @@ class CombatTurtle(turtle.Turtle):
     the step.
 
     The following visible methods are meant for use in user-defined
-        subclasses:
+    subclasses:
         forward(), backward() -- attempts to move forward or backward at a
             given fraction of the turtle's maximum speed (aliases: fd, back,
             bk)
@@ -64,10 +65,13 @@ class CombatTurtle(turtle.Turtle):
             get_health() -- returns the values of the turtle's variable
             attributes, including: position (px, px), heading (deg), speed
             (px/step), turning speed (deg/step), and health
+        get_fire_delay() -- returns delay between firing missiles (steps)
+        get_cooldown() -- returns number of steps until able to fire a missile
+        can_fire() -- returns whether the turtle is currently able to fire
         other_position(), other_heading(), other_speed(), other_turn_speed(),
             other_speed(), other_health() -- equivalent to the get methods,
             but returns the attributes of the opponent turtle
-        distance() -- returns the distance between a given pair of coordinates
+        distance() -- returns the distance between a pair of coordinates (px)
         other_distance() -- returns the distance to the opponent turtle (px)
         relative_position() -- returns the position of the opponent turtle
             (px, px) relative to this turtle
@@ -75,22 +79,17 @@ class CombatTurtle(turtle.Turtle):
             opponent turtle (deg, positive for CCW)
         line_of_sight() -- returns whether or not the line to the opponent
             turtle is free of obstacles
+        missile_speed() -- returns the travel speed of missiles (px/step)
+        missile_range() -- returns the maximum range of missiles (px)
+        missile_proximity() -- returns the proximity radius of missiles (px)
+        missile_radius() -- returns the explosion radius of missiles (px)
 
     The following methods are meant to be overwritten in user-defined
-        subclasses:
+    subclasses:
+        class_name() -- (static method) returns the name of the class for use
+            in distinguishing between different Combat Turtle AIs
         setup() -- code run at the end of the turtle's initialization
         step() -- code run during each step event (which occurs every 50 ms)
-
-    The following static methods can be used to retrieve relevant attributes
-    from other classes, including:
-        Missile.get_speed() -- missile travel speed (px/step)
-        Missile.get_lifespan() -- missile lifespan (steps until explosion)
-        Missile.get_proximity() -- missile explosive proximity (px from turtle)
-        Missile.get_radius() -- missile explosive radius (px)
-
-    In addition, each Combat Turtle subclass should include a static method
-    class_name() that returns the name (as a string) of the class, which is
-    used to distinguish between the different player AIs.
     """
 
     # Static methods declare class constants to be accessed by other classes
@@ -142,12 +141,13 @@ class CombatTurtle(turtle.Turtle):
         # Define constant attributes
         self.max_spd = 5.0 # maximum movement speed (px/step)
         self.max_turn = 5.0 # maximum turning speed (deg/step)
-        self.step_time = 50 # time between steps (ms)
+        self.fire_delay = 40 # delay between missile firing (steps)
 
         # Define variable attributes
         self.spd = 0.0 # target movement speed (px/step, negative for back)
         self.spd_turn = 0.0 # target CCW turn speed (deg/step, negative for CW)
         self.health = 100.0 # health points (turtle dies when health is zero)
+        self.cooldown = 0 # delay until able to fire next (steps)
 
         # Call setup function (contains setup code for specific submodule)
         self.setup()
@@ -217,6 +217,10 @@ class CombatTurtle(turtle.Turtle):
         then actually evaluates their effects, moving the turtle and firing
         missiles as necessary.
         """
+
+        # Reduce cooldown
+        if (self.cooldown > 0):
+            self.cooldown -= 1
 
         # Call the user-defined step method
         self.step()
@@ -288,6 +292,45 @@ class CombatTurtle(turtle.Turtle):
         """
 
         return self.position()
+
+    #-------------------------------------------------------------------------
+
+    def get_fire_delay(self):
+        """CombatTurtle.get_fire_delay() -> int
+        Returns the delay between firing missiles (steps).
+
+        User visibility:
+            should call -- yes
+            should overwrite -- no
+        """
+
+        return self.fire_delay
+
+    #-------------------------------------------------------------------------
+
+    def get_cooldown(self):
+        """CombatTurtle.get_cooldown() -> int
+        Returns the delay until next able to fire a missile (steps).
+
+        User visibility:
+            should call -- yes
+            should overwrite -- no
+        """
+
+        return self.cooldown
+
+    #-------------------------------------------------------------------------
+
+    def can_fire(self):
+        """CombatTurtle.can_fire() -> bool
+        Returns whether or not the Combat Turtle is able to fire.
+
+        User visibility:
+            should call -- yes
+            should overwrite -- no
+        """
+
+        return (self.cooldown <= 0)
 
     #-------------------------------------------------------------------------
 
@@ -586,7 +629,7 @@ class CombatTurtle(turtle.Turtle):
     #-------------------------------------------------------------------------
 
     def distance(self, coords1, coords2):
-        """CombatTurtle._distance(coords1, coords2) -> float
+        """CombatTurtle.distance(coords1, coords2) -> float
         Calculates the distance between a pair of coordinates (px).
 
         User visibility:
@@ -599,7 +642,8 @@ class CombatTurtle(turtle.Turtle):
         """
 
         # Calculate Euclidean distance
-        return ((coords1[0]-coords2[0])**2 + (coords1[1]-coords2[1])**2)**0.5
+        return math.sqrt((coords1[0]-coords2[0])**2 +
+                         (coords1[1]-coords2[1])**2)
 
     #-------------------------------------------------------------------------
 
@@ -735,6 +779,73 @@ class CombatTurtle(turtle.Turtle):
             return None
 
         return self.other.get_health()
+
+    #-------------------------------------------------------------------------
+
+    def missile_speed(self):
+        """CombatTurtle.missile_speed() -> float
+        Returns the constant travel speed of missiles (px/step).
+
+        User visibility:
+            should call -- yes
+            should overwrite -- no
+
+        Missile objects fired by a Combat Turtle travel at this constant speed
+        in a straight line in the direction of fire.
+        """
+
+        return Missile.get_speed()
+
+    #-------------------------------------------------------------------------
+
+    def missile_range(self):
+        """CombatTurtle.missile_range() -> float
+        Returns the maximum range of missiles (px).
+
+        User visibility:
+            should call -- yes
+            should overwrite -- no
+
+        Missile objects explode after a set delay (unless making contact with
+        a solid object or opponent turtle first). This method uses the missile
+        speed and delay to calculate the resulting range.
+        """
+
+        return Missile.get_speed() * Missile.get_lifespan()
+
+    #-------------------------------------------------------------------------
+
+    def missile_proximity(self):
+        """CombatTurtle.missile_proximity() -> float
+        Returns the proximity distance of missiles (px).
+
+        User visibility:
+            should call -- yes
+            should overwrite -- no
+
+        Missiles explode if they are within this distance of the opponent
+        turtle.
+        """
+
+        return Missile.get_proximity()
+
+    #-------------------------------------------------------------------------
+
+    def missile_radius(self):
+        """CombatTurtle.missile_radius() -> float
+        Returns the explosive radius of missiles (px).
+
+        User visibility:
+            should call -- yes
+            should overwrite -- no
+
+        When a missile explodes (either due to colliding with an object or
+        after reaching its maximum range), it creates an explosion with this
+        radius, damaging any turtle within the radius (including the turtle
+        that fired it).
+        """
+
+        return Missile.get_radius()
 
     #-------------------------------------------------------------------------
 
