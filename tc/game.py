@@ -1,6 +1,6 @@
 ### Main driver for the game. Handles step events of all game objects.
 
-import .
+import tc.ct
 
-class _TurtleCombatGame():
+class _TurtleCombatGame:
     pass

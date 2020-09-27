@@ -1,3 +1,6 @@
+### Turtles should also be able to access important global variables like missile speed, lifespan, and radius.
+### See about defining them as global variables in a main game object that all classes can see.
+
 ###
 # Implementation notes:
 # Each turtle should maintain an internal timer event that goes off several
@@ -16,6 +19,7 @@
 # time-dependent game objects in sync.
 
 import turtle
+from tc.game.missile import Missile
 
 class CombatTurtle(turtle.Turtle):
     """Parent class for combat turtle AI players.
@@ -76,22 +80,33 @@ class CombatTurtle(turtle.Turtle):
         subclasses:
         setup() -- code run at the end of the turtle's initialization
         step() -- code run during each step event (which occurs every 50 ms)
-    
+
+    The following static methods can be used to retrieve relevant attributes
+    from other classes, including:
+        Missile.get_speed() -- missile travel speed (px/step)
+        Missile.get_lifespan() -- missile lifespan (steps until explosion)
+        Missile.get_proximity() -- missile explosive proximity (px from turtle)
+        Missile.get_radius() -- missile explosive radius (px)
+
     In addition, each Combat Turtle subclass should include a static method
     class_name() that returns the name (as a string) of the class, which is
     used to distinguish between the different player AIs.
     """
-    
+
+    # Static methods declare class constants to be accessed by other classes
+
+    #-------------------------------------------------------------------------
+
     def class_name():
         """CombatTurtle.class_name() -> str
         Returns the name of the Combat Turtle AI.
         """
-        
-        return "Combat Turtle Parent"
 
-    #-------------------------------------------------------------------------
+        return "CombatTurtle"
 
-    def __init__(self, name="Combat Turtle", col="black", coords=(0.0, 0.0),
+    #=========================================================================
+
+    def __init__(self, name=class_name(), col="black", coords=(0.0, 0.0),
                  facing=0.0, other=None):
         """CombatTurtle([name], [col], [coords], [facing], [other]) ->
             CombatTurtle
@@ -234,7 +249,7 @@ class CombatTurtle(turtle.Turtle):
 
         ###
         pass
-    
+
     #-------------------------------------------------------------------------
 
     def get_max_speed(self):
@@ -247,7 +262,7 @@ class CombatTurtle(turtle.Turtle):
         """
 
         return self.max_spd
-    
+
     #-------------------------------------------------------------------------
 
     def get_max_turn_speed(self):
@@ -293,8 +308,8 @@ class CombatTurtle(turtle.Turtle):
                 meaning a fraction of the maximum speed
         """
 
-        # Determine movement speed (with rate clamped between 0 and 1)
-        self.spd = self.max_spd * max(min(rate, 1), 0)
+        # Determine movement speed (with rate clamped between -1 and 1)
+        self.spd = self.max_spd * max(min(rate, 1), -1)
 
     #-------------------------------------------------------------------------
 
@@ -454,8 +469,8 @@ class CombatTurtle(turtle.Turtle):
                 values meaning a fraction of the turning speed
         """
 
-        # Determine turning speed (with rate clamped between 0 and 1)
-        self.spd_turn = self.max_turn * max(min(rate, 1), 0)
+        # Determine turning speed (with rate clamped between -1 and 1)
+        self.spd_turn = self.max_turn * max(min(rate, 1), -1)
 
     #-------------------------------------------------------------------------
 
@@ -567,7 +582,7 @@ class CombatTurtle(turtle.Turtle):
             return None
 
         return self.other.get_position()
-    
+
     #-------------------------------------------------------------------------
 
     def distance(self, coords1, coords2):
@@ -577,7 +592,7 @@ class CombatTurtle(turtle.Turtle):
         User visibility:
             should call -- no
             should overwrite -- yes
-        
+
         Requires the following positional arguments:
             coords1 (tuple (float, float)) -- first pair of coordinates
             coords2 (tuple (float, float)) -- second pair of coordinates
@@ -585,7 +600,7 @@ class CombatTurtle(turtle.Turtle):
 
         # Calculate Euclidean distance
         return ((coords1[0]-coords2[0])**2 + (coords1[1]-coords2[1])**2)**0.5
-    
+
     #-------------------------------------------------------------------------
 
     def other_distance(self):
@@ -599,7 +614,7 @@ class CombatTurtle(turtle.Turtle):
 
         if (self.other == None):
             return None
-        
+
         # Calculate distance between pair of coordinates
         return self.distance(self.get_position(), self.other.get_position())
 
@@ -639,7 +654,7 @@ class CombatTurtle(turtle.Turtle):
             return None
 
         return self.other.get_heading()
-    
+
     #-------------------------------------------------------------------------
 
     def relative_heading(self):
@@ -653,11 +668,11 @@ class CombatTurtle(turtle.Turtle):
 
         if (self.other == None):
             return None
-        
+
         ### Calculate heading to other turtle. Find the angle between the
         ### current heading vector and the vector to the other turtle, and
         ### adjust the sign so that left is positive.
-        
+
         pass
 
     #-------------------------------------------------------------------------
@@ -720,7 +735,7 @@ class CombatTurtle(turtle.Turtle):
             return None
 
         return self.other.get_health()
-    
+
     #-------------------------------------------------------------------------
 
     def line_of_sight(self):
@@ -730,18 +745,18 @@ class CombatTurtle(turtle.Turtle):
         User visibility:
             should call -- yes
             should overwrite -- no
-        
+
         Returns True if the line between the two turtles is free of obstacles
         and False otherwise.
         """
 
         if (self.other == None):
             return None
-        
+
         ### Figure out how to quickly test sight lines. A quick and dirty way
         ### would just be to sample a bunch of points along the sight line to
         ### see whether any collide with a block, but this could be expensive
         ### since it needs to be looped over every block, potentially every
         ### step.
-        
+
         pass

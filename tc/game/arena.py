@@ -1,4 +1,4 @@
-class _Arena():
+class _Arena:
     """Arena class.
 
     Acts as a container to store the contents of the arena, including all of
@@ -8,7 +8,7 @@ class _Arena():
     ###
     # Automatic layouts should be defined as class attributes.
 
-    #-------------------------------------------------------------------------
+    #=========================================================================
 
     def __init__(self, width, height, walls=5.0):
         """_Arena(width, height[, walls]) -> _Arena
@@ -21,7 +21,7 @@ class _Arena():
         Accepts the following optional keyword arguments:
             walls (float [5.0]) -- thickness (px) of walls surrounding arena,
                 (walls excluded unless argument is positive)
-        
+
         The arena is centered at the origin and has the specified total width
         and height. If any walls are included, their thickness is taken from
         the interior of the arena so that the total arena dimensions

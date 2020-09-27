@@ -1,11 +1,11 @@
-class _Block():
+class _Block:
     """Block class.
 
     Defines rectangular obstacles in the arena. Turtles cannot pass through
     blocks, and missile explode on contact with blocks.
     """
 
-    #-------------------------------------------------------------------------
+    #=========================================================================
 
     def __init__(self, left, right, top, bottom):
         """_Block(left, right, top, bottom) -> _Block

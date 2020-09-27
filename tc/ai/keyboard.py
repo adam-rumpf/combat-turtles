@@ -1,8 +1,8 @@
-import ..
+import tc.ct
 
-class KeyboardTurtle(ct.CombatTurtle):
+class KeyboardTurtle(tc.ct.CombatTurtle):
     """Human-controlled Combat Turtle that uses keyboard inputs.
-    
+
     Controls are as follows:
         [Up] -- move forward
         [Down] -- move backward
@@ -10,15 +10,15 @@ class KeyboardTurtle(ct.CombatTurtle):
         [Right] -- turn right
         [Space] -- fire missile
     """
-    
+
     def class_name():
         """KeyboardTurtle.class_name() -> str
         Returns the name of the Combat Turtle AI.
         """
-        
-        return "Keyboard Turtle"
 
-    #-------------------------------------------------------------------------
+        return "Keyboard"
+
+    #=========================================================================
 
     def setup():
         """KeyboardTurtle.setup() -> None
