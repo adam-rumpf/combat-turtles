@@ -1,23 +1,3 @@
-### Turtles should also be able to access important global variables like missile speed, lifespan, and radius.
-### See about defining them as global variables in a main game object that all classes can see.
-
-###
-# Implementation notes:
-# Each turtle should maintain an internal timer event that goes off several
-# times per second.
-# The step() method of the turtle is executed every time this timer goes off,
-# and is meant to be overwritten by the AI subclasses to determine what to do
-# in every step.
-# The subclasses should not overwrite any of the direct movement methods, and
-# the normal movement methods are instead overwritten to set internal
-# attributes for what the turtle "wants" to do. After running the step()
-# method, a bunch of code is automatically run to actually evaluate the
-# effects of those changes.
-
-###
-# We might want to have the steps be handled by a global object to keep any
-# time-dependent game objects in sync.
-
 import turtle
 import math
 from tc.game.missile import Missile

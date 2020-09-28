@@ -1,15 +1,20 @@
-"""Main Turtle Combat script."""
+"""Main Turtle Combat script.
 
-import turtle
-from tc import ct
+Running this script automatically loads all necessary modules to play a game
+of Turtle Combat, and then starts the game.
+"""
 
-def play_game():
-    """Main driver for the Turtle Combat game."""
+from tc.tcgame import TurtleCombatGame
 
-    wn = turtle.Screen()
-    p1 = ct.CombatTurtle()
-    print(p1)
-    wn.mainloop()
-    turtle.bye()
+# Create game object
+print("Opening Turtle Combat.")
 
-play_game()
+# Get game options from user
+###
+
+# Create game object
+game = TurtleCombatGame()
+
+# Delete game object when done
+print("Closing Turtle Combat.")
+del game

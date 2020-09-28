@@ -1,6 +1,6 @@
-import tc.ct
+import tc.tcplayer
 
-class KeyboardTurtle(tc.ct.CombatTurtle):
+class KeyboardTurtle(tc.tcplayer.CombatTurtle):
     """Human-controlled Combat Turtle that uses keyboard inputs.
 
     Controls are as follows:
@@ -39,7 +39,7 @@ class KeyboardTurtle(tc.ct.CombatTurtle):
         """
 
         pass
-    
+
     #-------------------------------------------------------------------------
 
     def _up_key(self):
@@ -50,7 +50,7 @@ class KeyboardTurtle(tc.ct.CombatTurtle):
         """
 
         pass
-    
+
     #-------------------------------------------------------------------------
 
     def _down_key(self):
@@ -61,7 +61,7 @@ class KeyboardTurtle(tc.ct.CombatTurtle):
         """
 
         pass
-    
+
     #-------------------------------------------------------------------------
 
     def _left_key(self):
@@ -72,7 +72,7 @@ class KeyboardTurtle(tc.ct.CombatTurtle):
         """
 
         pass
-    
+
     #-------------------------------------------------------------------------
 
     def _right_key(self):
@@ -83,7 +83,7 @@ class KeyboardTurtle(tc.ct.CombatTurtle):
         """
 
         pass
-    
+
     #-------------------------------------------------------------------------
 
     def _space_bar(self):

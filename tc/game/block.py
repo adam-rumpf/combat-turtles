@@ -1,4 +1,6 @@
-class _Block:
+import turtle
+
+class Block:
     """Block class.
 
     Defines rectangular obstacles in the arena. Turtles cannot pass through
@@ -24,8 +26,9 @@ class _Block:
         self.top = top
         self.bottom = bottom
 
-        ###
-        # Use a turtle to draw the block.
+        # Create a turtle to draw the block
+        ### create (and save), set speed/color/visibility, draw
+        ### delete in destructor
 
     #-------------------------------------------------------------------------
 

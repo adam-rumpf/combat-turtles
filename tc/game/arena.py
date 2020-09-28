@@ -1,4 +1,4 @@
-class _Arena:
+class Arena:
     """Arena class.
 
     Acts as a container to store the contents of the arena, including all of
