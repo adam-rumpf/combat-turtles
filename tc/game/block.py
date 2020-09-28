@@ -46,15 +46,15 @@ class Block:
         """
 
         # Determine output depending on whether boundaries are included
-        if (closed == True):
+        if closed == True:
             # Closed boundaries
-            if ((coords[0] >= self.left) and (coords[0] <= self.right) and
-                (coords[1] >= self.bottom) and (coords[1] <= self.top)):
+            if (coords[0] >= self.left and coords[0] <= self.right and
+                coords[1] >= self.bottom and coords[1] <= self.top):
                 return True
         else:
             # Open boundaries
-            if ((coords[0] > self.left) and (coords[0] < self.right) and
-                (coords[1] > self.bottom) and (coords[1] < self.top)):
+            if (coords[0] > self.left and coords[0] < self.right and
+                coords[1] > self.bottom and coords[1] < self.top):
                 return True
 
         # If nothing has been returned yet, the tests failed

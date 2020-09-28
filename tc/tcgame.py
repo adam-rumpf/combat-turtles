@@ -1,4 +1,5 @@
 import turtle
+
 import tc.tcplayer
 
 class TurtleCombatGame:
@@ -15,7 +16,7 @@ class TurtleCombatGame:
     methods.
     """
 
-    #-------------------------------------------------------------------------
+    #=========================================================================
 
     def __init__(self, size=(200, 200), layout=0, class1=None, class2=None):
         """TurtleCombatGame([size], [layout], [p1], [p2]) -> TurtleCombatGame
@@ -40,6 +41,7 @@ class TurtleCombatGame:
         # Set up turtle window
         self.wn = turtle.Screen()
         self.wn.title("Turtle Combat") ### change to state player names
+        ### Window title: "P1 vs P2 in Arena"
 
         # Initialize arena
         ###
@@ -48,9 +50,9 @@ class TurtleCombatGame:
         # Initialize players
         self.p1 = None # first player
         self.p2 = None # second player
-        if (class1 != None):
+        if class1 != None:
             self.p1 = class1()
-        if (class2 != None):
+        if class2 != None:
             self.p2 = class2()
 
         # Initialize a missile list
@@ -58,8 +60,9 @@ class TurtleCombatGame:
 
         ### Get arguments to turtle objects
 
-        # Begin game
-        self.play_game()
+
+        # Begin game (after a delay, to allow the arena to initialize)
+        self.wn.ontimer(self.play_game, 1000)
         self.wn.mainloop()
 
     #-------------------------------------------------------------------------
@@ -72,9 +75,9 @@ class TurtleCombatGame:
         """
 
         # Delete players
-        if (self.p1 != None):
+        if self.p1 != None:
             del self.p1
-        if (self.p2 != None):
+        if self.p2 != None:
             del self.p2
 
         # Delete missiles
@@ -82,8 +85,12 @@ class TurtleCombatGame:
 
         # Delete blocks
         del self.blocks[:]
-
-        turtle.bye()
+        
+        # Attempt to close window (needed in certain Python IDEs)
+        try:
+            turtle.bye()
+        except turtle.Terminator:
+            pass
 
     #-------------------------------------------------------------------------
 
@@ -99,14 +106,27 @@ class TurtleCombatGame:
         """
 
         # Activate the step event of all game objects
-        if (self.p1 != None):
+        if self.p1 != None:
             self.p1.step()
-        if (self.p1 != None):
+        if self.p1 != None:
             self.p1.step()
         for m in self.missiles:
             m.step()
 
-        ### Apply game rules, break out if game hasn't ended yet.
+        # Check whether a player's health has reached zero
+        game_over = False # whether to end the game
+        if self.p1 != None:
+            if self.p1.get_health() <= 0:
+                game_over = True
+        if self.p2 != None:
+            if self.p2.get_health() <= 0:
+                game_over = True
 
-        # Reset timer for next step
-        self.wn.ontimer(self.play_game, self.step_time)
+        # Either end the game or go to the next loop
+        if game_over == True:
+            # Game over (break loop)
+            ### Determine how to display a winner.
+            pass
+        else:
+            # Continue loop by resetting timer
+            self.wn.ontimer(self.play_game, self.step_time)

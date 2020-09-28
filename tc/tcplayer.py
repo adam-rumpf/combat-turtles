@@ -1,5 +1,6 @@
 import turtle
 import math
+
 from tc.game.missile import Missile
 
 class CombatTurtle(turtle.Turtle):
@@ -72,13 +73,11 @@ class CombatTurtle(turtle.Turtle):
         step() -- code run during each step event (which occurs every 50 ms)
     """
 
-    # Static methods declare class constants to be accessed by other classes
-
     #-------------------------------------------------------------------------
 
     def class_name():
         """CombatTurtle.class_name() -> str
-        Returns the name of the Combat Turtle AI.
+        Static method to return the name of the Combat Turtle AI.
         """
 
         return "CombatTurtle"
@@ -199,7 +198,7 @@ class CombatTurtle(turtle.Turtle):
         """
 
         # Reduce cooldown
-        if (self.cooldown > 0):
+        if self.cooldown > 0:
             self.cooldown -= 1
 
         # Call the user-defined step method
@@ -601,7 +600,7 @@ class CombatTurtle(turtle.Turtle):
             should overwrite -- no
         """
 
-        if (self.other == None):
+        if self.other == None:
             return None
 
         return self.other.get_position()
@@ -636,7 +635,7 @@ class CombatTurtle(turtle.Turtle):
             should overwrite -- no
         """
 
-        if (self.other == None):
+        if self.other == None:
             return None
 
         # Calculate distance between pair of coordinates
@@ -653,7 +652,7 @@ class CombatTurtle(turtle.Turtle):
             should overwrite -- no
         """
 
-        if (self.other == None):
+        if self.other == None:
             return None
 
         # Get both sets of coordinates
@@ -674,7 +673,7 @@ class CombatTurtle(turtle.Turtle):
             should overwrite -- no
         """
 
-        if (self.other == None):
+        if self.other == None:
             return None
 
         return self.other.get_heading()
@@ -690,7 +689,7 @@ class CombatTurtle(turtle.Turtle):
             should overwrite -- no
         """
 
-        if (self.other == None):
+        if self.other == None:
             return None
 
         ### Calculate heading to other turtle. Find the angle between the
@@ -710,7 +709,7 @@ class CombatTurtle(turtle.Turtle):
             should overwrite -- no
         """
 
-        if (self.other == None):
+        if self.other == None:
             return None
 
         return self.other.get_speed()
@@ -726,7 +725,7 @@ class CombatTurtle(turtle.Turtle):
             should overwrite -- no
         """
 
-        if (self.other == None):
+        if self.other == None:
             return None
 
         return self.other.get_turn_speed()
@@ -755,7 +754,7 @@ class CombatTurtle(turtle.Turtle):
             should overwrite -- no
         """
 
-        if (self.other == None):
+        if self.other == None:
             return None
 
         return self.other.get_health()
@@ -841,13 +840,17 @@ class CombatTurtle(turtle.Turtle):
         and False otherwise.
         """
 
-        if (self.other == None):
+        if self.other == None:
             return None
 
         ### Figure out how to quickly test sight lines. A quick and dirty way
         ### would just be to sample a bunch of points along the sight line to
         ### see whether any collide with a block, but this could be expensive
         ### since it needs to be looped over every block, potentially every
-        ### step.
+        ### step. However, most arenas should include less than 8 or so
+        ### blocks, and we don't really need to check the walls.
+        ### Specifically, we could immediately calculate all of the points
+        ### that a missile would pass through (given its speed and direction)
+        ### and test whether each point collides with a block.
 
         pass

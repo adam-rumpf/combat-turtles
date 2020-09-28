@@ -4,7 +4,7 @@ Running this script automatically loads all necessary modules to play a game
 of Turtle Combat, and then starts the game.
 """
 
-from tc.tcgame import TurtleCombatGame
+import tc
 
 # Create game object
 print("Opening Turtle Combat.")
@@ -13,7 +13,7 @@ print("Opening Turtle Combat.")
 ###
 
 # Create game object
-game = TurtleCombatGame()
+game = tc.tcgame.TurtleCombatGame()
 
 # Delete game object when done
 print("Closing Turtle Combat.")

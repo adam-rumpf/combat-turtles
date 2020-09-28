@@ -11,9 +11,11 @@ class KeyboardTurtle(tc.tcplayer.CombatTurtle):
         [Space] -- fire missile
     """
 
+    #-------------------------------------------------------------------------
+
     def class_name():
-        """KeyboardTurtle.class_name() -> str
-        Returns the name of the Combat Turtle AI.
+        """CombatTurtle.class_name() -> str
+        Static method to return the name of the Combat Turtle AI.
         """
 
         return "Keyboard"
