@@ -1,3 +1,5 @@
+"""Defines the main game driver class."""
+
 import turtle
 
 import tc.tcplayer
@@ -60,7 +62,6 @@ class TurtleCombatGame:
 
         ### Get arguments to turtle objects
 
-
         # Begin game (after a delay, to allow the arena to initialize)
         self.wn.ontimer(self.play_game, 1000)
         self.wn.mainloop()
@@ -85,7 +86,7 @@ class TurtleCombatGame:
 
         # Delete blocks
         del self.blocks[:]
-        
+
         # Attempt to close window (needed in certain Python IDEs)
         try:
             turtle.bye()

@@ -1,9 +1,11 @@
+"""Defines the Combat Turtle parent class."""
+
 import turtle
 import math
 
 from tc.game.missile import Missile
 
-class CombatTurtle(turtle.Turtle):
+class CombatTurtleParent(turtle.Turtle):
     """Parent class for combat turtle AI players.
 
     Consists mostly of placeholders for methods to be overloaded by the
@@ -69,6 +71,8 @@ class CombatTurtle(turtle.Turtle):
     subclasses:
         class_name() -- (static method) returns the name of the class for use
             in distinguishing between different Combat Turtle AIs
+        class_desc() -- (static method) returns a one-line description of the
+            Combat Turtle AI
         setup() -- code run at the end of the turtle's initialization
         step() -- code run during each step event (which occurs every 50 ms)
     """
@@ -76,18 +80,27 @@ class CombatTurtle(turtle.Turtle):
     #-------------------------------------------------------------------------
 
     def class_name():
-        """CombatTurtle.class_name() -> str
+        """CombatTurtleParent.class_name() -> str
         Static method to return the name of the Combat Turtle AI.
         """
 
-        return "CombatTurtle"
+        return "CombatTurtleParent"
+
+    #-------------------------------------------------------------------------
+
+    def class_desc():
+        """CombatTurtleParent.class_desc() -> str
+        Static method to return a description of the Combat Turtle AI.
+        """
+
+        return "Parent class of all Combat Turtle classes."
 
     #=========================================================================
 
     def __init__(self, name=class_name(), col="black", coords=(0.0, 0.0),
                  facing=0.0, other=None):
-        """CombatTurtle([name], [col], [coords], [facing], [other]) ->
-            CombatTurtle
+        """CombatTurtleParent([name], [col], [coords], [facing], [other]) ->
+            CombatTurtleParent
         Combat Turtle parent constructor.
 
         User visibility:
@@ -124,7 +137,7 @@ class CombatTurtle(turtle.Turtle):
 
         # Define variable attributes
         self.spd = 0.0 # target movement speed (px/step, negative for back)
-        self.spd_turn = 0.0 # target CCW turn speed (deg/step, negative for CW)
+        self.spd_turn = 0.0 # target CCW turn speed (deg/step, < 0 for CW)
         self.health = 100.0 # health points (turtle dies when health is zero)
         self.cooldown = 0 # delay until able to fire next (steps)
 
@@ -134,7 +147,7 @@ class CombatTurtle(turtle.Turtle):
     #-------------------------------------------------------------------------
 
     def __str__(self):
-        """CombatTurtle.__str__() -> str
+        """CombatTurtleParent.__str__() -> str
         String conversion returns the Combat Turtle's name.
 
         User visibility:
@@ -147,7 +160,7 @@ class CombatTurtle(turtle.Turtle):
     #-------------------------------------------------------------------------
 
     def setup(self):
-        """CombatTurtle.setup() -> None
+        """CombatTurtleParent.setup() -> None
         Placeholder for Combat Turtle setup procedures.
 
         User visibility:
@@ -155,9 +168,9 @@ class CombatTurtle(turtle.Turtle):
             should overwrite -- yes
 
         This method is meant to be overwritten in the submodules of
-        CombatTurtle. It is called at the end of the constructor. Its purpose
-        is to prevent the user from having to overload the constructor in
-        their own submodule, in which case they would need to replicate its
+        CombatTurtleParent. It is called at the end of the constructor. Its
+        purpose is to prevent the user from having to overload the constructor
+        in their own submodule, in which case they would need to replicate its
         argument list and attribute definitions.
         """
 
@@ -166,7 +179,7 @@ class CombatTurtle(turtle.Turtle):
     #-------------------------------------------------------------------------
 
     def step(self):
-        """CombatTurtle.step() -> None
+        """CombatTurtleParent.step() -> None
         The main step event of the Combat Turtle.
 
         User visibility:
@@ -174,8 +187,8 @@ class CombatTurtle(turtle.Turtle):
             should overwrite -- yes
 
         This method is meant to be overwritten in the submodules of
-        CombatTurtle. It is called each step (every 50 ms), after which any
-        movement and firing events are actually executed.
+        CombatTurtleParent. It is called each step (every 50 ms), after which
+        any movement and firing events are actually executed.
         """
 
         pass
@@ -183,7 +196,7 @@ class CombatTurtle(turtle.Turtle):
     #-------------------------------------------------------------------------
 
     def _step(self):
-        """CombatTurtle._step() -> None
+        """CombatTurtleParent._step() -> None
         The driver for all step events of the Combat Turtle.
 
         User visibility:
@@ -216,7 +229,7 @@ class CombatTurtle(turtle.Turtle):
     #-------------------------------------------------------------------------
 
     def fire(self):
-        """CombatTurtle.fire() -> None
+        """CombatTurtleParent.fire() -> None
         Fires a missile in the turtle's current direction.
 
         User visibility:
@@ -236,7 +249,7 @@ class CombatTurtle(turtle.Turtle):
     #-------------------------------------------------------------------------
 
     def get_max_speed(self):
-        """CombatTurtle.get_max_speed() -> float
+        """CombatTurtleParent.get_max_speed() -> float
         Returns the maximum speed (px/step) of the turtle.
 
         User visibility:
@@ -249,7 +262,7 @@ class CombatTurtle(turtle.Turtle):
     #-------------------------------------------------------------------------
 
     def get_max_turn_speed(self):
-        """CombatTurtle.get_max_turn_speed() -> float
+        """CombatTurtleParent.get_max_turn_speed() -> float
         Returns the maximum turning speed (deg/step) of the turtle.
 
         User visibility:
@@ -262,7 +275,7 @@ class CombatTurtle(turtle.Turtle):
     #-------------------------------------------------------------------------
 
     def get_position(self):
-        """CombatTurtle.get_position() -> float
+        """CombatTurtleParent.get_position() -> float
         Returns the current position (px, px) of the Combat Turtle.
 
         User visibility:
@@ -275,7 +288,7 @@ class CombatTurtle(turtle.Turtle):
     #-------------------------------------------------------------------------
 
     def get_fire_delay(self):
-        """CombatTurtle.get_fire_delay() -> int
+        """CombatTurtleParent.get_fire_delay() -> int
         Returns the delay between firing missiles (steps).
 
         User visibility:
@@ -288,7 +301,7 @@ class CombatTurtle(turtle.Turtle):
     #-------------------------------------------------------------------------
 
     def get_cooldown(self):
-        """CombatTurtle.get_cooldown() -> int
+        """CombatTurtleParent.get_cooldown() -> int
         Returns the delay until next able to fire a missile (steps).
 
         User visibility:
@@ -301,7 +314,7 @@ class CombatTurtle(turtle.Turtle):
     #-------------------------------------------------------------------------
 
     def can_fire(self):
-        """CombatTurtle.can_fire() -> bool
+        """CombatTurtleParent.can_fire() -> bool
         Returns whether or not the Combat Turtle is able to fire.
 
         User visibility:
@@ -314,7 +327,7 @@ class CombatTurtle(turtle.Turtle):
     #-------------------------------------------------------------------------
 
     def forward(self, rate=1):
-        """CombatTurtle.forward([rate]) -> None
+        """CombatTurtleParent.forward([rate]) -> None
         Tells a turtle to move forward at a given fraction of its max speed.
 
         Aliases: forward, fd
@@ -336,7 +349,7 @@ class CombatTurtle(turtle.Turtle):
     #-------------------------------------------------------------------------
 
     def fd(self, rate=1):
-        """CombatTurtle.fd([rate]) -> None
+        """CombatTurtleParent.fd([rate]) -> None
         Tells a turtle to move forward at a given fraction of its max speed.
 
         Aliases: forward, fd
@@ -357,7 +370,7 @@ class CombatTurtle(turtle.Turtle):
     #-------------------------------------------------------------------------
 
     def backward(self, rate=1):
-        """CombatTurtle.backward([rate]) -> None
+        """CombatTurtleParent.backward([rate]) -> None
         Tells a turtle to move backward at a given fraction of its max speed.
 
         Aliases: backward, back, bk
@@ -379,7 +392,7 @@ class CombatTurtle(turtle.Turtle):
     #-------------------------------------------------------------------------
 
     def back(self, rate=1):
-        """CombatTurtle.back([rate]) -> None
+        """CombatTurtleParent.back([rate]) -> None
         Tells a turtle to move backward at a given fraction of its max speed.
 
         Aliases: backward, back, bk
@@ -400,7 +413,7 @@ class CombatTurtle(turtle.Turtle):
     #-------------------------------------------------------------------------
 
     def bk(self, rate=1):
-        """CombatTurtle.bk([rate]) -> None
+        """CombatTurtleParent.bk([rate]) -> None
         Tells a turtle to move backward at a given fraction of its max speed.
 
         Aliases: backward, back, bk
@@ -421,7 +434,7 @@ class CombatTurtle(turtle.Turtle):
     #-------------------------------------------------------------------------
 
     def get_speed(self):
-        """CombatTurtle.get_speed() -> float
+        """CombatTurtleParent.get_speed() -> float
         Returns the current speed (px/step) of the Combat Turtle.
 
         User visibility:
@@ -434,7 +447,7 @@ class CombatTurtle(turtle.Turtle):
     #-------------------------------------------------------------------------
 
     def _move(self):
-        """CombatTurtle._move() -> None
+        """CombatTurtleParent._move() -> None
         Moves a turtle according to its spd attribute.
 
         User visibility:
@@ -462,7 +475,7 @@ class CombatTurtle(turtle.Turtle):
     #-------------------------------------------------------------------------
 
     def get_heading(self):
-        """CombatTurtle.get_heading() -> float
+        """CombatTurtleParent.get_heading() -> float
         Returns the current direction (deg) of the Combat Turtle.
 
         User visibility:
@@ -475,7 +488,7 @@ class CombatTurtle(turtle.Turtle):
     #-------------------------------------------------------------------------
 
     def left(self, rate=1):
-        """CombatTurtle.left([angle]) -> None
+        """CombatTurtleParent.left([angle]) -> None
         Tells a turtle to turn left by a given fraction of its turning speed.
 
         Aliases: left, lt
@@ -497,7 +510,7 @@ class CombatTurtle(turtle.Turtle):
     #-------------------------------------------------------------------------
 
     def lt(self, rate=1):
-        """CombatTurtle.lt([angle]) -> None
+        """CombatTurtleParent.lt([angle]) -> None
         Tells a turtle to turn left by a given fraction of its turning speed.
 
         Aliases: left, lt
@@ -518,7 +531,7 @@ class CombatTurtle(turtle.Turtle):
     #-------------------------------------------------------------------------
 
     def right(self, rate=1):
-        """CombatTurtle.right([angle]) -> None
+        """CombatTurtleParent.right([angle]) -> None
         Tells a turtle to turn right by a given fraction of its turning speed.
 
         Aliases: right, rt
@@ -540,7 +553,7 @@ class CombatTurtle(turtle.Turtle):
     #-------------------------------------------------------------------------
 
     def rt(self, rate=1):
-        """CombatTurtle.right([angle]) -> None
+        """CombatTurtleParent.right([angle]) -> None
         Tells a turtle to turn right by a given fraction of its turning speed.
 
         Aliases: right, rt
@@ -561,7 +574,7 @@ class CombatTurtle(turtle.Turtle):
     #-------------------------------------------------------------------------
 
     def get_turn_speed(self):
-        """CombatTurtle.get_turn_speed() -> float
+        """CombatTurtleParent.get_turn_speed() -> float
         Returns the turning speed (CCW deg/step) of the Combat Turtle.
 
         User visibility:
@@ -574,7 +587,7 @@ class CombatTurtle(turtle.Turtle):
     #-------------------------------------------------------------------------
 
     def _turn(self):
-        """CombatTurtle._turn() -> None
+        """CombatTurtleParent._turn() -> None
         Turns a turtle according to its spd_turn attribute.
 
         User visibility:
@@ -592,7 +605,7 @@ class CombatTurtle(turtle.Turtle):
     #-------------------------------------------------------------------------
 
     def other_position(self):
-        """CombatTurtle.other_position() -> (float, float)
+        """CombatTurtleParent.other_position() -> (float, float)
         Returns the coordinates of the opponent Combat Turtle.
 
         User visibility:
@@ -608,7 +621,7 @@ class CombatTurtle(turtle.Turtle):
     #-------------------------------------------------------------------------
 
     def distance(self, coords1, coords2):
-        """CombatTurtle.distance(coords1, coords2) -> float
+        """CombatTurtleParent.distance(coords1, coords2) -> float
         Calculates the distance between a pair of coordinates (px).
 
         User visibility:
@@ -627,7 +640,7 @@ class CombatTurtle(turtle.Turtle):
     #-------------------------------------------------------------------------
 
     def other_distance(self):
-        """CombatTurtle.other_distance() -> float
+        """CombatTurtleParent.other_distance() -> float
         Returns the distance to the opponent turtle (px).
 
         User visibility:
@@ -644,7 +657,7 @@ class CombatTurtle(turtle.Turtle):
     #-------------------------------------------------------------------------
 
     def relative_position(self):
-        """CombatTurtle.relative_position() -> (float, float)
+        """CombatTurtleParent.relative_position() -> (float, float)
         Returns coordinates of the opponent Combat Turtle relative to self.
 
         User visibility:
@@ -665,7 +678,7 @@ class CombatTurtle(turtle.Turtle):
     #-------------------------------------------------------------------------
 
     def other_heading(self):
-        """CombatTurtle.other_heading() -> (float, float)
+        """CombatTurtleParent.other_heading() -> (float, float)
         Returns the heading direction (degrees) of the opponent Combat Turtle.
 
         User visibility:
@@ -681,7 +694,7 @@ class CombatTurtle(turtle.Turtle):
     #-------------------------------------------------------------------------
 
     def relative_heading(self):
-        """CombatTurtle.relative_heading() -> float
+        """CombatTurtleParent.relative_heading() -> float
         Returns the relative heading (deg) to the opponent turtle.
 
         User visibility:
@@ -701,7 +714,7 @@ class CombatTurtle(turtle.Turtle):
     #-------------------------------------------------------------------------
 
     def other_speed(self):
-        """CombatTurtle.other_speed() -> float
+        """CombatTurtleParent.other_speed() -> float
         Returns the current speed (px/step) of the opponent Combat Turtle.
 
         User visibility:
@@ -717,7 +730,7 @@ class CombatTurtle(turtle.Turtle):
     #-------------------------------------------------------------------------
 
     def other_turn_speed(self):
-        """CombatTurtle.other_turn_speed() -> float
+        """CombatTurtleParent.other_turn_speed() -> float
         Returns the turn speed (CCW deg/step) of the opponent Combat Turtle.
 
         User visibility:
@@ -733,7 +746,7 @@ class CombatTurtle(turtle.Turtle):
     #-------------------------------------------------------------------------
 
     def get_health(self):
-        """CombatTurtle.get_health() -> float
+        """CombatTurtleParent.get_health() -> float
         Returns the health of the Combat Turtle.
 
         User visibility:
@@ -746,7 +759,7 @@ class CombatTurtle(turtle.Turtle):
     #-------------------------------------------------------------------------
 
     def other_health(self):
-        """CombatTurtle.other_health() -> float
+        """CombatTurtleParent.other_health() -> float
         Returns the health of the opponent Combat Turtle.
 
         User visibility:
@@ -762,7 +775,7 @@ class CombatTurtle(turtle.Turtle):
     #-------------------------------------------------------------------------
 
     def missile_speed(self):
-        """CombatTurtle.missile_speed() -> float
+        """CombatTurtleParent.missile_speed() -> float
         Returns the constant travel speed of missiles (px/step).
 
         User visibility:
@@ -778,7 +791,7 @@ class CombatTurtle(turtle.Turtle):
     #-------------------------------------------------------------------------
 
     def missile_range(self):
-        """CombatTurtle.missile_range() -> float
+        """CombatTurtleParent.missile_range() -> float
         Returns the maximum range of missiles (px).
 
         User visibility:
@@ -795,7 +808,7 @@ class CombatTurtle(turtle.Turtle):
     #-------------------------------------------------------------------------
 
     def missile_proximity(self):
-        """CombatTurtle.missile_proximity() -> float
+        """CombatTurtleParent.missile_proximity() -> float
         Returns the proximity distance of missiles (px).
 
         User visibility:
@@ -811,7 +824,7 @@ class CombatTurtle(turtle.Turtle):
     #-------------------------------------------------------------------------
 
     def missile_radius(self):
-        """CombatTurtle.missile_radius() -> float
+        """CombatTurtleParent.missile_radius() -> float
         Returns the explosive radius of missiles (px).
 
         User visibility:
@@ -829,7 +842,7 @@ class CombatTurtle(turtle.Turtle):
     #-------------------------------------------------------------------------
 
     def line_of_sight(self):
-        """CombatTurtle.line_of_sight() -> bool
+        """CombatTurtleParent.line_of_sight() -> bool
         Returns whether there is a clear line of sight to the opponent turtle.
 
         User visibility:

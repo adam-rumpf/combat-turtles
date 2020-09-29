@@ -1,3 +1,5 @@
+"""Defines the missile class."""
+
 import turtle
 
 class Missile(turtle.Turtle):

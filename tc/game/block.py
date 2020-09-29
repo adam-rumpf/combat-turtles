@@ -1,3 +1,5 @@
+"""Defines the block class."""
+
 import turtle
 
 class Block:

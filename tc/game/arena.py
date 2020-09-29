@@ -1,3 +1,5 @@
+"""Defines the arena container class."""
+
 class Arena:
     """Arena class.
 
@@ -22,7 +24,8 @@ class Arena:
         The names in this list correspond to the layout ID numbers.
         """
 
-        return ["Empty", "Central Column", "Corner Columns", "Doorway", "Plus"]
+        return ["Empty", "Central Column", "Corner Columns", "Doorway",
+                "Plus"]
 
     #=========================================================================
 

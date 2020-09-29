@@ -1,6 +1,8 @@
+"""Defines a keyboard-controlled CombatTurtle object."""
+
 import tc.tcplayer
 
-class KeyboardTurtle(tc.tcplayer.CombatTurtle):
+class CombatTurtle(tc.tcplayer.CombatTurtleParent):
     """Human-controlled Combat Turtle that uses keyboard inputs.
 
     Controls are as follows:
@@ -18,12 +20,21 @@ class KeyboardTurtle(tc.tcplayer.CombatTurtle):
         Static method to return the name of the Combat Turtle AI.
         """
 
-        return "Keyboard"
+        return "KeyboardTurtle"
+
+    #-------------------------------------------------------------------------
+
+    def class_desc():
+        """CombatTurtle.class_desc() -> str
+        Static method to return a description of the Combat Turtle AI.
+        """
+
+        return "Human-controlled turtle that uses keyboard inputs."
 
     #=========================================================================
 
     def setup(self):
-        """KeyboardTurtle.setup() -> None
+        """CombatTurtle.setup() -> None
         Initialization code for human-controlled Combat Turtle.
 
         Sets up listeners for keyboard input.
@@ -34,7 +45,7 @@ class KeyboardTurtle(tc.tcplayer.CombatTurtle):
     #-------------------------------------------------------------------------
 
     def step(self):
-        """KeyboardTurtle.setup() -> None
+        """CombatTurtle.setup() -> None
         Step event code for human-controlled Combat Turtle.
 
         Listens for keyboard input to control movement and firing.
@@ -45,7 +56,7 @@ class KeyboardTurtle(tc.tcplayer.CombatTurtle):
     #-------------------------------------------------------------------------
 
     def _up_key(self):
-        """KeyboardTurtle._up_key() -> None
+        """CombatTurtle._up_key() -> None
         Event handler for the [Up] key.
 
         [Up] should move the turtle forward.
@@ -56,7 +67,7 @@ class KeyboardTurtle(tc.tcplayer.CombatTurtle):
     #-------------------------------------------------------------------------
 
     def _down_key(self):
-        """KeyboardTurtle._down_key() -> None
+        """CombatTurtle._down_key() -> None
         Event handler for the [Down] key.
 
         [Down] should move the turtle backward.
@@ -67,7 +78,7 @@ class KeyboardTurtle(tc.tcplayer.CombatTurtle):
     #-------------------------------------------------------------------------
 
     def _left_key(self):
-        """KeyboardTurtle._left_key() -> None
+        """CombatTurtle._left_key() -> None
         Event handler for the [Left] key.
 
         [Left] should turn the turtle left.
@@ -78,7 +89,7 @@ class KeyboardTurtle(tc.tcplayer.CombatTurtle):
     #-------------------------------------------------------------------------
 
     def _right_key(self):
-        """KeyboardTurtle._right_key() -> None
+        """CombatTurtle._right_key() -> None
         Event handler for the [Right] key.
 
         [Right] should turn the turtle right.
@@ -89,7 +100,7 @@ class KeyboardTurtle(tc.tcplayer.CombatTurtle):
     #-------------------------------------------------------------------------
 
     def _space_bar(self):
-        """KeyboardTurtle._space_bar() -> None
+        """CombatTurtle._space_bar() -> None
         Event handler for the [Space] bar.
 
         [Space] should attempt to fire a missile.
