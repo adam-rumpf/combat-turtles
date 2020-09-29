@@ -2,7 +2,6 @@
 
 import turtle
 import math
-
 from tc.game.missile import Missile
 
 class CombatTurtleParent(turtle.Turtle):
@@ -98,8 +97,8 @@ class CombatTurtleParent(turtle.Turtle):
     #=========================================================================
 
     def __init__(self, name=class_name(), col="black", coords=(0.0, 0.0),
-                 facing=0.0, other=None):
-        """CombatTurtleParent([name], [col], [coords], [facing], [other]) ->
+                 facing=0.0):
+        """CombatTurtleParent([name], [col], [coords], [facing]) ->
             CombatTurtleParent
         Combat Turtle parent constructor.
 
@@ -112,7 +111,6 @@ class CombatTurtleParent(turtle.Turtle):
             col (str or color tuple) ["black"] -- color of turtle
             coords (tuple (float, float)) [(0,0, 0.0)] -- initial coordinates
             facing (float) [0.0] -- initial orientation (degrees)
-            other (CombatTurtle) [None] -- opponent combat turtle object
         """
 
         # Initialize turtle
@@ -128,7 +126,6 @@ class CombatTurtleParent(turtle.Turtle):
         self.color(col)
         self.goto(coords[0], coords[1])
         self.setheading(facing)
-        self.other = other
 
         # Define constant attributes
         self.max_spd = 5.0 # maximum movement speed (px/step)
@@ -136,6 +133,7 @@ class CombatTurtleParent(turtle.Turtle):
         self.fire_delay = 40 # delay between missile firing (steps)
 
         # Define variable attributes
+        self.other = None # opponent turtle object
         self.spd = 0.0 # target movement speed (px/step, negative for back)
         self.spd_turn = 0.0 # target CCW turn speed (deg/step, < 0 for CW)
         self.health = 100.0 # health points (turtle dies when health is zero)
@@ -192,6 +190,23 @@ class CombatTurtleParent(turtle.Turtle):
         """
 
         pass
+
+    #-------------------------------------------------------------------------
+
+    def _set_other(self, other):
+        """CombatTurtleParent._set_other(other) -> None
+        Sets a pointer to the opponent Combat Turtle.
+
+        User visibility:
+            should call -- no
+            should overwrite -- no
+
+        Both Combat Turtles involved in the game must be instantiated before
+        the 'other' attribute can be set. This method is meant to be called by
+        the game driver after defining both players.
+        """
+
+        self.other = other
 
     #-------------------------------------------------------------------------
 

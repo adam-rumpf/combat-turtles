@@ -11,7 +11,7 @@ class Block:
 
     #=========================================================================
 
-    def __init__(self, left, right, top, bottom):
+    def __init__(self, left, right, top, bottom, col="black"):
         """_Block(left, right, top, bottom) -> _Block
         Block constructor.
 
@@ -20,6 +20,9 @@ class Block:
             right (float) -- rightmost x-coordinate (px)
             top (float) -- uppermost y-coordinate (px)
             bottom (float) -- lowermost y-coordinate (px)
+
+        Accepts the following optional keyword arguments:
+            col (str or color tuple) ["black"] -- color of block
         """
 
         # Assign given attributes
@@ -29,8 +32,17 @@ class Block:
         self.bottom = bottom
 
         # Create a turtle to draw the block
-        ### create (and save), set speed/color/visibility, draw
-        ### delete in destructor
+        self.t = turtle.Turtle() # turtle object
+        self._draw_block(col=col)
+
+    #-------------------------------------------------------------------------
+
+    def __del__(self):
+        """~Block() -> None
+        Block destructor destroys graphics turtle.
+        """
+
+        del self.t
 
     #-------------------------------------------------------------------------
 
@@ -61,3 +73,35 @@ class Block:
 
         # If nothing has been returned yet, the tests failed
         return False
+
+    #-------------------------------------------------------------------------
+
+    def _draw_block(self, col="black"):
+        """Block._draw_block() -> None
+        Uses a turtle to draw the block.
+
+        Accepts the following optional keyword arguments:
+            col (str or color tuple) ["black"] -- color of block
+        """
+
+        # Calculate dimensions
+        w = self.right - self.left # width
+        h = self.top - self.bottom # height
+
+        # Use turtle to draw block
+        self.t.hideturtle()
+        self.t.speed(0)
+        self.t.color(col)
+        self.t.penup()
+        self.t.goto(self.left, self.bottom)
+        self.t.setheading(0)
+        self.t.pendown()
+        self.t.begin_fill()
+        self.t.forward(w)
+        self.t.left(90)
+        self.t.forward(h)
+        self.t.left(90)
+        self.t.forward(w)
+        self.t.left(90)
+        self.t.forward(h)
+        self.t.end_fill()

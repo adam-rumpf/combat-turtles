@@ -5,7 +5,6 @@ of Turtle Combat, and then starts the game.
 """
 
 import inspect
-
 import tc
 
 #=============================================================================
@@ -17,13 +16,13 @@ def turtle_combat():
     # In order to allow the user to place additional AI modules inside the ai/
     # directory, we generate a list of strings which include the full
     # addresses of the AI objects (for example, tc.ai.keyboard.CombatTurtle).
-    # These can then be used with the exec() function to instantiate the
-    # necessary turtle objects.
+    # These can then be used with the exec() or eval() function to instantiate
+    # the necessary turtle objects.
     # All Combat Turtle AIs are required to use the class name "CombatTurtle",
     # so this only requires us to find the name of the module.
 
     # Build list of class names for each module that includes CombatTurtle
-    print("Loading Combat Turtle AI modules...", end="")
+    print("Finding Combat Turtle AI modules...", end="")
     turtle_classes = []
     for f in tc.ai.__all__:
         # Use static method to test whether the module includes the class
@@ -48,32 +47,42 @@ def turtle_combat():
     # Display AI choices
     print()
     _ai_table(turtle_classes)
-    print()
 
-    # Ask the user to choose the turtle AIs
-    if len(turtle_classes) == 1:
-        # If only one choice, immediately initialize both
-        print("Using only AI to initialize both players.")
-        ###
-    else:
-        # Otherwise ask the user to enter the IDs of the two players
+    # Ask the user to choose the turtle AIs (assuming more than one is loaded)
+    choice1 = 0 # index of Player 1 AI
+    choice2 = 0 # index of PLayer 2 AI
+    if len(turtle_classes) > 1:
         indices = {str(i) for i in range(len(turtle_classes))} # valid indices
-        choice = -1
 
         # Ask for Player 1 choice until getting a valid response
+        choice = ""
         while choice not in indices:
             choice = input("Input an Index [0-" + str(len(turtle_classes)-1) +
                            "] to choose the AI for Player 1, and then press" +
                            " [Enter]: ")
+        choice1 = int(choice)
 
-        # Initialize Player 1
-        ###
-        ###
-        ###
+        # Ask for Player 2 choice until getting a valid response
+        choice = ""
+        while choice not in indices:
+            choice = input("Input an Index [0-" + str(len(turtle_classes)-1) +
+                           "] to choose the AI for Player 2, and then press" +
+                           " [Enter]: ")
+        choice2 = int(choice)
 
-    # Create game object
-    print("Opening Turtle Combat.")
-    game = tc.tcgame.TurtleCombatGame()
+    # Show choices
+    print("\nPlayer 1: " + eval(turtle_classes[choice1] + ".class_name()"))
+    print("Player 2: " + eval(turtle_classes[choice2] + ".class_name()"))
+
+    # Ask the user to choose an arena
+    ###
+    arena = 0 # layout ID of arena
+
+    # Create game object with chosen turtles and arena
+    print("\nOpening Turtle Combat.")
+    game = tc.tcgame.TurtleCombatGame(class1=turtle_classes[choice1],
+                                      class2=turtle_classes[choice2],
+                                      layout=arena)
 
     # Delete game object when done
     print("Closing Turtle Combat.")

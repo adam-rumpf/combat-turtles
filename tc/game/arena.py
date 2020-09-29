@@ -1,5 +1,7 @@
 """Defines the arena container class."""
 
+from .block import Block
+
 class Arena:
     """Arena class.
 
@@ -29,14 +31,14 @@ class Arena:
 
     #=========================================================================
 
-    def __init__(self, size=(200, 200), layout=0, walls=5.0):
+    def __init__(self, size=(400, 400), layout=0, walls=5):
         """Arena([size], [layout], [walls]) -> Arena
         Arena constructor, including obstacle setup.
 
         Accepts the following optional keyword arguments:
-            size (tuple (int, int)) [(200, 200)] -- arena width/height (px)
+            size (tuple (int, int)) [(400, 400)] -- arena width/height (px)
             layout (int) [0] -- arena obstacle layout ID (see class docstring)
-            walls (float [5.0]) -- thickness (px) of walls surrounding arena,
+            walls (int) [5] -- thickness (px) of walls surrounding arena
                 (walls excluded unless argument is positive)
 
         The arena is centered at the origin and has the specified total width
@@ -53,8 +55,7 @@ class Arena:
 
         # Generate walls around arena
         if walls > 0:
-            ### Generate blocks.
-            pass
+            self._create_walls(walls)
 
         # Generate the walls defined by the layout (default to empty)
         if layout == 1:
@@ -73,3 +74,38 @@ class Arena:
         ###
         # Add some methods for automatically generating specific layouts, or
         # possibly random layouts. Also handle the window.
+
+    #-------------------------------------------------------------------------
+
+    def __del__(self):
+        """~Arena() -> None
+        Arena destructor deletes all blocks in arena.
+        """
+
+        del self.blocks[:]
+
+    #-------------------------------------------------------------------------
+
+    def _create_walls(self, width):
+        """Arena._create_walls() -> None
+        Generates blocks to define the walls of an arena.
+
+        Walls are Block objects which are added to the Arena's block list.
+        The arena's size is considered to be the external dimension of the
+        arena, with the wall thickness reducing the interior size.
+
+        Requires the following positional arguments:
+            width (int) -- thickness of walls (px)
+        """
+
+        # Determine coordinates of edges
+        left = int(-self.size[0]/2)
+        right = int(self.size[0]/2)
+        top = int(self.size[1]/2)
+        bottom = int(-self.size[1]/2)
+
+        # Define walls
+        self.blocks.append(Block(left, left+width, top, bottom))
+        self.blocks.append(Block(right-width, right, top, bottom))
+        self.blocks.append(Block(left, right, top, top-width))
+        self.blocks.append(Block(left, right, bottom+width, bottom))

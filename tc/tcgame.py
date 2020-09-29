@@ -1,8 +1,9 @@
 """Defines the main game driver class."""
 
 import turtle
-
 import tc.tcplayer
+from tc.game.arena import Arena
+from tc.game.missile import Missile
 
 class TurtleCombatGame:
     """A class to act as the main driver for a game of Turtle Combat.
@@ -20,19 +21,22 @@ class TurtleCombatGame:
 
     #=========================================================================
 
-    def __init__(self, size=(200, 200), layout=0, class1=None, class2=None):
+    def __init__(self, size=(400, 400), layout=0, class1=None, class2=None):
         """TurtleCombatGame([size], [layout], [p1], [p2]) -> TurtleCombatGame
         Constructor for the Turtle Combat game.
 
         Sets up window, game variables, step timer, and all in-game objects,
         and then begins the game.
 
+        The turtle classes must be given as strings which give the full
+        submodule path, for example "tc.ai.keyboard.CombatTurtle".
+
         Accepts the following optional keyword arguments:
-            size (tuple (int, int)) [(200, 200)] -- arena width/height (px)
+            size (tuple (int, int)) [(400, 400)] -- arena width/height (px)
             layout (int) [0] -- arena obstacle layout ID (meanings of IDs
                 defined in Arena class)
-            class1 (CombatTurtle) [None] -- class of first player object
-            class2 (CombatTurtle) [None] -- class of second player object
+            class1 (str) [None] -- full class name of first player object
+            class2 (str) [None] -- full class name of second player object
         """
 
         ### Also add options for how to set up the arena.
@@ -40,27 +44,43 @@ class TurtleCombatGame:
         # Initialize game constants
         self.step_time = 50 # time per step (ms)
 
+        # Define game title string
+        title = "Turtle Combat"
+        if class1 != None and class2 != None:
+            title += (" (" + eval(class1 + ".class_name()") + " vs " +
+                      eval(class2 + ".class_name()") + ")")
+
         # Set up turtle window
         self.wn = turtle.Screen()
-        self.wn.title("Turtle Combat") ### change to state player names
+        self.wn.screensize(size[0], size[1])
+        self.wn.setup(size[0]+50, size[1]+50) # screen size with small margin
+        self.wn.title(title)
         ### Window title: "P1 vs P2 in Arena"
 
         # Initialize arena
-        ###
-        self.blocks = [] # list of block objects
+        self.arena = Arena(size=size, layout=layout, walls=5)
 
         # Initialize players
         self.p1 = None # first player
         self.p2 = None # second player
         if class1 != None:
-            self.p1 = class1()
+            x = int(size[0]/4) # x-coordinate
+            argstring = ("(col=\"red\", coords=(" + str(x) + ", 0)," +
+                         " facing=90)")
+            self.p1 = eval(class1 + argstring)
         if class2 != None:
-            self.p2 = class2()
+            x = int(-size[0]/4) # x-coordinate
+            argstring = ("(col=\"blue\", coords=(" + str(x) + ", 0)," +
+                         " facing=270)")
+            self.p2 = eval(class2 + argstring)
+
+        # Give players each others' pointers
+        if self.p1 != None and self.p2 != None:
+            self.p1._set_other(self.p2)
+            self.p2._set_other(self.p1)
 
         # Initialize a missile list
         self.missiles = [] # list of currently-active missile objects
-
-        ### Get arguments to turtle objects
 
         # Begin game (after a delay, to allow the arena to initialize)
         self.wn.ontimer(self.play_game, 1000)
@@ -84,8 +104,8 @@ class TurtleCombatGame:
         # Delete missiles
         del self.missiles[:]
 
-        # Delete blocks
-        del self.blocks[:]
+        # Delete arena
+        del self.arena
 
         # Attempt to close window (needed in certain Python IDEs)
         try:
