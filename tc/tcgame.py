@@ -3,7 +3,6 @@
 import turtle
 import tc.tcplayer
 from tc.game.arena import Arena
-from tc.game.missile import Missile
 
 class TurtleCombatGame:
     """A class to act as the main driver for a game of Turtle Combat.
@@ -79,9 +78,6 @@ class TurtleCombatGame:
             self.p1._set_other(self.p2)
             self.p2._set_other(self.p1)
 
-        # Initialize a missile list
-        self.missiles = [] # list of currently-active missile objects
-
         # Begin game (after a delay, to allow the arena to initialize)
         self.wn.ontimer(self.play_game, 1000)
         self.wn.mainloop()
@@ -95,21 +91,18 @@ class TurtleCombatGame:
         Deletes game objects and closes window.
         """
 
-        # Delete players
-        if self.p1 != None:
-            del self.p1
-        if self.p2 != None:
-            del self.p2
-
-        # Delete missiles
-        del self.missiles[:]
-
-        # Delete arena
-        del self.arena
-
-        # Attempt to close window (needed in certain Python IDEs)
         try:
+
+            # Delete players
+            if self.p1 != None:
+                del self.p1
+            if self.p2 != None:
+                del self.p2
+
+            # Delete arena
+            del self.arena
             turtle.bye()
+
         except turtle.Terminator:
             pass
 
@@ -131,8 +124,6 @@ class TurtleCombatGame:
             self.p1._step()
         if self.p2 != None:
             self.p2._step()
-        for m in self.missiles:
-            m.step()
 
         # Check whether a player's health has reached zero
         game_over = False # whether to end the game

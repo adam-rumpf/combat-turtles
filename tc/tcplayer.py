@@ -119,6 +119,7 @@ class CombatTurtleParent(turtle.Turtle):
         super().__init__()
 
         # Set turtle class attributes
+        self.hideturtle() # hide before moving into position
         self.speed(0) # movement handled in steps
         self.penup() # don't trace path
         self.shape("turtle") # turtle shape
@@ -128,6 +129,7 @@ class CombatTurtleParent(turtle.Turtle):
         self.color(col)
         self.goto(coords[0], coords[1])
         self.setheading(facing)
+        self.showturtle()
 
         # Define constant attributes
         self.max_spd = 4.0 # maximum movement speed (px/step)
@@ -140,6 +142,9 @@ class CombatTurtleParent(turtle.Turtle):
         self.spd_turn = 0.0 # target CCW turn speed (deg/step, < 0 for CW)
         self.health = 100.0 # health points (turtle dies when health is zero)
         self.cooldown = 0 # delay until able to fire next (steps)
+
+        # Initialize list of currently-active missiles fired by this turtle
+        self.missiles = []
 
         # Call setup function (contains setup code for specific submodule)
         self.setup()
@@ -156,6 +161,17 @@ class CombatTurtleParent(turtle.Turtle):
         """
 
         return self.name
+
+    #-------------------------------------------------------------------------
+
+    def __del__(self):
+        """~CombatTurtleParent.__del__() -> None
+        Combat Turtle destructor.
+
+        Deletes all associated Missile objects.
+        """
+
+        del self.missiles[:]
 
     #-------------------------------------------------------------------------
 
@@ -225,6 +241,9 @@ class CombatTurtleParent(turtle.Turtle):
         which the internal movement and firing attributes should be set, and
         then actually evaluates their effects, moving the turtle and firing
         missiles as necessary.
+
+        Any missiles fired by this Combat Turtle are also updated here using
+        the missile's step() method.
         """
 
         # Reduce cooldown
@@ -242,6 +261,10 @@ class CombatTurtleParent(turtle.Turtle):
 
         ###
         # movement, missiles, cooldown, timer
+
+        # Update all missiles
+        for m in self.missiles:
+            m.step()
 
     #-------------------------------------------------------------------------
 
@@ -261,9 +284,9 @@ class CombatTurtleParent(turtle.Turtle):
         if self.cooldown > 0:
             return None
 
-        # Otherwise create a missile object and start cooldown
+        # Otherwise create a missile object and start the firing cooldown
         self.cooldown = self.fire_delay # reset cooldown duration
-        ### firing
+        self.missiles.append(Missile(self, self.get_heading())) # new missile
 
     #-------------------------------------------------------------------------
 
