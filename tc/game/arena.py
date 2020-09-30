@@ -38,7 +38,7 @@ class Arena:
         """
 
         # All currently-defined arenas use the same initial coordinates
-        return (200, 0)
+        return (-200, 0)
 
     #-------------------------------------------------------------------------
 
@@ -51,7 +51,7 @@ class Arena:
         """
 
         # All currently-defined arenas use the same initial coordinates
-        return (-200, 0)
+        return (200, 0)
 
     #-------------------------------------------------------------------------
 

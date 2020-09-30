@@ -12,7 +12,7 @@ class TurtleCombatGame:
     turtles), enforces the rules of the game, and implements the automatic
     timer that governs most objects' movement.
 
-    A step occurs every 50 ms (at a rate of 20 steps/sec). At the end of each
+    A step occurs every 40 ms (at a rate of 25 steps/sec). At the end of each
     step, this object calls the hidden _step() method of all moving objects.
     Moving objects are all turtle subclasses, but they move instantly during
     their step events rather than moving smoothly with the built-in turtle
@@ -29,7 +29,7 @@ class TurtleCombatGame:
         and then begins the game.
 
         The turtle classes must be given as strings which give the full
-        submodule path, for example "tc.ai.keyboard.CombatTurtle".
+        submodule path, for example "tc.ai.direct.CombatTurtle".
 
         Accepts the following optional keyword arguments:
             size (tuple (int, int)) [(600, 400)] -- arena width/height (px)
@@ -40,7 +40,7 @@ class TurtleCombatGame:
         """
 
         # Initialize game constants
-        self.step_time = 50 # time per step (ms)
+        self.step_time = 40 # time per step (ms)
 
         # Define game title string
         title = "Turtle Combat: "
@@ -128,9 +128,9 @@ class TurtleCombatGame:
 
         # Activate the step event of all game objects
         if self.p1 != None:
-            self.p1.step()
-        if self.p1 != None:
-            self.p1.step()
+            self.p1._step()
+        if self.p2 != None:
+            self.p2._step()
         for m in self.missiles:
             m.step()
 

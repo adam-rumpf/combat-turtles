@@ -1,11 +1,12 @@
-"""Defines a drunken CombatTurtle object."""
-
-### Add full instructions, including the game mechanics and what is and is not allowed to be used.
+"""Defines a test CombatTurtle object that simply moves in circles."""
 
 import tc.tcplayer
 
 class CombatTurtle(tc.tcplayer.CombatTurtleParent):
-    """Template Combat Turtle class."""
+    """Test circular combat turtle.
+
+    This turtle should simply travel in circles and periodically shoot.
+    """
 
     #-------------------------------------------------------------------------
 
@@ -14,7 +15,7 @@ class CombatTurtle(tc.tcplayer.CombatTurtleParent):
         Static method to return the name of the Combat Turtle AI.
         """
 
-        return "TemplateTurtle"
+        return "CircleTurtle"
 
     #-------------------------------------------------------------------------
 
@@ -23,7 +24,7 @@ class CombatTurtle(tc.tcplayer.CombatTurtleParent):
         Static method to return a description of the Combat Turtle AI.
         """
 
-        return "This is a template class that does nothing on its own."
+        return "Moves in circles and periodically shoots."
 
     #=========================================================================
 
@@ -39,6 +40,12 @@ class CombatTurtle(tc.tcplayer.CombatTurtleParent):
     def step(self):
         """CombatTurtle.setup() -> None
         Step event code for Combat Turtle.
+
+        This turtle's behavior is completely constant and consists of simply
+        moving forward while turning, firing when able.
         """
 
-        pass
+        self.forward()
+        self.left()
+        if self.can_fire():
+            self.fire()

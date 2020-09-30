@@ -4,7 +4,7 @@ import tc.tcplayer
 
 class CombatTurtle(tc.tcplayer.CombatTurtleParent):
     """Direct combat turtle.
-    
+
     Its main strategy is to try to move directly towards the opponent, firing
     missiles when it has clear line of sight. It does not pay much attention
     to obstacles.
@@ -26,7 +26,7 @@ class CombatTurtle(tc.tcplayer.CombatTurtleParent):
         Static method to return a description of the Combat Turtle AI.
         """
 
-        return "Tries to move directly towards opponent, and not much else."
+        return "Moves directly towards opponent while ignoring obstacles."
 
     #=========================================================================
 

@@ -22,8 +22,8 @@ class CombatTurtleParent(turtle.Turtle):
     attributes and methods, which the user should feel free to modify at
     will.
 
-    Turtle movement is handled using discrete steps, which occur every 50 ms
-    (at a rate of 20 steps/sec). The step() method is called once at the end
+    Turtle movement is handled using discrete steps, which occur every 40 ms
+    (at a rate of 25 steps/sec). The step() method is called once at the end
     of each step, after which the turtle is moved directly to its new
     position according to its current speed and heading. The visible movement-
     related methods (such as forward(), backward(), left(), and right()) do
@@ -130,8 +130,8 @@ class CombatTurtleParent(turtle.Turtle):
         self.setheading(facing)
 
         # Define constant attributes
-        self.max_spd = 5.0 # maximum movement speed (px/step)
-        self.max_turn = 5.0 # maximum turning speed (deg/step)
+        self.max_spd = 4.0 # maximum movement speed (px/step)
+        self.max_turn = 15.0 # maximum turning speed (deg/step)
         self.fire_delay = 40 # delay between missile firing (steps)
 
         # Define variable attributes
@@ -187,7 +187,7 @@ class CombatTurtleParent(turtle.Turtle):
             should overwrite -- yes
 
         This method is meant to be overwritten in the submodules of
-        CombatTurtleParent. It is called each step (every 50 ms), after which
+        CombatTurtleParent. It is called each step (every 40 ms), after which
         any movement and firing events are actually executed.
         """
 

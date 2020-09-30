@@ -1,7 +1,7 @@
 """Main Turtle Combat script.
 
 Running this script automatically loads all necessary modules to play a game
-of Turtle Combat, and then starts the game.
+of Turtle Combat and then starts the game.
 """
 
 import inspect

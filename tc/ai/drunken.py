@@ -1,11 +1,14 @@
 """Defines a drunken CombatTurtle object."""
 
-### Add full instructions, including the game mechanics and what is and is not allowed to be used.
-
 import tc.tcplayer
 
 class CombatTurtle(tc.tcplayer.CombatTurtleParent):
-    """Template Combat Turtle class."""
+    """Drunken combat turtle.
+
+    This is a slightly less randomized version of the random turtle. Its
+    movement is mostly randomized, but biased towards moving in the opponent's
+    direction, and it fires only when pointing towards the opponent.
+    """
 
     #-------------------------------------------------------------------------
 
@@ -14,7 +17,7 @@ class CombatTurtle(tc.tcplayer.CombatTurtleParent):
         Static method to return the name of the Combat Turtle AI.
         """
 
-        return "TemplateTurtle"
+        return "DrunkenTurtle"
 
     #-------------------------------------------------------------------------
 
@@ -23,7 +26,7 @@ class CombatTurtle(tc.tcplayer.CombatTurtleParent):
         Static method to return a description of the Combat Turtle AI.
         """
 
-        return "This is a template class that does nothing on its own."
+        return "Wanders semi-randomly towards the opponent."
 
     #=========================================================================
 
