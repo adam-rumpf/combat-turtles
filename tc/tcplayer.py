@@ -76,6 +76,8 @@ class CombatTurtleParent(turtle.Turtle):
         step() -- code run during each step event (which occurs every 50 ms)
     """
 
+    # Static methods declare class constants to be accessed by other classes
+
     #-------------------------------------------------------------------------
 
     def class_name():
@@ -255,11 +257,13 @@ class CombatTurtleParent(turtle.Turtle):
         turtle's current direction.
         """
 
-        ###
-        # Include a way to account for cooldown.
+        # If on cooldown, do nothing
+        if self.cooldown > 0:
+            return None
 
-        ###
-        pass
+        # Otherwise create a missile object and start cooldown
+        self.cooldown = self.fire_delay # reset cooldown duration
+        ### firing
 
     #-------------------------------------------------------------------------
 

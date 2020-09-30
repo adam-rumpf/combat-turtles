@@ -11,15 +11,15 @@ class Block:
 
     #=========================================================================
 
-    def __init__(self, left, right, top, bottom, col="black"):
-        """_Block(left, right, top, bottom) -> _Block
+    def __init__(self, left, right, bottom, top, col="black"):
+        """_Block(left, right, bottom, top) -> _Block
         Block constructor.
 
         Requires the following positional arguments:
             left (float) -- leftmost x-coordinate (px)
             right (float) -- rightmost x-coordinate (px)
-            top (float) -- uppermost y-coordinate (px)
             bottom (float) -- lowermost y-coordinate (px)
+            top (float) -- uppermost y-coordinate (px)
 
         Accepts the following optional keyword arguments:
             col (str or color tuple) ["black"] -- color of block
@@ -28,8 +28,8 @@ class Block:
         # Assign given attributes
         self.left = left
         self.right = right
-        self.top = top
         self.bottom = bottom
+        self.top = top
 
         # Create a turtle to draw the block
         self.t = turtle.Turtle() # turtle object

@@ -70,16 +70,34 @@ def turtle_combat():
                            " [Enter]: ")
         choice2 = int(choice)
 
-    # Show choices
+    # Show players
     print("\nPlayer 1: " + eval(turtle_classes[choice1] + ".class_name()"))
     print("Player 2: " + eval(turtle_classes[choice2] + ".class_name()"))
 
+    # Display arena choices
+    print()
+    arena_names = tc.game.arena.Arena.get_names() # list of all arena layouts
+    _arena_table(arena_names)
+
     # Ask the user to choose an arena
-    ###
-    arena = 0 # layout ID of arena
+    arena = 0 # index of arena layout
+    if len(arena_names) > 1:
+        indices = {str(i) for i in range(len(arena_names))} # valid indices
+
+        # Ask for layout choice until getting a valid response
+        choice = ""
+        while choice not in indices:
+            choice = input("Input an Index [0-" + str(len(arena_names)-1) +
+                           "] to choose the arena layout, and then press" +
+                           " [Enter]: ")
+        arena = int(choice)
+
+    # Show arena
+    print("\nArena: " + arena_names[arena])
 
     # Create game object with chosen turtles and arena
     print("\nOpening Turtle Combat.")
+    print("Game in progress...")
     game = tc.tcgame.TurtleCombatGame(class1=turtle_classes[choice1],
                                       class2=turtle_classes[choice2],
                                       layout=arena)
@@ -107,6 +125,24 @@ def _ai_table(classes):
         name = eval(classes[i] + ".class_name()")
         desc = eval(classes[i] + ".class_desc()")
         print(str(i) + "\t" + name + "\t" + desc)
+
+#-----------------------------------------------------------------------------
+
+def _arena_table(arenas):
+    """_arena_table(arenas) -> None
+    Prints a table of listed arena layouts.
+
+    Requires the following positional arguments:
+        arenas (list (str)) -- list of arena layout names
+    """
+
+    # Print header
+    print("Index\tName")
+    print("-"*60)
+
+    # Print names
+    for i in range(len(arenas)):
+        print(str(i) + "\t" + arenas[i])
 
 #=============================================================================
 

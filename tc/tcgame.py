@@ -21,7 +21,7 @@ class TurtleCombatGame:
 
     #=========================================================================
 
-    def __init__(self, size=(400, 400), layout=0, class1=None, class2=None):
+    def __init__(self, size=(600, 400), layout=0, class1=None, class2=None):
         """TurtleCombatGame([size], [layout], [p1], [p2]) -> TurtleCombatGame
         Constructor for the Turtle Combat game.
 
@@ -32,30 +32,28 @@ class TurtleCombatGame:
         submodule path, for example "tc.ai.keyboard.CombatTurtle".
 
         Accepts the following optional keyword arguments:
-            size (tuple (int, int)) [(400, 400)] -- arena width/height (px)
+            size (tuple (int, int)) [(600, 400)] -- arena width/height (px)
             layout (int) [0] -- arena obstacle layout ID (meanings of IDs
                 defined in Arena class)
             class1 (str) [None] -- full class name of first player object
             class2 (str) [None] -- full class name of second player object
         """
 
-        ### Also add options for how to set up the arena.
-
         # Initialize game constants
         self.step_time = 50 # time per step (ms)
 
         # Define game title string
-        title = "Turtle Combat"
+        title = "Turtle Combat: "
         if class1 != None and class2 != None:
-            title += (" (" + eval(class1 + ".class_name()") + " vs " +
-                      eval(class2 + ".class_name()") + ")")
+            title += (eval(class1 + ".class_name()") + " vs. " +
+                      eval(class2 + ".class_name()") + " ")
+        title += "(" + Arena.get_names()[layout] + ")"
 
         # Set up turtle window
         self.wn = turtle.Screen()
         self.wn.screensize(size[0], size[1])
         self.wn.setup(size[0]+50, size[1]+50) # screen size with small margin
         self.wn.title(title)
-        ### Window title: "P1 vs P2 in Arena"
 
         # Initialize arena
         self.arena = Arena(size=size, layout=layout, walls=5)
@@ -64,14 +62,16 @@ class TurtleCombatGame:
         self.p1 = None # first player
         self.p2 = None # second player
         if class1 != None:
-            x = int(size[0]/4) # x-coordinate
-            argstring = ("(col=\"red\", coords=(" + str(x) + ", 0)," +
-                         " facing=90)")
+            coords = Arena.get_p1_coords(layout)
+            heading = Arena.get_p1_heading(layout)
+            argstring = ("(col=\"red\", coords=" + str(coords) +
+                         ", facing=" + str(heading) + ")")
             self.p1 = eval(class1 + argstring)
         if class2 != None:
-            x = int(-size[0]/4) # x-coordinate
-            argstring = ("(col=\"blue\", coords=(" + str(x) + ", 0)," +
-                         " facing=270)")
+            coords = Arena.get_p2_coords(layout)
+            heading = Arena.get_p2_heading(layout)
+            argstring = ("(col=\"blue\", coords=" + str(coords) +
+                         ", facing=" + str(heading) + ")")
             self.p2 = eval(class2 + argstring)
 
         # Give players each others' pointers
