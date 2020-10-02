@@ -1,4 +1,4 @@
 from . import tcgame
-from . import tcplayer
+from . import tkturtle
 from . import ai
 from . import game

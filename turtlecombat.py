@@ -1,3 +1,6 @@
+### Bugs:
+### Turtles are the wrong shape. Try setting their headings to 0 and printing their coordinates.
+
 """Main Turtle Combat script.
 
 Running this script automatically loads all necessary modules to play a game

@@ -1,6 +1,6 @@
 """Defines the block class."""
 
-import turtle
+### Use Tkinter to draw the blocks.
 
 class Block:
     """Block class.
@@ -32,8 +32,8 @@ class Block:
         self.top = top
 
         # Create a turtle to draw the block
-        self.t = turtle.Turtle() # turtle object
-        self._draw_block(col=col)
+        ###self.t = turtle.Turtle() # turtle object
+        ###self._draw_block(col=col)
 
     #-------------------------------------------------------------------------
 
@@ -84,24 +84,26 @@ class Block:
             col (str or color tuple) ["black"] -- color of block
         """
 
-        # Calculate dimensions
-        w = self.right - self.left # width
-        h = self.top - self.bottom # height
+        pass
 
-        # Use turtle to draw block
-        self.t.hideturtle()
-        self.t.speed(0)
-        self.t.color(col)
-        self.t.penup()
-        self.t.goto(self.left, self.bottom)
-        self.t.setheading(0)
-        self.t.pendown()
-        self.t.begin_fill()
-        self.t.forward(w)
-        self.t.left(90)
-        self.t.forward(h)
-        self.t.left(90)
-        self.t.forward(w)
-        self.t.left(90)
-        self.t.forward(h)
-        self.t.end_fill()
+        # # Calculate dimensions
+        # w = self.right - self.left # width
+        # h = self.top - self.bottom # height
+
+        # # Use turtle to draw block
+        # self.t.hideturtle()
+        # self.t.speed(0)
+        # self.t.color(col)
+        # self.t.penup()
+        # self.t.goto(self.left, self.bottom)
+        # self.t.setheading(0)
+        # self.t.pendown()
+        # self.t.begin_fill()
+        # self.t.forward(w)
+        # self.t.left(90)
+        # self.t.forward(h)
+        # self.t.left(90)
+        # self.t.forward(w)
+        # self.t.left(90)
+        # self.t.forward(h)
+        # self.t.end_fill()

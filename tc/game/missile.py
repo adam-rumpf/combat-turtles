@@ -1,8 +1,9 @@
 """Defines the missile class."""
 
-import turtle
+### Need to add more methods to work from scratch.
+### For simplicity, just make missiles a circle.
 
-class Missile(turtle.Turtle):
+class Missile:
     """Missile class.
 
     Missiles are fired by Combat Turtles. They travel at a fixed speed until
@@ -80,9 +81,6 @@ class Missile(turtle.Turtle):
             trail (bool) [True] -- whether or not to draw a trail for the
                 missile's path
         """
-
-        # Initialize turtle
-        super().__init__()
 
         ### Set appearance and colors, and handle trail option.
         ### If needed, delete drawings on death.

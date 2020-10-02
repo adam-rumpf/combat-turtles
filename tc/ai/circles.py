@@ -1,8 +1,8 @@
 """Defines a test CombatTurtle object that simply moves in circles."""
 
-import tc.tcplayer
+import tc.tkturtle
 
-class CombatTurtle(tc.tcplayer.CombatTurtleParent):
+class CombatTurtle(tc.tkturtle.TkTurtle):
     """Test circular combat turtle.
 
     This turtle should simply travel in circles and periodically shoot.
@@ -42,10 +42,10 @@ class CombatTurtle(tc.tcplayer.CombatTurtleParent):
         Step event code for Combat Turtle.
 
         This turtle's behavior is completely constant and consists of simply
-        moving forward while turning, firing when able.
+        moving forward while turning, shooting when able.
         """
 
         self.forward()
         self.left()
-        if self.can_fire():
-            self.fire()
+        if self.can_shoot():
+            self.shoot()

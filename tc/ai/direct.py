@@ -1,8 +1,8 @@
 """Defines a direct CombatTurtle object."""
 
-import tc.tcplayer
+import tc.tkturtle
 
-class CombatTurtle(tc.tcplayer.CombatTurtleParent):
+class CombatTurtle(tc.tkturtle.TkTurtle):
     """Direct combat turtle.
 
     Its main strategy is to try to move directly towards the opponent, firing

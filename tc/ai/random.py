@@ -1,9 +1,9 @@
 """Defines a random CombatTurtle object."""
 
-import numpy.random as nprand
-import tc.tcplayer
+import random
+import tc.tkturtle
 
-class CombatTurtle(tc.tcplayer.CombatTurtleParent):
+class CombatTurtle(tc.tkturtle.TkTurtle):
     """Random combat turtle.
 
     This turtle's behavior in each step is completely randomized, and has
@@ -39,11 +39,7 @@ class CombatTurtle(tc.tcplayer.CombatTurtleParent):
         distribution.
         """
 
-        # Initialize NumPy RNG
-        self.rng = nprand.default_rng()
-
-        # Initialize firing timer
-        self.timer = 0 # steps since firing
+        pass
 
     #-------------------------------------------------------------------------
 
@@ -54,17 +50,4 @@ class CombatTurtle(tc.tcplayer.CombatTurtleParent):
         Randomize direction and move forward at a random speed.
         """
 
-        # Set random direction (uniformly on [-1,1])
-        self.left(self.rng.uniform(-1, 1))
-
-        # Move at a random speed (uniform on [0, 1])
-        self.forward(self.rng.uniform(0, 1))
-
-        # Make firing decision
-        if self.can_fire():
-            self.timer += 1 # increment timer
-
-            # Use exponential distribution to decide whether to fire
-            if self.rng.exponential(20) < self.timer:
-                self.fire()
-                self.timer = 0
+        pass

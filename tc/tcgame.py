@@ -1,8 +1,8 @@
 """Defines the main game driver class."""
 
-import turtle
-import tc.tcplayer
-from tc.game.arena import Arena
+import tkinter as tk
+import tc.tkturtle
+###from tc.game.arena import Arena
 
 class TurtleCombatGame:
     """A class to act as the main driver for a game of Turtle Combat.
@@ -46,31 +46,37 @@ class TurtleCombatGame:
         if class1 != None and class2 != None:
             title += (eval(class1 + ".class_name()") + " vs. " +
                       eval(class2 + ".class_name()") + " ")
-        title += "(" + Arena.get_names()[layout] + ")"
+        ###title += "(" + Arena.get_names()[layout] + ")"
 
-        # Set up turtle window
-        self.wn = turtle.Screen()
-        self.wn.screensize(size[0], size[1])
-        self.wn.setup(size[0]+50, size[1]+50) # screen size with small margin
-        self.wn.title(title)
+        # Set up Tkinter window
+        self.root = tk.Tk()
+        self.root.title(title)
+        self.canvas = tk.Canvas(self.root, width=size[0], height=size[1])
+        self.canvas.pack()
 
         # Initialize arena
-        self.arena = Arena(size=size, layout=layout, walls=5)
+        ###self.arena = Arena(size=size, layout=layout, walls=5)
 
         # Initialize players
         self.p1 = None # first player
         self.p2 = None # second player
         if class1 != None:
-            coords = Arena.get_p1_coords(layout)
-            heading = Arena.get_p1_heading(layout)
-            argstring = ("(col=\"red\", coords=" + str(coords) +
-                         ", facing=" + str(heading) + ")")
+            ###coords = Arena.get_p1_coords(layout)
+            ###heading = Arena.get_p1_heading(layout)
+            coords = (100, 200)
+            heading = 90
+            argstring = ("(self.root, self.canvas, col=\"red\", coords=" +
+                         str(coords) + ", heading=" + str(heading) +
+                         ", name=\"Player 1\")")
             self.p1 = eval(class1 + argstring)
         if class2 != None:
-            coords = Arena.get_p2_coords(layout)
-            heading = Arena.get_p2_heading(layout)
-            argstring = ("(col=\"blue\", coords=" + str(coords) +
-                         ", facing=" + str(heading) + ")")
+            ###coords = Arena.get_p2_coords(layout)
+            ###heading = Arena.get_p2_heading(layout)
+            coords = (500, 200)
+            heading = 270
+            argstring = ("(self.root, self.canvas, col=\"blue\", coords=" +
+                         str(coords) + ", heading=" + str(heading) +
+                         ", name=\"Player 2\")")
             self.p2 = eval(class2 + argstring)
 
         # Give players each others' pointers
@@ -79,8 +85,8 @@ class TurtleCombatGame:
             self.p2._set_other(self.p1)
 
         # Begin game (after a delay, to allow the arena to initialize)
-        self.wn.ontimer(self.play_game, 1000)
-        self.wn.mainloop()
+        ###self.wn.ontimer(self.play_game, 1000)
+        self.root.mainloop()
 
     #-------------------------------------------------------------------------
 
@@ -91,23 +97,18 @@ class TurtleCombatGame:
         Deletes game objects and closes window.
         """
 
-        try:
+        # Delete players
+        if self.p1 != None:
+            del self.p1
+        if self.p2 != None:
+            del self.p2
 
-            # Delete players
-            if self.p1 != None:
-                del self.p1
-            if self.p2 != None:
-                del self.p2
-
-            # Delete arena
-            del self.arena
-            turtle.bye()
-
-        except turtle.Terminator:
-            pass
+        # Delete arena
+        ###del self.arena
 
     #-------------------------------------------------------------------------
 
+    ###
     def play_game(self):
         """TurtleCombatGame.play_game() -> None
         Main gameplay loop of Turtle Combat.
