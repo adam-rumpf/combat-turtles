@@ -85,7 +85,7 @@ class TurtleCombatGame:
             self.p2._set_other(self.p1)
 
         # Begin game (after a delay, to allow the arena to initialize)
-        ###self.wn.ontimer(self.play_game, 1000)
+        self.root.after(1000, self.play_game)
         self.root.mainloop()
 
     #-------------------------------------------------------------------------
@@ -142,4 +142,4 @@ class TurtleCombatGame:
             pass
         else:
             # Continue loop by resetting timer
-            self.wn.ontimer(self.play_game, self.step_time)
+            self.root.after(self.step_time, self.play_game)

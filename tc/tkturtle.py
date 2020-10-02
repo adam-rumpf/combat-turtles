@@ -126,6 +126,7 @@ class TkTurtle:
         self.heading = heading
         self.root = root
         self.canvas = canvas
+        self.color = col
 
         # Define constant attributes
         self.max_speed = 4.0 # maximum movement speed (px/step)
@@ -136,8 +137,8 @@ class TkTurtle:
         # in polar coordinates (for more easily calculating rotations)
         r1 = dim[0]/2
         r2 = dim[1]/2
-        self.shape_angle = [0, math.pi, math.atan2(r2, -r1),
-                            math.atan2(-r2, -r1), -math.pi]
+        self.shape_angle = [0, math.pi/2, math.atan2(r2, -r1),
+                            math.atan2(-r2, -r1), -math.pi/2]
         self.shape_radius = [r1, r2, math.sqrt(r1**2 + r2**2),
                              math.sqrt(r1**2 + r2**2), r2]
 
@@ -149,7 +150,7 @@ class TkTurtle:
         self.cooldown = 0 # delay until able to shoot next (steps)
 
         # Draw self
-        self.sprite = self.canvas.create_polygon(self._poly(), fill=col)
+        self._redraw()
 
         # Initialize list of currently-active missiles shot by this turtle
         self.missiles = []
@@ -217,6 +218,31 @@ class TkTurtle:
         """
 
         pass
+
+    #-------------------------------------------------------------------------
+
+    def _redraw(self):
+        """TkTurtle._redraw() -> None
+        Redraws sprite on canvas to update appearance after moving.
+
+        User visibility:
+            should call -- no
+            should overwrite -- no
+
+        This method is called at the end of each step to update the turtle
+        sprite's position on the screen. The existing sprite is deleted and a
+        new polygon is drawn at the new position and orientation.
+        """
+
+        # Delete existing sprite (undefined during initial draw)
+        try:
+            self.canvas.delete(self.sprite)
+        except AttributeError:
+            pass
+
+        # Draw new sprite
+        self.sprite = self.canvas.create_polygon(self._poly(),
+                                                 fill=self.color)
 
     #-------------------------------------------------------------------------
 
@@ -304,6 +330,9 @@ class TkTurtle:
         # Update all missiles
         ###for m in self.missiles:
         ###    m.step()
+
+        # Update sprite
+        self._redraw()
 
     #-------------------------------------------------------------------------
 
@@ -529,7 +558,7 @@ class TkTurtle:
 
     def _move(self):
         """TkTurtle._move() -> None
-        Moves a turtle according to its spd attribute.
+        Moves a turtle according to its speed attribute.
 
         User visibility:
             should call -- no
@@ -588,7 +617,7 @@ class TkTurtle:
         """
 
         # Determine turning speed (with rate clamped between -1 and 1)
-        self.spd_turn = self.max_turn * max(min(rate, 1), -1)
+        self.speed_turn = self.max_turn * max(min(rate, 1), -1)
 
     #-------------------------------------------------------------------------
 
@@ -665,13 +694,13 @@ class TkTurtle:
             should overwrite -- no
         """
 
-        return self.spd_turn
+        return self.speed_turn
 
     #-------------------------------------------------------------------------
 
     def _turn(self):
         """TkTurtle._turn() -> None
-        Turns a turtle according to its spd_turn attribute.
+        Turns a turtle according to its speed_turn attribute.
 
         User visibility:
             should call -- no
@@ -682,8 +711,8 @@ class TkTurtle:
         left() and right() methods (or their aliases).
         """
 
-        # Call standard turtle left method
-        super().left(int(self.spd_turn))
+        # Change heading
+        self.heading += self.speed_turn
 
     #-------------------------------------------------------------------------
 
