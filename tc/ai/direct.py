@@ -35,7 +35,9 @@ class CombatTurtle(tc.tkturtle.TkTurtle):
         Initialization code for direct Combat Turtle.
         """
 
-        pass
+        # Define constant linear and angular speed factors
+        self.speed = 1.0
+        self.turn_speed = 1.0
 
     #-------------------------------------------------------------------------
 
@@ -44,4 +46,9 @@ class CombatTurtle(tc.tkturtle.TkTurtle):
         Step event code for direct Combat Turtle.
         """
 
-        pass
+        # Turn towards opponent
+        self.turn_towards()
+
+        # Move towards opponent (unless within blast radius)
+        if self.other_distance() > self.missile_radius():
+            self.forward(self.speed)

@@ -5,8 +5,9 @@ script imports all submodules, defined as .py files whose names do not begin
 with an underscore (_).
 
 In the main driver, specific AI classes will be referred to using the format
-'tc.ai.<classname>.CombatTurtle', where '<classname>' is the name of the .py
-file.
+'tc.ai.<submodule>.CombatTurtle', where '<submodule>' is the name of the .py
+file. This script loads all valid submodule names into this module's __all__
+attribute.
 """
 
 import os.path

@@ -33,7 +33,9 @@ class CombatTurtle(tc.tkturtle.TkTurtle):
         Initialization code for Combat Turtle.
         """
 
-        pass
+        # Define constant linear and angular speed factors
+        self.speed = 1.0
+        self.turn_speed = 0.5
 
     #-------------------------------------------------------------------------
 
@@ -45,7 +47,7 @@ class CombatTurtle(tc.tkturtle.TkTurtle):
         moving forward while turning, shooting when able.
         """
 
-        self.forward()
-        self.left()
+        self.forward(self.speed)
+        self.left(self.turn_speed)
         if self.can_shoot():
             self.shoot()
