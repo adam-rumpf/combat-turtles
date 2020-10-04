@@ -6,6 +6,7 @@
 
 import tkinter as tk
 import math
+from . import tcgame
 from tc.game.missile import Missile
 
 class TkTurtle:
@@ -55,8 +56,8 @@ class TkTurtle:
         other_position(), other_heading(), other_speed(), other_turn_speed(),
             other_speed(), other_health() -- equivalent to the get methods,
             but returns the attributes of the opponent turtle
-        distance() -- returns the distance between a pair of coordinates (px)
-        other_distance() -- returns the distance to the opponent turtle (px)
+        distance() -- returns the distance between a pair of coordinates (px),
+            including distance to opponent turtle
         relative_position() -- returns the position of the opponent turtle
             (px, px) relative to this turtle
         relative_heading() -- returns the relative heading towards the
@@ -67,6 +68,8 @@ class TkTurtle:
         missile_range() -- returns the maximum range of missiles (px)
         missile_proximity() -- returns the proximity radius of missiles (px)
         missile_radius() -- returns the explosion radius of missiles (px)
+        arena_left(), arena_right(), arena_top(), arena_bottom() -- returns
+            the coordinates of the arena boundaries
 
     The following methods are meant to be overwritten in user-defined
     subclasses:
@@ -100,9 +103,9 @@ class TkTurtle:
 
     #=========================================================================
 
-    def __init__(self, root, canvas, name=class_name(), col="black",
+    def __init__(self, game, name=class_name(), col="black",
                  coords=(0.0, 0.0), heading=0.0, dim=(30, 20)):
-        """TkTurtle(root, canvas, [name], [col], [coords], [facing], [dim]) ->
+        """TkTurtle(game, [name], [col], [coords], [facing], [dim]) ->
         TkTurtle
         Combat Turtle parent constructor.
 
@@ -111,14 +114,13 @@ class TkTurtle:
             should overwrite -- no
 
         Requires the following positional arguments:
-            root (tkinter.Tk) -- Tkinter root object for game window
-            canvas (tkinter.Canvas) -- canvas object for game window
+            game (tcgame.TurtleCombatGame) -- game driver object
 
         Accepts the following optional keyword arguments:
             name (str) ["Combat Turtle"] -- name of turtle
             col (str or color tuple) ["black"] -- color of turtle
             coords (tuple (float, float)) [(0,0, 0.0)] -- initial coordinates
-            facing (float) [0.0] -- initial orientation (degrees)
+            heading (int) [0] -- initial orientation (degrees north of east)
             dim (tuple (int, int)) [(30, 20)] -- length and width (px) of
                 turtle's sprite
         """
@@ -127,13 +129,13 @@ class TkTurtle:
         self._name = name
         (self._x, self._y) = coords
         self._heading = heading
-        self._root = root
-        self._canvas = canvas
+        self._game = game
+        self._canvas = self._game.get_canvas()
         self._color = col
 
         # Define constant attributes
-        self._max_speed = 4.0 # maximum movement speed (px/step)
-        self._max_turn = 15.0 # maximum turning speed (deg/step)
+        self._max_speed = 4 # maximum movement speed (px/step)
+        self._max_turn = 15 # maximum turning speed (deg/step)
         self._shoot_delay = 40 # delay between missile shots (steps)
 
         # Define default shape polygon (points relative to (0,0)), expressed
@@ -147,9 +149,9 @@ class TkTurtle:
 
         # Define variable attributes
         self._other = None # opponent turtle object
-        self._speed = 0.0 # target movement speed (px/step, negative for back)
-        self._speed_turn = 0.0 # target CCW turn speed (deg/step, < 0 for CW)
-        self._health = 100.0 # health points (turtle dies when health is zero)
+        self._speed = 0 # target movement speed (px/step, negative for back)
+        self._speed_turn = 0 # target CCW turn speed (deg/step, < 0 for CW)
+        self._health = 100 # health points (turtle dies when health is zero)
         self._cooldown = 0 # delay until able to shoot next (steps)
 
         # Draw self
@@ -288,10 +290,10 @@ class TkTurtle:
         coords = [0 for i in range(2*(len(self._shape_radius)+1))]
         angle = (math.pi/180)*self._heading # convert heading to radians
         for i in range(len(self._shape_angle)):
-            coords[2*i] = self._x + (self._shape_radius[i]*
-                                     math.cos(self._shape_angle[i]+angle))
-            coords[2*i+1] = self._y + (self._shape_radius[i]*
-                                       math.sin(self._shape_angle[i]+angle))
+            coords[2*i] = int(self._x + (self._shape_radius[i]*
+                              math.cos(self._shape_angle[i]+angle)))
+            coords[2*i+1] = int(self._y + (self._shape_radius[i]*
+                                math.sin(self._shape_angle[i]+angle)))
         coords[-2] = coords[0]
         coords[-1] = coords[1]
 
@@ -323,6 +325,7 @@ class TkTurtle:
 
         # Set speed to zero
         self._speed = 0
+        self._speed_turn = 0
 
         # Call the user-defined step method
         self.step()
@@ -460,7 +463,7 @@ class TkTurtle:
         """
 
         # Determine movement speed (with rate clamped between -1 and 1)
-        self._speed = self._max_speed * max(min(rate, 1), -1)
+        self._speed = int(self._max_speed * max(min(rate, 1), -1))
 
     #-------------------------------------------------------------------------
 
@@ -586,13 +589,13 @@ class TkTurtle:
         # wall.
 
         # Move to new coordinates
-        self._x += self._speed*math.cos((math.pi/180)*self._heading)
-        self._y += self._speed*math.sin((math.pi/180)*self._heading)
+        self._x += int(self._speed*math.cos((math.pi/180)*self._heading))
+        self._y += int(self._speed*math.sin((math.pi/180)*self._heading))
 
     #-------------------------------------------------------------------------
 
     def get_heading(self):
-        """TkTurtle.get_heading() -> float
+        """TkTurtle.get_heading() -> int
         Returns the current direction (deg) of the Combat Turtle.
 
         User visibility:
@@ -622,7 +625,7 @@ class TkTurtle:
         """
 
         # Determine turning speed (with rate clamped between -1 and 1)
-        self._speed_turn = self._max_turn * max(min(rate, 1), -1)
+        self._speed_turn = int(self._max_turn * max(min(rate, 1), -1))
 
     #-------------------------------------------------------------------------
 
@@ -717,7 +720,7 @@ class TkTurtle:
         """
 
         # Change heading
-        self._heading += self._speed_turn
+        self._heading += int(self._speed_turn)
 
     #-------------------------------------------------------------------------
 
@@ -737,18 +740,35 @@ class TkTurtle:
 
     #-------------------------------------------------------------------------
 
-    def distance(self, coords1, coords2):
-        """TkTurtle.distance(coords1, coords2) -> float
+    def distance(self, *args):
+        """TkTurtle.distance([coords1[, coords2]]) -> float
         Calculates the distance between a pair of coordinates (px).
 
         User visibility:
             should call -- no
             should overwrite -- yes
 
-        Requires the following positional arguments:
-            coords1 (tuple (float, float)) -- first pair of coordinates
-            coords2 (tuple (float, float)) -- second pair of coordinates
+        This method can be called in several different formats depending on
+            the number of arguments:
+            TkTurtle.distance() -- returns distance between self and opponent
+                combat turtle
+            TkTurtle.distance(coords) -- returns distance between self and a
+                specified set of coordinates (int, int)
+            TkTurtle.distance(coords1, coords2) -- returns distance between
+                a specified pair of coordiantes (int, int) and (int, int)
         """
+
+        # Default arguments
+        coords1 = self.get_position()
+        coords2 = self.get_position()
+        if self._other != None:
+            coords2 = self._other.get_position()
+
+        # Modify depending on given inputs
+        if len(args) >= 1:
+            coords2 = args[0]
+        if len(args) >= 2:
+            coords1 = args[1]
 
         # Calculate Euclidean distance
         return math.sqrt((coords1[0]-coords2[0])**2 +
@@ -1045,3 +1065,55 @@ class TkTurtle:
         ### Specifically, we could immediately calculate all of the points
         ### that a missile would pass through (given its speed and direction)
         ### and test whether each point collides with a block.
+
+    #-------------------------------------------------------------------------
+
+    def arena_left(self):
+        """TkTurtle.arena_left() -> float
+        Returns the minimum x-coordinate of the arena boundary.
+
+        User visibility:
+            should call -- yes
+            should overwrite -- no
+        """
+
+        return 0
+
+    #-------------------------------------------------------------------------
+
+    def arena_right(self):
+        """TkTurtle.arena_right() -> float
+        Returns the maximum x-coordinate of the arena boundary.
+
+        User visibility:
+            should call -- yes
+            should overwrite -- no
+        """
+
+        return self._canvas["width"]
+
+    #-------------------------------------------------------------------------
+
+    def arena_bottom(self):
+        """TkTurtle.arena_bottom() -> float
+        Returns the minimum y-coordinate of the arena boundary.
+
+        User visibility:
+            should call -- yes
+            should overwrite -- no
+        """
+
+        return 0
+
+    #-------------------------------------------------------------------------
+
+    def arena_top(self):
+        """TkTurtle.arena_top() -> float
+        Returns the maximum y-coordinate of the arena boundary.
+
+        User visibility:
+            should call -- yes
+            should overwrite -- no
+        """
+
+        return self._canvas["height"]

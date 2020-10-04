@@ -35,7 +35,7 @@ def turtle_combat():
 
     # Quit if no valid modules were found
     if len(turtle_classes) == 0:
-        print("\nNo valid modules were found in the ai/ directory.")
+        print("\nNo valid modules were found in the tc/ai/ directory.")
         print("Please review the documentation to see the required format.")
         print("https://github.com/adam-rumpf/turtle-combat")
         return None

@@ -50,5 +50,7 @@ class CombatTurtle(tc.tkturtle.TkTurtle):
         self.turn_towards()
 
         # Move towards opponent (unless within blast radius)
-        if self.other_distance() > self.missile_radius():
+        if self.distance() > self.missile_radius():
             self.forward(self.speed)
+
+        ### Shoot if facing opponent

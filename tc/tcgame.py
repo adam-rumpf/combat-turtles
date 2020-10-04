@@ -53,6 +53,7 @@ class TurtleCombatGame:
         self.root.title(title)
         self.canvas = tk.Canvas(self.root, width=size[0], height=size[1])
         self.canvas.pack()
+        ### Change this to grid to place turtle health outside arena.
 
         # Initialize arena
         ###self.arena = Arena(size=size, layout=layout, walls=5)
@@ -65,18 +66,16 @@ class TurtleCombatGame:
             ###heading = Arena.get_p1_heading(layout)
             coords = (100, 200)
             heading = 90
-            argstring = ("(self.root, self.canvas, col=\"red\", coords=" +
-                         str(coords) + ", heading=" + str(heading) +
-                         ", name=\"Player 1\")")
+            argstring = ("(self, col=\"red\", coords=" + str(coords) +
+                         ", heading=" + str(heading) + ", name=\"Player 1\")")
             self.p1 = eval(class1 + argstring)
         if class2 != None:
             ###coords = Arena.get_p2_coords(layout)
             ###heading = Arena.get_p2_heading(layout)
             coords = (500, 200)
             heading = 270
-            argstring = ("(self.root, self.canvas, col=\"blue\", coords=" +
-                         str(coords) + ", heading=" + str(heading) +
-                         ", name=\"Player 2\")")
+            argstring = ("(self, col=\"blue\", coords=" + str(coords) +
+                         ", heading=" + str(heading) + ", name=\"Player 2\")")
             self.p2 = eval(class2 + argstring)
 
         # Give players each others' pointers
@@ -85,7 +84,7 @@ class TurtleCombatGame:
             self.p2._set_other(self.p1)
 
         # Begin game (after a delay, to allow the arena to initialize)
-        self.root.after(1000, self.play_game)
+        self.root.after(500, self.play_game)
         self.root.mainloop()
 
     #-------------------------------------------------------------------------
@@ -105,6 +104,15 @@ class TurtleCombatGame:
 
         # Delete arena
         ###del self.arena
+
+    #-------------------------------------------------------------------------
+
+    def get_canvas(self):
+        """TurtleCombatGame.get_canvas() -> tkinter.Canvas
+        Returns the Canvas object representing the game arena.
+        """
+
+        return self.canvas
 
     #-------------------------------------------------------------------------
 
