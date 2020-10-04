@@ -104,7 +104,7 @@ class TkTurtle:
     #=========================================================================
 
     def __init__(self, game, name=class_name(), col="black",
-                 coords=(0.0, 0.0), heading=0.0, dim=(30, 20)):
+                 coords=(0, 0), heading=0, dim=(30, 20)):
         """TkTurtle(game, [name], [col], [coords], [facing], [dim]) ->
         TkTurtle
         Combat Turtle parent constructor.
@@ -119,7 +119,7 @@ class TkTurtle:
         Accepts the following optional keyword arguments:
             name (str) ["Combat Turtle"] -- name of turtle
             col (str or color tuple) ["black"] -- color of turtle
-            coords (tuple (float, float)) [(0,0, 0.0)] -- initial coordinates
+            coords (tuple (int, int)) [(0,0, 0.0)] -- initial coordinates
             heading (int) [0] -- initial orientation (degrees north of east)
             dim (tuple (int, int)) [(30, 20)] -- length and width (px) of
                 turtle's sprite
@@ -368,7 +368,7 @@ class TkTurtle:
     #-------------------------------------------------------------------------
 
     def get_max_speed(self):
-        """TkTurtle.get_max_speed() -> float
+        """TkTurtle.get_max_speed() -> int
         Returns the maximum speed (px/step) of the turtle.
 
         User visibility:
@@ -381,7 +381,7 @@ class TkTurtle:
     #-------------------------------------------------------------------------
 
     def get_max_turn_speed(self):
-        """TkTurtle.get_max_turn_speed() -> float
+        """TkTurtle.get_max_turn_speed() -> int
         Returns the maximum turning speed (deg/step) of the turtle.
 
         User visibility:
@@ -394,7 +394,7 @@ class TkTurtle:
     #-------------------------------------------------------------------------
 
     def get_position(self):
-        """TkTurtle.get_position() -> float
+        """TkTurtle.get_position() -> tuple
         Returns the current position (px, px) of the Combat Turtle.
 
         User visibility:
@@ -553,7 +553,7 @@ class TkTurtle:
     #-------------------------------------------------------------------------
 
     def get_speed(self):
-        """TkTurtle.get_speed() -> float
+        """TkTurtle.get_speed() -> int
         Returns the current speed (px/step) of the Combat Turtle.
 
         User visibility:
@@ -694,7 +694,7 @@ class TkTurtle:
     #-------------------------------------------------------------------------
 
     def get_turn_speed(self):
-        """TkTurtle.get_turn_speed() -> float
+        """TkTurtle.get_turn_speed() -> int
         Returns the turning speed (CCW deg/step) of the Combat Turtle.
 
         User visibility:
@@ -725,7 +725,7 @@ class TkTurtle:
     #-------------------------------------------------------------------------
 
     def other_position(self):
-        """TkTurtle.other_position() -> (float, float)
+        """TkTurtle.other_position() -> tuple
         Returns the coordinates of the opponent Combat Turtle.
 
         User visibility:
@@ -749,13 +749,12 @@ class TkTurtle:
             should overwrite -- yes
 
         This method can be called in several different formats depending on
-            the number of arguments:
-            TkTurtle.distance() -- returns distance between self and opponent
-                combat turtle
-            TkTurtle.distance(coords) -- returns distance between self and a
-                specified set of coordinates (int, int)
-            TkTurtle.distance(coords1, coords2) -- returns distance between
-                a specified pair of coordiantes (int, int) and (int, int)
+        the number of arguments:
+            0 arguments -- returns distance between self and opponent
+            1 argument -- returns distance between self and given coordinate
+                (int, int)
+            2 arguments -- returns distance between given pair of coordinates,
+                both (int, int)
         """
 
         # Default arguments
@@ -776,25 +775,8 @@ class TkTurtle:
 
     #-------------------------------------------------------------------------
 
-    def other_distance(self):
-        """TkTurtle.other_distance() -> float
-        Returns the distance to the opponent turtle (px).
-
-        User visibility:
-            should call -- yes
-            should overwrite -- no
-        """
-
-        if self._other == None:
-            return None
-
-        # Calculate distance between pair of coordinates
-        return self.distance(self.get_position(), self._other.get_position())
-
-    #-------------------------------------------------------------------------
-
     def relative_position(self):
-        """TkTurtle.relative_position() -> (float, float)
+        """TkTurtle.relative_position() -> tuple
         Returns coordinates of the opponent Combat Turtle relative to self.
 
         User visibility:
@@ -815,7 +797,7 @@ class TkTurtle:
     #-------------------------------------------------------------------------
 
     def other_heading(self):
-        """TkTurtle.other_heading() -> (float, float)
+        """TkTurtle.other_heading() -> tuple
         Returns the heading direction (degrees) of the opponent Combat Turtle.
 
         User visibility:
@@ -831,7 +813,7 @@ class TkTurtle:
     #-------------------------------------------------------------------------
 
     def relative_heading(self):
-        """TkTurtle.relative_heading() -> float
+        """TkTurtle.relative_heading() -> int
         Returns the relative heading (deg) to the opponent turtle.
 
         User visibility:
@@ -862,8 +844,8 @@ class TkTurtle:
             should overwrite -- no
 
         Accepts the following optional keyword arguments:
-            coords (tuple (float, float)) [other_position] -- coordinates to
-                turn towards (px, px), defaults to opponent position
+            coords (tuple (int, int)) [other_position] -- coordinates to turn
+                towards (px, px), defaults to opponent position
 
         This method automatically attempts to turn the Combat Turtle towards a
         given set of coordinates. If possible, it will turn directly towards
@@ -877,12 +859,13 @@ class TkTurtle:
             self.turn_towards(coords=self.other_position())
 
         ###
+        ### Turn left equal to the relative heading, clamped at +/- maximum turn speed.
         pass
 
     #-------------------------------------------------------------------------
 
     def other_speed(self):
-        """TkTurtle.other_speed() -> float
+        """TkTurtle.other_speed() -> int
         Returns the current speed (px/step) of the opponent Combat Turtle.
 
         User visibility:
@@ -898,7 +881,7 @@ class TkTurtle:
     #-------------------------------------------------------------------------
 
     def other_turn_speed(self):
-        """TkTurtle.other_turn_speed() -> float
+        """TkTurtle.other_turn_speed() -> int
         Returns the turn speed (CCW deg/step) of the opponent Combat Turtle.
 
         User visibility:
@@ -914,7 +897,7 @@ class TkTurtle:
     #-------------------------------------------------------------------------
 
     def get_health(self):
-        """TkTurtle.get_health() -> float
+        """TkTurtle.get_health() -> int
         Returns the health of the Combat Turtle.
 
         User visibility:
@@ -927,7 +910,7 @@ class TkTurtle:
     #-------------------------------------------------------------------------
 
     def other_health(self):
-        """TkTurtle.other_health() -> float
+        """TkTurtle.other_health() -> int
         Returns the health of the opponent Combat Turtle.
 
         User visibility:
@@ -943,7 +926,7 @@ class TkTurtle:
     #-------------------------------------------------------------------------
 
     def missile_speed(self):
-        """TkTurtle.missile_speed() -> float
+        """TkTurtle.missile_speed() -> int
         Returns the constant travel speed of missiles (px/step).
 
         User visibility:
@@ -959,7 +942,7 @@ class TkTurtle:
     #-------------------------------------------------------------------------
 
     def missile_range(self):
-        """TkTurtle.missile_range() -> float
+        """TkTurtle.missile_range() -> int
         Returns the maximum range of missiles (px).
 
         User visibility:
@@ -976,7 +959,7 @@ class TkTurtle:
     #-------------------------------------------------------------------------
 
     def missile_proximity(self):
-        """TkTurtle.missile_proximity() -> float
+        """TkTurtle.missile_proximity() -> int
         Returns the proximity distance of missiles (px).
 
         User visibility:
@@ -992,7 +975,7 @@ class TkTurtle:
     #-------------------------------------------------------------------------
 
     def missile_radius(self):
-        """TkTurtle.missile_radius() -> float
+        """TkTurtle.missile_radius() -> int
         Returns the explosive radius of missiles (px).
 
         User visibility:
@@ -1018,7 +1001,7 @@ class TkTurtle:
             should overwrite -- no
 
         Requires the following positional arguments:
-            hp (float) -- amount of health to add
+            hp (int) -- amount of health to add
         """
 
         self._health += hp
@@ -1034,7 +1017,7 @@ class TkTurtle:
             should overwrite -- no
 
         Requires the following positional arguments:
-            hp (float) -- amount of health to remove
+            hp (int) -- amount of health to remove
         """
 
         self._health -= hp
@@ -1069,7 +1052,7 @@ class TkTurtle:
     #-------------------------------------------------------------------------
 
     def arena_left(self):
-        """TkTurtle.arena_left() -> float
+        """TkTurtle.arena_left() -> int
         Returns the minimum x-coordinate of the arena boundary.
 
         User visibility:
@@ -1082,7 +1065,7 @@ class TkTurtle:
     #-------------------------------------------------------------------------
 
     def arena_right(self):
-        """TkTurtle.arena_right() -> float
+        """TkTurtle.arena_right() -> int
         Returns the maximum x-coordinate of the arena boundary.
 
         User visibility:
@@ -1095,7 +1078,7 @@ class TkTurtle:
     #-------------------------------------------------------------------------
 
     def arena_bottom(self):
-        """TkTurtle.arena_bottom() -> float
+        """TkTurtle.arena_bottom() -> int
         Returns the minimum y-coordinate of the arena boundary.
 
         User visibility:
@@ -1108,7 +1091,7 @@ class TkTurtle:
     #-------------------------------------------------------------------------
 
     def arena_top(self):
-        """TkTurtle.arena_top() -> float
+        """TkTurtle.arena_top() -> int
         Returns the maximum y-coordinate of the arena boundary.
 
         User visibility:

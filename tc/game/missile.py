@@ -22,14 +22,14 @@ class Missile:
     #-------------------------------------------------------------------------
 
     def get_speed():
-        """Missile.get_speed() -> float
+        """Missile.get_speed() -> int
         Returns missile travel speed (px/step).
 
         Missiles travel at a constant speed in the direction of their initial
         heading.
         """
 
-        return 10.0
+        return 10
 
     #-------------------------------------------------------------------------
 
@@ -46,40 +46,36 @@ class Missile:
     #-------------------------------------------------------------------------
 
     def get_proximity():
-        """Missile.get_proximity() -> float
+        """Missile.get_proximity() -> int
         Returns missile proximity distance (px).
 
         Missiles explode when they get within this distance of an opponent
         Combat Turtle.
         """
 
-        return 5.0
+        return 5
 
     #-------------------------------------------------------------------------
 
     def get_radius():
-        """Missile.get_radius() -> float
+        """Missile.get_radius() -> int
         Returns missile explosive radius.
 
         When a missile explodes, any turtle within this radius is damaged
         (including the missile's shooter).
         """
 
-        return 20.0
+        return 20
 
     #=========================================================================
 
-    def __init__(self, shooter, angle, trail=False):
-        """Missile(shooter, angle[, trail]) -> Missile
+    def __init__(self, shooter, angle):
+        """Missile(shooter, angle) -> Missile
         Missile constructor.
 
         Requires the following positional arguments:
             shooter (CombatTurtle) -- turtle object that fired the missile
-            angle (float) -- direction in which missile was fired
-
-        Accepts the following optional keyword argument:
-            trail (bool) [True] -- whether or not to draw a trail for the
-                missile's path
+            angle (int) -- direction in which missile was fired
         """
 
         ### Set appearance and colors, and handle trail option.

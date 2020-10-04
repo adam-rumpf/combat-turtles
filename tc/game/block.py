@@ -16,10 +16,10 @@ class Block:
         Block constructor.
 
         Requires the following positional arguments:
-            left (float) -- leftmost x-coordinate (px)
-            right (float) -- rightmost x-coordinate (px)
-            bottom (float) -- lowermost y-coordinate (px)
-            top (float) -- uppermost y-coordinate (px)
+            left (int) -- leftmost x-coordinate (px)
+            right (int) -- rightmost x-coordinate (px)
+            bottom (int) -- lowermost y-coordinate (px)
+            top (int) -- uppermost y-coordinate (px)
 
         Accepts the following optional keyword arguments:
             col (str or color tuple) ["black"] -- color of block
@@ -51,7 +51,7 @@ class Block:
         Determines whether the block contains a given coordinate.
 
         Requires the following positional arguments:
-            coords (tuple (float, float)) -- coordinate to test
+            coords (tuple (int, int)) -- coordinate to test
 
         Accepts the following optional keyword arguments:
             closed (bool [True]) -- whether to include the boundaries

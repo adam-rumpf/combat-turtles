@@ -13,9 +13,6 @@ class TurtleCombatGame:
 
     A step occurs every 40 ms (at a rate of 25 steps/sec). At the end of each
     step, this object calls the hidden _step() method of all moving objects.
-    Moving objects are all turtle subclasses, but they move instantly during
-    their step events rather than moving smoothly with the built-in turtle
-    methods.
     """
 
     #=========================================================================
