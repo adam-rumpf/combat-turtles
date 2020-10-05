@@ -3,6 +3,7 @@
 ### Note: May need to update the 40 ms (25 steps/sec) step timing description.
 
 ### In the template, list the public methods and sort by general purpose (action, opponent info, constant info, self info).
+### Also reorder these methods by category.
 
 import tkinter as tk
 import math
@@ -136,7 +137,7 @@ class TkTurtle:
         # Define constant attributes
         self._max_speed = 4 # maximum movement speed (px/step)
         self._max_turn = 15 # maximum turning speed (deg/step)
-        self._shoot_delay = 40 # delay between missile shots (steps)
+        self._shoot_delay = 60 # delay between missile shots (steps)
 
         # Define default shape polygon (points relative to (0,0)), expressed
         # in polar coordinates (for more easily calculating rotations)
@@ -153,6 +154,7 @@ class TkTurtle:
         self._speed_turn = 0 # target CCW turn speed (deg/step, < 0 for CW)
         self._health = 100 # health points (turtle dies when health is zero)
         self._cooldown = 0 # delay until able to shoot next (steps)
+        self._shooting = False # whether the turtle is attempting to shoot
 
         # Draw self
         self._redraw()
@@ -319,13 +321,14 @@ class TkTurtle:
         the missile's step() method.
         """
 
+        # Reset speed and shooting status
+        self._speed = 0
+        self._speed_turn = 0
+        self._shooting = False
+
         # Reduce cooldown
         if self._cooldown > 0:
             self._cooldown -= 1
-
-        # Set speed to zero
-        self._speed = 0
-        self._speed_turn = 0
 
         # Call the user-defined step method
         self.step()
@@ -338,32 +341,36 @@ class TkTurtle:
 
         # Update all missiles
         for m in self._missiles:
-            m.step()
+            m._step()
+
+        # Attempt to shoot
+        self._shoot()
 
         # Update sprite
         self._redraw()
 
     #-------------------------------------------------------------------------
 
-    def shoot(self):
-        """TkTurtle.shoot() -> None
+    def _shoot(self):
+        """TkTurtle._shoot() -> None
         Shoots a missile in the turtle's current direction.
 
         User visibility:
-            should call -- yes
+            should call -- no
             should overwrite -- no
 
         Creates a Missile object which begins to automatically move in the
         turtle's current direction.
         """
 
-        # If on cooldown, do nothing
-        if self._cooldown > 0:
+        # If on cooldown or if not shooting, do nothing
+        if self._shooting == False or self._cooldown > 0:
             return None
 
-        # Otherwise create a missile object and start the cooldown
-        ###self.cooldown = self.shoot # reset cooldown duration
-        ###self.missiles.append(Missile(self, self.get_heading())) # new missile
+        # Otherwise create a missile object and add to the list
+        self._cooldown = self._shoot_delay # reset cooldown duration
+        self._missiles.append(Missile(self._game, self, self._other,
+                                      self.get_position(), self._heading))
 
     #-------------------------------------------------------------------------
 
@@ -442,6 +449,23 @@ class TkTurtle:
         """
 
         return (self._cooldown <= 0)
+
+    #-------------------------------------------------------------------------
+
+    def shoot(self):
+        """TkTurtle.shoot() -> None
+        Tells a turtle to shoot a missile.
+
+        User visibility:
+            should call -- yes
+            should overwrite -- no
+
+        Attempts to shoot a missile in the turtle's current direction. If the
+        turtle is still on cooldown from the previous shot, this does nothing.
+        """
+
+        # Set shooting status
+        self._shooting = True
 
     #-------------------------------------------------------------------------
 

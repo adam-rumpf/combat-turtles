@@ -1,7 +1,7 @@
 """Defines the missile class."""
 
-### Need to add more methods to work from scratch.
-### For simplicity, just make missiles a circle.
+import math
+import tkinter as tk
 
 class Missile:
     """Missile class.
@@ -69,49 +69,62 @@ class Missile:
 
     #=========================================================================
 
-    def __init__(self, shooter, angle):
-        """Missile(shooter, angle) -> Missile
+    def __init__(self, game, shooter, target, coords, heading):
+        """Missile(game, target, heading) -> Missile
         Missile constructor.
 
         Requires the following positional arguments:
-            shooter (CombatTurtle) -- turtle object that fired the missile
-            angle (int) -- direction in which missile was fired
+            game (tcgame.TurtleCombatGame) -- game driver object
+            shooter (tkturtle.CombatTurtle) -- combat turtle that shot this
+                missile (missile maintained in its shooter's list)
+            target (tkturtle.CombatTurtle) -- combat turtle to treat as the
+                target (missile explodes when close enough to target)
+            coords (tuple (int, int)) -- initial coordinates of missile
+            heading (int) -- constant heading for missile
         """
 
-        ### Set appearance and colors, and handle trail option.
-        ### If needed, delete drawings on death.
-
-        # Set turtle class attributes
-        self.hideturtle() # hide before moving into position
-        self.speed(0) # movement handled in steps
-        self.shape("arrow")
-        self.resizemode("user")
-        self.shapesize(0.5, 0.5)
-        self.color("gray")
-        self.penup()
-        self.goto(shooter.get_position()) # go to parent turtle's position
-        self.setheading(angle)
-        if trail:
-            self.pendown()
-        self.showturtle()
-
-        # Define associated shooter Combat Turtle
+        # Assign given attributes
+        self.game = game
+        self.canvas = self.game.get_canvas() # canvas to draw self on
         self.shooter = shooter
+        self.target = target
+        self.x = coords[0]
+        self.y = coords[1]
+        self.heading = heading
 
         # Assign constant attributes
-        self.spd = Missile.get_speed() # constant travel speed (px/step)
-        self.step_time = 40 # time between steps (ms)
+        self.sprite_radius = 4 # radius of circular missile sprite
+        self.speed = Missile.get_speed() # constant travel speed (px/step)
         self.proximity = Missile.get_proximity() # missile explodes when
-            # within this distance (px) of a turtle (except for the shooter)
+            # within this distance (px) of the target turtle
         self.radius = Missile.get_lifespan() # radius of explosion (px)
 
         # Initialize countdown timer
         self.countdown = Missile.get_lifespan() # time until explosion (steps)
+        self.exploding = 0 # time since explosion began (steps)
+
+        # Draw self
+        self._redraw()
 
     #-------------------------------------------------------------------------
 
-    def step(self):
-        """Missile.step() -> None
+    def __del__(self):
+        """~Missile.__del__() -> None
+        Missile destructor.
+
+        Deletes drawing on canvas.
+        """
+
+        # Delete sprite (if it has been defined)
+        try:
+            self.canvas.delete(self.sprite)
+        except AttributeError:
+            pass
+
+    #-------------------------------------------------------------------------
+
+    def _step(self):
+        """Missile._step() -> None
         The step event of missile objects.
 
         This method is called during each step event of the game. This handles
@@ -121,18 +134,59 @@ class Missile:
         # Decrement timer
         self.countdown -= 1
 
-        # If timer has expired, explode
-        if self.countdown <= 0:
+        # If timer has expired explode (only activates on the explosion step)
+        if self.countdown == 0:
             self._explode()
 
+        # If currently exploding, increment explosion timer
+        if self.countdown < 0:
+            self.exploding += 1
+
         # Move forward
-        self.forward(self.spd)
+        self.x += self.speed*math.cos((math.pi/180)*self.heading)
+        self.y += self.speed*math.sin((math.pi/180)*self.heading)
 
         # Test for block collisions
         ###
 
-        # Test for proximity to opponent turtle
+        # Test for proximity to target turtle
         ###
+
+        # Update sprite
+        self._redraw()
+
+    #-------------------------------------------------------------------------
+
+    def _redraw(self):
+        """Missile.redraw() -> None
+        Redraws sprite on canvas to update appearance after moving.
+
+        User visibility:
+            should call -- no
+            should overwrite -- no
+
+        This method is called at the end of each step to update the missile's
+        appearance on the screen.
+        """
+
+        # Delete existing sprite (undefined during initial draw)
+        try:
+            self.canvas.delete(self.sprite)
+        except AttributeError:
+            pass
+
+        # Draw sprite depending on whether the missile has exploded
+        if self.exploding <= 0:
+            # During travel, draw self as a gray circle
+            self.sprite = self.canvas.create_oval(self.x-self.sprite_radius,
+                                                  self.y-self.sprite_radius,
+                                                  self.x+self.sprite_radius,
+                                                  self.y+self.sprite_radius,
+                                                  fill="gray")
+        else:
+            # During explosion, draw an animating explosive radius
+            ###
+            pass
 
     #-------------------------------------------------------------------------
 
@@ -144,24 +198,14 @@ class Missile:
         when their timer expires.
 
         The explosion affects all turtles within a set radius of the missile,
-        after which the missile object is deleted.
+        after which the missile object is deleted from its shooter's missile
+        list.
         """
 
-        ###
+        # Damage all nearby turtles
+        ### test distance to both shooter and target
 
         # Notify shooter to delete this missile
-        self._notify()
-
-    #-------------------------------------------------------------------------
-
-    def _notify(self):
-        """Missile.notify() -> None
-        Notifies the missile's Combat Turtle to delete the missile object.
-
-        Each Combat Turtle should maintain a list of all currently-active
-        missiles it has fired. This method is called when the missile
-        explodes, and notifies its parent Combat Turtle to delete it from the
-        list, as well as to delete the object.
-        """
+        ###
 
         pass

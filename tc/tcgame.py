@@ -104,6 +104,15 @@ class TurtleCombatGame:
 
     #-------------------------------------------------------------------------
 
+    def get_step_time(self):
+        """TurtleCombatGame.get_step_time() -> int
+        Returns the time between game steps (ms).
+        """
+
+        return self.step_time
+
+    #-------------------------------------------------------------------------
+
     def get_canvas(self):
         """TurtleCombatGame.get_canvas() -> tkinter.Canvas
         Returns the Canvas object representing the game arena.
