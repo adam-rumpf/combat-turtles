@@ -17,7 +17,7 @@ class TurtleCombatGame:
 
     #=========================================================================
 
-    def __init__(self, size=(600, 400), layout=0, class1=None, class2=None):
+    def __init__(self, size=(800, 800), layout=0, class1=None, class2=None):
         """TurtleCombatGame([size], [layout], [p1], [p2]) -> TurtleCombatGame
         Constructor for the Turtle Combat game.
 
@@ -48,8 +48,9 @@ class TurtleCombatGame:
         # Set up Tkinter window
         self.root = tk.Tk()
         self.root.title(title)
-        self.canvas = tk.Canvas(self.root, width=size[0], height=size[1])
-        self.canvas.pack()
+        self.canvas = tk.Canvas(self.root, width=size[0], height=size[1],
+                                relief="sunken")
+        self.canvas.grid()
         ### Change this to grid to place turtle health outside arena.
 
         # Initialize arena

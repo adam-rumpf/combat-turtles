@@ -69,6 +69,7 @@ class TkTurtle:
         missile_range() -- returns the maximum range of missiles (px)
         missile_proximity() -- returns the proximity radius of missiles (px)
         missile_radius() -- returns the explosion radius of missiles (px)
+        missile_damage() -- returns the damage dealt by a missile
         arena_left(), arena_right(), arena_top(), arena_bottom() -- returns
             the coordinates of the arena boundaries
 
@@ -1016,6 +1017,45 @@ class TkTurtle:
 
     #-------------------------------------------------------------------------
 
+    def missile_damage(self):
+        """TkTurtle.missile_damage() -> int
+        Returns the damage caused by a missile explosion.
+
+        User visibility:
+            should call -- yes
+            should overwrite -- no
+
+        Missiles deal a constant amount of damage to all turtles within their
+        explosive radius.
+        """
+
+        return Missile.get_damage()
+
+    #-------------------------------------------------------------------------
+
+    def _delete_missile(self, missile):
+        """TkTurtle._delete_missile(missile) -> None
+        Deletes a missile object from the turtle's missile list.
+
+        User visibility:
+            should call -- no
+            should overwrite -- no
+
+        Requires the following positional arguments:
+            missile (Missile) -- missile object to delete from the list
+        """
+
+        # Attempt to remove the missile from the list
+        try:
+            self._missiles.remove(missile)
+        except ValueError:
+            pass
+
+        # Delete the missile
+        del missile
+
+    #-------------------------------------------------------------------------
+
     def _heal(self, hp):
         """TkTurtle.heal(hp) -> None
         Adds to the Combat Turtle's health.
@@ -1097,7 +1137,7 @@ class TkTurtle:
             should overwrite -- no
         """
 
-        return self._canvas["width"]
+        return int(self._canvas["width"])
 
     #-------------------------------------------------------------------------
 
@@ -1123,4 +1163,4 @@ class TkTurtle:
             should overwrite -- no
         """
 
-        return self._canvas["height"]
+        return int(self._canvas["height"])

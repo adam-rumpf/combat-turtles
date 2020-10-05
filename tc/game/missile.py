@@ -29,7 +29,7 @@ class Missile:
         heading.
         """
 
-        return 10
+        return 15
 
     #-------------------------------------------------------------------------
 
@@ -53,7 +53,7 @@ class Missile:
         Combat Turtle.
         """
 
-        return 5
+        return 20
 
     #-------------------------------------------------------------------------
 
@@ -63,6 +63,18 @@ class Missile:
 
         When a missile explodes, any turtle within this radius is damaged
         (including the missile's shooter).
+        """
+
+        return 20
+
+    #-------------------------------------------------------------------------
+
+    def get_damage():
+        """Missile.get_damage() -> int
+        Returns missile damage.
+
+        Missiles deal a constant amount of damage to any turtle within their
+        explosive radius.
         """
 
         return 20
@@ -98,6 +110,8 @@ class Missile:
         self.proximity = Missile.get_proximity() # missile explodes when
             # within this distance (px) of the target turtle
         self.radius = Missile.get_lifespan() # radius of explosion (px)
+        self.damage = Missile.get_damage() # damage on hit
+        self.exploding_frames = 4 # number of steps for explosion animation
 
         # Initialize countdown timer
         self.countdown = Missile.get_lifespan() # time until explosion (steps)
@@ -134,23 +148,41 @@ class Missile:
         # Decrement timer
         self.countdown -= 1
 
-        # If timer has expired explode (only activates on the explosion step)
-        if self.countdown == 0:
-            self._explode()
-
-        # If currently exploding, increment explosion timer
-        if self.countdown < 0:
-            self.exploding += 1
-
         # Move forward
         self.x += self.speed*math.cos((math.pi/180)*self.heading)
         self.y += self.speed*math.sin((math.pi/180)*self.heading)
 
-        # Test for block collisions
-        ###
+        # Check whether the missile will explode this step
+        if self.exploding <= 0:
+            explode = False # whether to explode this step
 
-        # Test for proximity to target turtle
-        ###
+            # If timer has expired, explode
+            if self.countdown == 0:
+                explode = True
+
+            # Test for block collisions
+            ###elif ___:
+
+            # Test for wall collisions
+            elif (self.x < 0 or self.x > int(self.game.canvas["width"]) or
+                  self.y < 0 or self.y > int(self.game.canvas["height"])):
+                explode = True
+
+            # Test for proximity to target turtle
+            elif self.target.distance((self.x, self.y)) < self.proximity:
+                explode = True
+
+            # If any explosion trigger is activated, explode
+            if explode == True:
+                self._explode()
+
+        else:
+            # If already exploding, increment counter
+            self.exploding += 1
+
+        # Delete self after explosion animation is complete
+        if self.exploding >= self.exploding_frames:
+            self._remove()
 
         # Update sprite
         self._redraw()
@@ -182,11 +214,14 @@ class Missile:
                                                   self.y-self.sprite_radius,
                                                   self.x+self.sprite_radius,
                                                   self.y+self.sprite_radius,
-                                                  fill="gray")
+                                                  fill="gray", outline="gray")
         else:
-            # During explosion, draw an animating explosive radius
-            ###
-            pass
+            # During explosion, draw a growing explosive radius
+            r = int((self.exploding/self.exploding_frames)*self.radius)
+            self.sprite = self.canvas.create_oval(self.x-r, self.y-r,
+                                                  self.x+r, self.y+r,
+                                                  fill="yellow",
+                                                  outline="red")
 
     #-------------------------------------------------------------------------
 
@@ -202,10 +237,28 @@ class Missile:
         list.
         """
 
-        # Damage all nearby turtles
-        ### test distance to both shooter and target
+        # Damage shooter if close enough
+        if self.shooter.distance((self.x, self.y)) < self.radius:
+            self.shooter._damage(self.damage)
+
+        # Damage target if close
+        if self.target.distance((self.x, self.y)) < self.radius:
+            self.target._damage(self.damage)
+
+        # Increment exploding timer
+        self.exploding += 1
+
+    #-------------------------------------------------------------------------
+
+    def _remove(self):
+        """Missile._remove() -> None
+        Removes a missile after its explosion animation has completed.
+
+        The actual deletion of this object is handled by the combat turtle
+        that shot the missile, which maintains a list of all currently-active
+        missiles it has shot. This method prompts the turtle to remove the
+        missile from its list and delete the object.
+        """
 
         # Notify shooter to delete this missile
-        ###
-
-        pass
+        self.shooter._delete_missile(self)
