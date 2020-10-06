@@ -1,5 +1,6 @@
 """Defines the arena container class."""
 
+import math
 from .block import Block
 
 class Arena:
@@ -38,7 +39,7 @@ class Arena:
         """
 
         # All currently-defined arenas use the same initial coordinates
-        return (-200, 0)
+        return (200, 400)
 
     #-------------------------------------------------------------------------
 
@@ -51,7 +52,7 @@ class Arena:
         """
 
         # All currently-defined arenas use the same initial coordinates
-        return (200, 0)
+        return (600, 400)
 
     #-------------------------------------------------------------------------
 
@@ -81,31 +82,27 @@ class Arena:
 
     #=========================================================================
 
-    def __init__(self, size=(600, 400), layout=0, walls=5):
+    def __init__(self, game, size=(800, 800), layout=0):
         """Arena([size], [layout], [walls]) -> Arena
         Arena constructor, including obstacle setup.
 
+        Requires the following positional arguments:
+            game (tcgame.TurtleCombatGame) -- game driver object
+
         Accepts the following optional keyword arguments:
-            size (tuple (int, int)) [(600, 400)] -- arena width/height (px)
+            size (tuple (int, int)) [(800, 800)] -- arena width/height (px)
             layout (int) [0] -- arena obstacle layout ID (see class docstring)
-            walls (int) [5] -- thickness (px) of walls surrounding arena
-                (walls excluded unless argument is positive)
 
         The arena is centered at the origin and has the specified total width
-        and height. If any walls are included, their thickness is taken from
-        the interior of the arena so that the total arena dimensions
-        (including the walls) remains the same.
+        and height.
         """
 
         # Assign given attributes
+        self.game = game
         self.size = size
 
         # Initialize block object list
         self.blocks = []
-
-        # Generate walls around arena
-        if walls > 0:
-            self._create_walls(walls)
 
         # Generate the walls defined by the layout (default to empty)
         if layout == 1:
@@ -132,39 +129,15 @@ class Arena:
 
     #-------------------------------------------------------------------------
 
-    def _create_walls(self, width):
-        """Arena._create_walls() -> None
-        Generates blocks to define the walls of an arena.
-
-        Walls are Block objects which are added to the Arena's block list.
-        The arena's size is considered to be the external dimension of the
-        arena, with the wall thickness reducing the interior size.
-
-        Requires the following positional arguments:
-            width (int) -- thickness of walls (px)
-        """
-
-        # Determine coordinates of edges
-        left = int(-self.size[0]/2)
-        right = int(self.size[0]/2)
-        top = int(self.size[1]/2)
-        bottom = int(-self.size[1]/2)
-
-        # Define walls
-        self.blocks.append(Block(left, left+width, bottom, top))
-        self.blocks.append(Block(right-width, right, bottom, top))
-        self.blocks.append(Block(left, right, top-width, top))
-        self.blocks.append(Block(left, right, bottom, bottom+width))
-
-    #-------------------------------------------------------------------------
-
     def _single_block(self):
         """Arena._single_block() -> None
         Generates the blocks of the Central Column arena type.
         """
 
         # Define column block
-        self.blocks.append(Block(-80, 80, -80, 80))
+        self.blocks.append(Block(self.game, (self.size[0]/2)-80,
+                                 (self.size[0]/2)+80, (self.size[1]/2)-80,
+                                 (self.size[1]/2)+80))
 
     #-------------------------------------------------------------------------
 
@@ -174,10 +147,14 @@ class Arena:
         """
 
         # Define four small columns
-        self.blocks.append(Block(-120, -80, -120, -80))
-        self.blocks.append(Block(-120, -80, 120, 80))
-        self.blocks.append(Block(120, 80, -120, -80))
-        self.blocks.append(Block(120, 80, 120, 80))
+        self.blocks.append(Block(self.game, 200, 260, 200, 260))
+        self.blocks.append(Block(self.game, self.size[0]-260,
+                                 self.size[0]-200, 200, 260))
+        self.blocks.append(Block(self.game, 200, 260, self.size[1]-260,
+                                 self.size[1]-200))
+        self.blocks.append(Block(self.game, self.size[0]-260,
+                                 self.size[0]-200, self.size[1]-260,
+                                 self.size[1]-200))
 
     #-------------------------------------------------------------------------
 
@@ -187,8 +164,12 @@ class Arena:
         """
 
         # Define two wall portions
-        self.blocks.append(Block(-20, 20, -200, -40))
-        self.blocks.append(Block(-20, 20, 40, 200))
+        self.blocks.append(Block(self.game, (self.size[0]/2)-30,
+                                 (self.size[0]/2)+30, -40,
+                                 (self.size[1]/2)-60))
+        self.blocks.append(Block(self.game, (self.size[0]/2)-30,
+                                 (self.size[0]/2)+30, (self.size[1]/2)+60,
+                                 self.size[1]+40))
 
     #-------------------------------------------------------------------------
 
@@ -198,5 +179,35 @@ class Arena:
         """
 
         # Define two crossing wall portions
-        self.blocks.append(Block(-20, 20, -100, 100))
-        self.blocks.append(Block(-100, 100, -20, 20))
+        self.blocks.append(Block(self.game, (self.size[0]/2)-30,
+                                 (self.size[0]/2)+30,
+                                 math.floor(self.size[1]/3),
+                                 math.ceil(2*self.size[1]/3)))
+        self.blocks.append(Block(self.game, math.floor(self.size[0]/3),
+                                 math.ceil(2*self.size[0]/3),
+                                 (self.size[1]/2)-30, (self.size[1]/2)+30))
+
+    #-------------------------------------------------------------------------
+
+    def intersections(self, coords):
+        """Arena.intersections(coords) -> list
+        Returns a list of block objects that intersect a given coordinate.
+
+        Requires the following positional arguments:
+            coords (tuple (int, int)) -- coordinate to test
+
+        If the coordinate intersects no blocks, an empty list will be
+        returned.
+        """
+
+        # Return a list of all blocks that intersect the given coordinate
+        return [b for b in self.blocks if b.contains(coords)]
+
+    #-------------------------------------------------------------------------
+
+    def get_blocks(self):
+        """Arena.get_blocks() -> list
+        Returns a list of all block objects in the arena.
+        """
+
+        return self.blocks

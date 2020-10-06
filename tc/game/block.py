@@ -1,48 +1,57 @@
 """Defines the block class."""
 
-import turtle
+import tkinter as tk
 
 class Block:
     """Block class.
 
     Defines rectangular obstacles in the arena. Turtles cannot pass through
-    blocks, and missile explode on contact with blocks.
+    blocks, and missiles explode on contact with blocks.
     """
 
     #=========================================================================
 
-    def __init__(self, left, right, bottom, top, col="black"):
+    def __init__(self, game, left, right, bottom, top, col="black"):
         """_Block(left, right, bottom, top) -> _Block
         Block constructor.
 
         Requires the following positional arguments:
-            left (float) -- leftmost x-coordinate (px)
-            right (float) -- rightmost x-coordinate (px)
-            bottom (float) -- lowermost y-coordinate (px)
-            top (float) -- uppermost y-coordinate (px)
+            game (tcgame.TurtleCombatGame) -- game driver object
+            left (int) -- leftmost x-coordinate (px)
+            right (int) -- rightmost x-coordinate (px)
+            bottom (int) -- lowermost y-coordinate (px)
+            top (int) -- uppermost y-coordinate (px)
 
         Accepts the following optional keyword arguments:
             col (str or color tuple) ["black"] -- color of block
         """
 
         # Assign given attributes
+        self.game = game
+        self.canvas = game.get_canvas() # canvas to draw self on
         self.left = left
         self.right = right
         self.bottom = bottom
         self.top = top
+        self.color = col
 
-        # Create a turtle to draw the block
-        self.t = turtle.Turtle() # turtle object
-        self._draw_block(col=col)
+        # Draw the block
+        self._draw()
 
     #-------------------------------------------------------------------------
 
     def __del__(self):
         """~Block() -> None
-        Block destructor destroys graphics turtle.
+        Block destructor deletes drawing on canvas.
         """
 
-        del self.t
+        # Delete sprite (if it has been defined)
+        try:
+            self.canvas.delete(self.sprite)
+        except AttributeError:
+            pass
+        except tk.TclError:
+            pass
 
     #-------------------------------------------------------------------------
 
@@ -51,7 +60,7 @@ class Block:
         Determines whether the block contains a given coordinate.
 
         Requires the following positional arguments:
-            coords (tuple (float, float)) -- coordinate to test
+            coords (tuple (int, int)) -- coordinate to test
 
         Accepts the following optional keyword arguments:
             closed (bool [True]) -- whether to include the boundaries
@@ -76,32 +85,11 @@ class Block:
 
     #-------------------------------------------------------------------------
 
-    def _draw_block(self, col="black"):
-        """Block._draw_block() -> None
-        Uses a turtle to draw the block.
-
-        Accepts the following optional keyword arguments:
-            col (str or color tuple) ["black"] -- color of block
+    def _draw(self):
+        """Block._draw() -> None
+        Draws a block on the game canvas.
         """
 
-        # Calculate dimensions
-        w = self.right - self.left # width
-        h = self.top - self.bottom # height
-
-        # Use turtle to draw block
-        self.t.hideturtle()
-        self.t.speed(0)
-        self.t.color(col)
-        self.t.penup()
-        self.t.goto(self.left, self.bottom)
-        self.t.setheading(0)
-        self.t.pendown()
-        self.t.begin_fill()
-        self.t.forward(w)
-        self.t.left(90)
-        self.t.forward(h)
-        self.t.left(90)
-        self.t.forward(w)
-        self.t.left(90)
-        self.t.forward(h)
-        self.t.end_fill()
+        # Draw a rectangle on the game's canvas
+        self.sprite = self.canvas.create_rectangle(self.left, self.bottom,
+                          self.right, self.top, fill=self.color)

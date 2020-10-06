@@ -1,13 +1,13 @@
 """Defines a drunken CombatTurtle object."""
 
-import tc.tcplayer
+import tc.tkturtle
 
-class CombatTurtle(tc.tcplayer.CombatTurtleParent):
+class CombatTurtle(tc.tkturtle.TkTurtle):
     """Drunken combat turtle.
 
     This is a slightly less randomized version of the random turtle. Its
     movement is mostly randomized, but biased towards moving in the opponent's
-    direction, and it fires only when pointing towards the opponent.
+    direction, and it shoots only when pointing towards the opponent.
     """
 
     #-------------------------------------------------------------------------

@@ -1,8 +1,8 @@
 """Defines the main game driver class."""
 
-import turtle
-import tc.tcplayer
-from tc.game.arena import Arena
+import tkinter as tk
+import tc.tkturtle
+from .game.arena import Arena
 
 class TurtleCombatGame:
     """A class to act as the main driver for a game of Turtle Combat.
@@ -13,14 +13,11 @@ class TurtleCombatGame:
 
     A step occurs every 40 ms (at a rate of 25 steps/sec). At the end of each
     step, this object calls the hidden _step() method of all moving objects.
-    Moving objects are all turtle subclasses, but they move instantly during
-    their step events rather than moving smoothly with the built-in turtle
-    methods.
     """
 
     #=========================================================================
 
-    def __init__(self, size=(600, 400), layout=0, class1=None, class2=None):
+    def __init__(self, size=(800, 800), layout=0, class1=None, class2=None):
         """TurtleCombatGame([size], [layout], [p1], [p2]) -> TurtleCombatGame
         Constructor for the Turtle Combat game.
 
@@ -31,7 +28,7 @@ class TurtleCombatGame:
         submodule path, for example "tc.ai.direct.CombatTurtle".
 
         Accepts the following optional keyword arguments:
-            size (tuple (int, int)) [(600, 400)] -- arena width/height (px)
+            size (tuple (int, int)) [(800, 800)] -- arena width/height (px)
             layout (int) [0] -- arena obstacle layout ID (meanings of IDs
                 defined in Arena class)
             class1 (str) [None] -- full class name of first player object
@@ -48,14 +45,17 @@ class TurtleCombatGame:
                       eval(class2 + ".class_name()") + " ")
         title += "(" + Arena.get_names()[layout] + ")"
 
-        # Set up turtle window
-        self.wn = turtle.Screen()
-        self.wn.screensize(size[0], size[1])
-        self.wn.setup(size[0]+50, size[1]+50) # screen size with small margin
-        self.wn.title(title)
+        # Set up Tkinter window
+        self.root = tk.Tk()
+        self.root.title(title)
+        self.canvas = tk.Canvas(self.root, width=size[0], height=size[1],
+                                relief="sunken")
+        self.canvas.grid(column=1)
+        self.root.update()
+        ### Change this to grid to place turtle health outside arena.
 
         # Initialize arena
-        self.arena = Arena(size=size, layout=layout, walls=5)
+        self.arena = Arena(self, size=size, layout=layout)
 
         # Initialize players
         self.p1 = None # first player
@@ -63,14 +63,14 @@ class TurtleCombatGame:
         if class1 != None:
             coords = Arena.get_p1_coords(layout)
             heading = Arena.get_p1_heading(layout)
-            argstring = ("(col=\"red\", coords=" + str(coords) +
-                         ", facing=" + str(heading) + ")")
+            argstring = ("(self, col=\"red\", coords=" + str(coords) +
+                         ", heading=" + str(heading) + ", name=\"Player 1\")")
             self.p1 = eval(class1 + argstring)
         if class2 != None:
             coords = Arena.get_p2_coords(layout)
             heading = Arena.get_p2_heading(layout)
-            argstring = ("(col=\"blue\", coords=" + str(coords) +
-                         ", facing=" + str(heading) + ")")
+            argstring = ("(self, col=\"blue\", coords=" + str(coords) +
+                         ", heading=" + str(heading) + ", name=\"Player 2\")")
             self.p2 = eval(class2 + argstring)
 
         # Give players each others' pointers
@@ -79,8 +79,8 @@ class TurtleCombatGame:
             self.p2._set_other(self.p1)
 
         # Begin game (after a delay, to allow the arena to initialize)
-        self.wn.ontimer(self.play_game, 1000)
-        self.wn.mainloop()
+        self.root.after(500, self.play_game)
+        self.root.mainloop()
 
     #-------------------------------------------------------------------------
 
@@ -91,23 +91,69 @@ class TurtleCombatGame:
         Deletes game objects and closes window.
         """
 
-        try:
+        # Delete players
+        if self.p1 != None:
+            del self.p1
+        if self.p2 != None:
+            del self.p2
 
-            # Delete players
-            if self.p1 != None:
-                del self.p1
-            if self.p2 != None:
-                del self.p2
-
-            # Delete arena
-            del self.arena
-            turtle.bye()
-
-        except turtle.Terminator:
-            pass
+        # Delete arena
+        del self.arena
 
     #-------------------------------------------------------------------------
 
+    def get_step_time(self):
+        """TurtleCombatGame.get_step_time() -> int
+        Returns the time between game steps (ms).
+        """
+
+        return self.step_time
+
+    #-------------------------------------------------------------------------
+
+    def get_canvas(self):
+        """TurtleCombatGame.get_canvas() -> tkinter.Canvas
+        Returns the Canvas object representing the game arena.
+        """
+
+        return self.canvas
+
+    #-------------------------------------------------------------------------
+
+    def get_arena(self):
+        """TurtleCombatGame.get_arena() -> tc.game.Arena
+        Returns the game's Arena object.
+        """
+
+        return self.arena
+
+    #-------------------------------------------------------------------------
+
+    def get_blocks(self):
+        """TurtleCombatGame.get_blocks() -> list
+        Returns a list of all Block objects in the arena.
+        """
+
+        return self.arena.get_blocks()
+
+    #-------------------------------------------------------------------------
+
+    def intersections(self, coords):
+        """TurtleCombatGame.intersections(coords) -> list
+        Returns a list of block objects that intersect a given coordinate.
+
+        Requires the following positional arguments:
+            coords (tuple (int, int)) -- coordinate to test
+
+        If the coordinate intersects no blocks, an empty list will be
+        returned.
+        """
+
+        return self.arena.intersections(coords)
+
+    #-------------------------------------------------------------------------
+
+    ###
     def play_game(self):
         """TurtleCombatGame.play_game() -> None
         Main gameplay loop of Turtle Combat.
@@ -141,4 +187,4 @@ class TurtleCombatGame:
             pass
         else:
             # Continue loop by resetting timer
-            self.wn.ontimer(self.play_game, self.step_time)
+            self.root.after(self.step_time, self.play_game)

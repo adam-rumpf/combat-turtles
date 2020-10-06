@@ -9,9 +9,25 @@ import tc
 
 #=============================================================================
 
-def turtle_combat():
+def turtle_combat(tid1=-1, tid2=-1, aid=-1):
     """turtle_combat() -> None
-    Turtle Combat game driver."""
+    Turtle Combat game driver.
+
+    By default this function will present the user with options for the game
+    setup, including which turtle AI modules to use and which arena layout to
+    use. Optional keyword arguments can be used to automatically fill these
+    fields. Note, however, that these indices depend on the order in which the
+    submodules are loaded from the ai/ directory, which could change as
+    modules are added or removed.
+
+    Accepts the following optional keyword arguments:
+        tid1 (int) [-1] -- index of player 1 turtle class (in the list of all
+            available combat turtle AI submodules)
+        tid2 (int) [-1] -- index of player 2 turtle class (in the list of all
+            available combat turtle AI submodules)
+        aid (int) [-1] -- index of arena layout (in the list of all available
+            arena layouts)
+    """
 
     # In order to allow the user to place additional AI modules inside the ai/
     # directory, we generate a list of strings which include the full
@@ -35,7 +51,7 @@ def turtle_combat():
 
     # Quit if no valid modules were found
     if len(turtle_classes) == 0:
-        print("\nNo valid modules were found in the ai/ directory.")
+        print("\nNo valid modules were found in the tc/ai/ directory.")
         print("Please review the documentation to see the required format.")
         print("https://github.com/adam-rumpf/turtle-combat")
         return None
@@ -55,7 +71,7 @@ def turtle_combat():
         indices = {str(i) for i in range(len(turtle_classes))} # valid indices
 
         # Ask for Player 1 choice until getting a valid response
-        choice = ""
+        choice = str(tid1)
         while choice not in indices:
             choice = input("Input an Index [0-" + str(len(turtle_classes)-1) +
                            "] to choose the AI for Player 1, and then press" +
@@ -63,7 +79,7 @@ def turtle_combat():
         choice1 = int(choice)
 
         # Ask for Player 2 choice until getting a valid response
-        choice = ""
+        choice = str(tid2)
         while choice not in indices:
             choice = input("Input an Index [0-" + str(len(turtle_classes)-1) +
                            "] to choose the AI for Player 2, and then press" +
@@ -85,7 +101,7 @@ def turtle_combat():
         indices = {str(i) for i in range(len(arena_names))} # valid indices
 
         # Ask for layout choice until getting a valid response
-        choice = ""
+        choice = str(aid)
         while choice not in indices:
             choice = input("Input an Index [0-" + str(len(arena_names)-1) +
                            "] to choose the arena layout, and then press" +
@@ -147,4 +163,5 @@ def _arena_table(arenas):
 #=============================================================================
 
 # Execute function
-turtle_combat()
+###turtle_combat()
+turtle_combat(0, 0, 2) ### arguments for fast testing
