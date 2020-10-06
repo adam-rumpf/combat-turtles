@@ -164,4 +164,4 @@ def _arena_table(arenas):
 
 # Execute function
 ###turtle_combat()
-turtle_combat(0, 0, 0) ### arguments for fast testing
+turtle_combat(0, 0, 2) ### arguments for fast testing

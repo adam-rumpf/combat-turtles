@@ -29,7 +29,7 @@ class Missile:
         heading.
         """
 
-        return 15
+        return 10
 
     #-------------------------------------------------------------------------
 
@@ -97,7 +97,7 @@ class Missile:
 
         # Assign given attributes
         self.game = game
-        self.canvas = self.game.get_canvas() # canvas to draw self on
+        self.canvas = game.get_canvas() # canvas to draw self on
         self.shooter = shooter
         self.target = target
         self.x = coords[0]
@@ -124,15 +124,15 @@ class Missile:
 
     def __del__(self):
         """~Missile.__del__() -> None
-        Missile destructor.
-
-        Deletes drawing on canvas.
+        Missile destructor deletes drawing on canvas.
         """
 
         # Delete sprite (if it has been defined)
         try:
             self.canvas.delete(self.sprite)
         except AttributeError:
+            pass
+        except tk.TclError:
             pass
 
     #-------------------------------------------------------------------------
@@ -148,20 +148,21 @@ class Missile:
         # Decrement timer
         self.countdown -= 1
 
-        # Move forward
-        self.x += self.speed*math.cos((math.pi/180)*self.heading)
-        self.y += self.speed*math.sin((math.pi/180)*self.heading)
-
-        # Check whether the missile will explode this step
+        # Determine behavior depending on explosion status
         if self.exploding <= 0:
-            explode = False # whether to explode this step
+
+            # If not already exploding, move and test for collisions/timers
+
+            # Move forward
+            self.x += self.speed*math.cos((math.pi/180)*self.heading)
+            self.y += self.speed*math.sin((math.pi/180)*self.heading)
+
+            # Determine whether to explode
+            explode = False
 
             # If timer has expired, explode
             if self.countdown == 0:
                 explode = True
-
-            # Test for block collisions
-            ###elif ___:
 
             # Test for wall collisions
             elif (self.x < 0 or self.x > int(self.game.canvas["width"]) or
@@ -170,6 +171,10 @@ class Missile:
 
             # Test for proximity to target turtle
             elif self.target.distance((self.x, self.y)) < self.proximity:
+                explode = True
+
+            # Test for block collisions
+            elif len(self.game.intersections((self.x, self.y))) > 0:
                 explode = True
 
             # If any explosion trigger is activated, explode

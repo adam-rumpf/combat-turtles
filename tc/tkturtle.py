@@ -7,8 +7,9 @@
 
 import tkinter as tk
 import math
-from . import tcgame
-from tc.game.missile import Missile
+from .game.arena import Arena
+from .game.block import Block
+from .game.missile import Missile
 
 class TkTurtle:
     """Tkinter turtle class to use as the parent of Combat Turtle classes.
@@ -132,7 +133,7 @@ class TkTurtle:
         (self._x, self._y) = coords
         self._heading = heading
         self._game = game
-        self._canvas = self._game.get_canvas()
+        self._canvas = game.get_canvas()
         self._color = col
 
         # Define constant attributes
@@ -192,6 +193,8 @@ class TkTurtle:
         try:
             self._canvas.delete(self._sprite)
         except AttributeError:
+            pass
+        except tk.TclError:
             pass
 
         # Delete all missile objects
@@ -603,6 +606,13 @@ class TkTurtle:
         forward() and backward() methods (or their aliases).
         """
 
+        # Calculate components of movement
+        dx = int(self._speed*math.cos((math.pi/180)*self._heading))
+        dy = int(self._speed*math.sin((math.pi/180)*self._heading))
+
+        # Check if the destination is occupied
+        ### Make an arena method that returns a list of all block objects that intersect a given coordinate.
+
         ###
         # Add collision checks for walls. We could use the goto method and
         # explicitly calculate the target coordinate, and then call the
@@ -614,8 +624,8 @@ class TkTurtle:
         # wall.
 
         # Move to new coordinates
-        self._x += int(self._speed*math.cos((math.pi/180)*self._heading))
-        self._y += int(self._speed*math.sin((math.pi/180)*self._heading))
+        self._x += dx
+        self._y += dy
 
     #-------------------------------------------------------------------------
 

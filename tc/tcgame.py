@@ -2,7 +2,7 @@
 
 import tkinter as tk
 import tc.tkturtle
-###from tc.game.arena import Arena
+from .game.arena import Arena
 
 class TurtleCombatGame:
     """A class to act as the main driver for a game of Turtle Combat.
@@ -28,7 +28,7 @@ class TurtleCombatGame:
         submodule path, for example "tc.ai.direct.CombatTurtle".
 
         Accepts the following optional keyword arguments:
-            size (tuple (int, int)) [(600, 400)] -- arena width/height (px)
+            size (tuple (int, int)) [(800, 800)] -- arena width/height (px)
             layout (int) [0] -- arena obstacle layout ID (meanings of IDs
                 defined in Arena class)
             class1 (str) [None] -- full class name of first player object
@@ -43,35 +43,32 @@ class TurtleCombatGame:
         if class1 != None and class2 != None:
             title += (eval(class1 + ".class_name()") + " vs. " +
                       eval(class2 + ".class_name()") + " ")
-        ###title += "(" + Arena.get_names()[layout] + ")"
+        title += "(" + Arena.get_names()[layout] + ")"
 
         # Set up Tkinter window
         self.root = tk.Tk()
         self.root.title(title)
         self.canvas = tk.Canvas(self.root, width=size[0], height=size[1],
                                 relief="sunken")
-        self.canvas.grid()
+        self.canvas.grid(column=1)
+        self.root.update()
         ### Change this to grid to place turtle health outside arena.
 
         # Initialize arena
-        ###self.arena = Arena(size=size, layout=layout, walls=5)
+        self.arena = Arena(self, size=size, layout=layout)
 
         # Initialize players
         self.p1 = None # first player
         self.p2 = None # second player
         if class1 != None:
-            ###coords = Arena.get_p1_coords(layout)
-            ###heading = Arena.get_p1_heading(layout)
-            coords = (100, 200)
-            heading = 90
+            coords = Arena.get_p1_coords(layout)
+            heading = Arena.get_p1_heading(layout)
             argstring = ("(self, col=\"red\", coords=" + str(coords) +
                          ", heading=" + str(heading) + ", name=\"Player 1\")")
             self.p1 = eval(class1 + argstring)
         if class2 != None:
-            ###coords = Arena.get_p2_coords(layout)
-            ###heading = Arena.get_p2_heading(layout)
-            coords = (500, 200)
-            heading = 270
+            coords = Arena.get_p2_coords(layout)
+            heading = Arena.get_p2_heading(layout)
             argstring = ("(self, col=\"blue\", coords=" + str(coords) +
                          ", heading=" + str(heading) + ", name=\"Player 2\")")
             self.p2 = eval(class2 + argstring)
@@ -101,7 +98,7 @@ class TurtleCombatGame:
             del self.p2
 
         # Delete arena
-        ###del self.arena
+        del self.arena
 
     #-------------------------------------------------------------------------
 
@@ -120,6 +117,39 @@ class TurtleCombatGame:
         """
 
         return self.canvas
+
+    #-------------------------------------------------------------------------
+
+    def get_arena(self):
+        """TurtleCombatGame.get_arena() -> tc.game.Arena
+        Returns the game's Arena object.
+        """
+
+        return self.arena
+
+    #-------------------------------------------------------------------------
+
+    def get_blocks(self):
+        """TurtleCombatGame.get_blocks() -> list
+        Returns a list of all Block objects in the arena.
+        """
+
+        return self.arena.get_blocks()
+
+    #-------------------------------------------------------------------------
+
+    def intersections(self, coords):
+        """TurtleCombatGame.intersections(coords) -> list
+        Returns a list of block objects that intersect a given coordinate.
+
+        Requires the following positional arguments:
+            coords (tuple (int, int)) -- coordinate to test
+
+        If the coordinate intersects no blocks, an empty list will be
+        returned.
+        """
+
+        return self.arena.intersections(coords)
 
     #-------------------------------------------------------------------------
 
