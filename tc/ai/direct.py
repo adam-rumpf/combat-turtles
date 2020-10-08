@@ -39,6 +39,9 @@ class CombatTurtle(tc.tkturtle.TkTurtle):
         self.speed = 1.0
         self.turn_speed = 1.0
 
+        ###
+        self.counter = 0
+
     #-------------------------------------------------------------------------
 
     def step(self):
@@ -47,10 +50,20 @@ class CombatTurtle(tc.tkturtle.TkTurtle):
         """
 
         # Turn towards opponent
-        self.turn_towards()
+        ###self.turn_towards()
+        #self.left(0.075)
 
-        # Move towards opponent (unless within blast radius)
-        if self.distance() > self.missile_radius():
-            self.forward(self.speed)
+        self.counter += 1
+        print(self._heading)
+        if self.counter < 20:
+            self.turn_towards(0)
+        elif self.counter < 40:
+            self.turn_towards(90)
+
+        # Move towards opponent (or away if too close)
+        #if self.distance() > self.missile_radius():
+        #    self.forward(self.speed)
+        #else:
+        #    self.backward(self.speed)
 
         ### Shoot if facing opponent

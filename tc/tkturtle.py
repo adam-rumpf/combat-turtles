@@ -5,6 +5,10 @@
 ### In the template, list the public methods and sort by general purpose (action, opponent info, constant info, self info).
 ### Also reorder these methods by category.
 
+### We may have to change the way that headings are handled, since turtles might spin around from handling absolute headings that are equivalent.
+### Look at all of the functions where headings are significant and see how they are handled.
+### Whenever comparing two headings, we generally want the smallest angle between them, with a sign indicating which is CCW and which is CW.
+
 import tkinter as tk
 import math
 from .game.arena import Arena
@@ -606,26 +610,38 @@ class TkTurtle:
         forward() and backward() methods (or their aliases).
         """
 
-        # Calculate components of movement
-        dx = int(self._speed*math.cos((math.pi/180)*self._heading))
-        dy = int(self._speed*math.sin((math.pi/180)*self._heading))
+        # Set new coordinates
+        self._x += int(self._speed*math.cos((math.pi/180)*self._heading))
+        self._y += int(self._speed*math.sin((math.pi/180)*self._heading))
 
-        # Check if the destination is occupied
-        ### Make an arena method that returns a list of all block objects that intersect a given coordinate.
+        # Check whether the destination intersects any blocks
+        blocks = self._game.intersections((self._x, self._y))
+        if len(blocks) > 0:
+            # If so, check all intersecting blocks and move to outside
+            for b in blocks:
+                # Determine overlap on each side
+                overlap = [1000000 for i in range(4)] # ordered overlaps
+                if self._x >= b.get_left():
+                    overlap[0] = self._x - b.get_left()
+                if self._x <= b.get_right():
+                    overlap[1] = b.get_right() - self._x
+                if self._y >= b.get_bottom():
+                    overlap[2] = self._y - b.get_bottom()
+                if self._y <= b.get_top():
+                    overlap[3] = b.get_top() - self._y
 
-        ###
-        # Add collision checks for walls. We could use the goto method and
-        # explicitly calculate the target coordinate, and then call the
-        # contains() method for all blocks to see whether it's free; if not,
-        # iteratively reduce speed until it is free.
-        # Another simple alternative could be to use goto and calculate the
-        # destination coordinate each step. If this would collide with a wall,
-        # cap one coordinate (or both) to equal the border coordinate of the
-        # wall.
+                # Find minimum nonzero overlap
+                mo = overlap.index(min(overlap))
 
-        # Move to new coordinates
-        self._x += dx
-        self._y += dy
+                # Reset coordinates based on minimum overlap
+                if mo == 0:
+                    self._x -= overlap[0] - 1
+                elif mo == 1:
+                    self._x += overlap[1] + 1
+                elif mo == 2:
+                    self._y -= overlap[2] - 1
+                else:
+                    self._y += overlap[3] + 1
 
     #-------------------------------------------------------------------------
 
@@ -754,8 +770,8 @@ class TkTurtle:
         left() and right() methods (or their aliases).
         """
 
-        # Change heading
-        self._heading += int(self._speed_turn)
+        # Change heading (negate angle due to origin at top of screen)
+        self._heading -= int(self._speed_turn)
 
     #-------------------------------------------------------------------------
 
@@ -870,32 +886,46 @@ class TkTurtle:
 
     #-------------------------------------------------------------------------
 
-    def turn_towards(self, coords=None):
-        """TkTurtle.turn_towards([coords]) -> None
-        Turns the Combat Turtle as far as possible towards a coordinate.
+    def turn_towards(self, target=None):
+        """TkTurtle.turn_towards([target]) -> None
+        Turns the Combat Turtle as far as possible towards a target.
 
         User visibility:
             should call -- yes
             should overwrite -- no
 
-        Accepts the following optional keyword arguments:
-            coords (tuple (int, int)) [other_position] -- coordinates to turn
-                towards (px, px), defaults to opponent position
+        This method can be called in several different formats depending on
+        whether a target is specified, and what type it is:
+            None -- target becomes opponent turtle's coordinates
+            int -- turtle will attempt to turn towards the given heading
+            tuple (int, int) -- turtle will attempt to turn to face a given
+                coordinate
 
         This method automatically attempts to turn the Combat Turtle towards a
-        given set of coordinates. If possible, it will turn directly towards
-        the coordinates, but if this would require turning more than the
-        maximum turning speed will allow, it will instead turn as far as
-        possible towards the coordinates.
+        given heading or set of coordinates. If possible, it will turn
+        directly to the target, but if this would require turning more than
+        the maximum turning speed will allow, it will instead turn as far as
+        possible towards the specified target.
         """
 
         # Default to opponent coordinates
-        if coords == None:
-            self.turn_towards(coords=self.other_position())
+        if target == None:
+            self.turn_towards(target=self.other_position())
 
-        ###
-        ### Turn left equal to the relative heading, clamped at +/- maximum turn speed.
-        pass
+        # Turn towards coordinates if given a tuple
+        if type(target) == type((0, 0)):
+            pass
+            ###
+            ### Turn left equal to the relative heading,
+            ### clamped at +/- maximum turn speed.
+
+        # Turn towards heading if given an int or float
+        else:
+            # Calculate a point to turn towards to use min angle calculations
+            point = (int(self._x + 1000*math.cos((math.pi/180)*target)),
+                     int(self._y + 1000*math.sin((math.pi/180)*target)))
+            print(point)###
+            self.turn_towards(target=point)
 
     #-------------------------------------------------------------------------
 

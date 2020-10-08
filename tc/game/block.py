@@ -17,22 +17,28 @@ class Block:
 
         Requires the following positional arguments:
             game (tcgame.TurtleCombatGame) -- game driver object
-            left (int) -- leftmost x-coordinate (px)
-            right (int) -- rightmost x-coordinate (px)
-            bottom (int) -- lowermost y-coordinate (px)
-            top (int) -- uppermost y-coordinate (px)
+            left (int) -- smallest x-coordinate (px)
+            right (int) -- largest x-coordinate (px)
+            bottom (int) -- smallest y-coordinate (px)
+            top (int) -- largest y-coordinate (px)
 
         Accepts the following optional keyword arguments:
             col (str or color tuple) ["black"] -- color of block
+
+        Because screen coordinates begin at the top, "bottom" here actually
+        corresponds to the top of the screen, and "top" corresponds to the
+        bottom.
+
+        The constructor ensures that left <= right and bottom <= top.
         """
 
-        # Assign given attributes
+        # Assign given attributes (ensuring order of coordinates)
         self.game = game
         self.canvas = game.get_canvas() # canvas to draw self on
-        self.left = left
-        self.right = right
-        self.bottom = bottom
-        self.top = top
+        self.left = min(left, right)
+        self.right = max(left, right)
+        self.bottom = min(bottom, top)
+        self.top = max(bottom, top)
         self.color = col
 
         # Draw the block
@@ -93,3 +99,39 @@ class Block:
         # Draw a rectangle on the game's canvas
         self.sprite = self.canvas.create_rectangle(self.left, self.bottom,
                           self.right, self.top, fill=self.color)
+    
+    #-------------------------------------------------------------------------
+
+    def get_left(self):
+        """Block.get_left() -> None
+        Returns the left coordinate of the block.
+        """
+
+        return self.left
+
+    #-------------------------------------------------------------------------
+
+    def get_right(self):
+        """Block.get_right() -> None
+        Returns the right coordinate of the block.
+        """
+
+        return self.right
+
+    #-------------------------------------------------------------------------
+
+    def get_bottom(self):
+        """Block.get_bottom() -> None
+        Returns the bottom coordinate of the block.
+        """
+
+        return self.bottom
+
+    #-------------------------------------------------------------------------
+
+    def get_top(self):
+        """Block.get_top() -> None
+        Returns the top coordinate of the block.
+        """
+
+        return self.top
