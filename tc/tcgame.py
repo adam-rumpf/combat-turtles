@@ -61,7 +61,7 @@ class TurtleCombatGame:
 
         # Set up arena canvas
         self.canvas = tk.Canvas(self.root, width=size[0], height=size[1],
-                                bd=4, relief="sunken")
+                                bg="white", bd=4, relief="sunken")
         self.canvas.grid(column=1, rowspan=2, padx=8, pady=8)
 
         # Set up name and health displays
@@ -175,6 +175,15 @@ class TurtleCombatGame:
         """
 
         return self.arena.get_blocks()
+    
+    #-------------------------------------------------------------------------
+    
+    def get_size(self):
+        """TurtleCombatGame.get_size() -> tuple
+        Returns the dimensions of the arena, as a tuple of integers.
+        """
+        
+        return self.size
 
     #-------------------------------------------------------------------------
 
@@ -190,6 +199,42 @@ class TurtleCombatGame:
         """
 
         return self.arena.intersections(coords)
+    
+    #-------------------------------------------------------------------------
+    
+    def _message_position(self):
+        """TurtleCombatGame._message_position() -> tuple
+        Determines the coordinates of messages to display on the arena canvas.
+        
+        When the game ends, a message is displayed somewhere in the arena to
+        announce the result. In order to avoid covering up the turtles, we
+        choose one of five positions: the center or one of the corners.
+        
+        If the center is free of turtles, the message is displayed there.
+        Otherwise we choose the corner for which the sum of distances to each
+        turtle is the greatest.
+        """
+        
+        # Get turtle coordinates and center coordinates
+        (x1, y1) = self.p1.get_position()
+        (x2, y2) = self.p2.get_position()
+        (xc, yc) = (self.size[0]/2, self.size[1]/2)
+        
+        # Define safety margin for text box size
+        (xr, yr) = (200, 50)
+        
+        # If the center is free, display there
+        if ((x1 < xc-xr or x1 > xc+xr) and (x2 < xc-xr or x2 > xc+xr)
+            and (y1 < yc-yr or y1 > yc+yr) and (y2 < yc-yr or y2 > yc+yr)):
+            return (xc, yc)
+        
+        # Otherwise find the corner furthest from both turtles
+        corners = [(xr, yr), (self.size[0]-xr, yr), (xr, self.size[1]-yr),
+                   (self.size[0]-xr, self.size[1]-yr)] # corner coordinates
+        dist = [self.p1.distance(corners[i]) + self.p2.distance(corners[i])
+                for i in range(len(corners))] # distances to all corners
+        mi = dist.index(max(dist)) # index of maximum distance
+        return corners[mi]
 
     #-------------------------------------------------------------------------
 
@@ -225,41 +270,45 @@ class TurtleCombatGame:
         # Decide whether to continue based on player health values
         if hp1 <= 0 and hp2 <= 0:
             # Tie
-            self.canvas.create_text(self.size[0]/2 + 2, self.size[1]/2 + 2,
+            pos = self._message_position()
+            self.canvas.create_text(pos[0] + 2, pos[1] + 2,
                                     text="Tie!",
                                     font=("Helvetica", 32, "bold"),
                                     fill="gray")
-            self.canvas.create_text(self.size[0]/2, self.size[1]/2,
+            self.canvas.create_text(pos[0], pos[1],
                                     text="Tie!",
                                     font=("Helvetica", 32, "bold"),
                                     fill="yellow")
         elif hp1 <= 0:
             # Player 2 win
-            self.canvas.create_text(self.size[0]/2 + 2, self.size[1]/2 + 2,
+            pos = self._message_position()
+            self.canvas.create_text(pos[0] + 2, pos[1] + 2,
                                     text=str(self.p2_name)+" wins!",
                                     font=("Helvetica", 32, "bold"),
                                     fill="gray")
-            self.canvas.create_text(self.size[0]/2, self.size[1]/2,
+            self.canvas.create_text(pos[0], pos[1],
                                     text=str(self.p2_name)+" wins!",
                                     font=("Helvetica", 32, "bold"),
                                     fill="blue")
         elif hp2 <= 0:
             # Player 1 win
-            self.canvas.create_text(self.size[0]/2 + 2, self.size[1]/2 + 2,
+            pos = self._message_position()
+            self.canvas.create_text(pos[0] + 2, pos[1] + 2,
                                     text=str(self.p1_name)+" wins!",
                                     font=("Helvetica", 32, "bold"),
                                     fill="gray")
-            self.canvas.create_text(self.size[0]/2, self.size[1]/2,
+            self.canvas.create_text(pos[0], pos[1],
                                     text=str(self.p1_name)+" wins!",
                                     font=("Helvetica", 32, "bold"),
                                     fill="red")
         elif self.cutoff > 0 and self.iteration >= self.cutoff:
             # Time limit cutoff
-            self.canvas.create_text(self.size[0]/2 + 2, self.size[1]/2 + 2,
+            pos = self._message_position()
+            self.canvas.create_text(pos[0] + 2, pos[1] + 2,
                                     text="Out of time!",
                                     font=("Helvetica", 32, "bold"),
                                     fill="gray")
-            self.canvas.create_text(self.size[0]/2, self.size[1]/2,
+            self.canvas.create_text(pos[0], pos[1],
                                     text="Out of time!",
                                     font=("Helvetica", 32, "bold"),
                                     fill="yellow")

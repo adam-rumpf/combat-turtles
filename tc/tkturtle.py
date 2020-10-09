@@ -796,8 +796,8 @@ class TkTurtle:
         Calculates the distance between a pair of coordinates (px).
 
         User visibility:
-            should call -- no
-            should overwrite -- yes
+            should call -- yes
+            should overwrite -- no
 
         This method can be called in several different formats depending on
         the number of arguments:

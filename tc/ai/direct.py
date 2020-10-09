@@ -54,11 +54,15 @@ class CombatTurtle(tc.tkturtle.TkTurtle):
         #self.left(0.075)
 
         self.counter += 1
-        print(self._heading)
-        if self.counter < 20:
-            self.turn_towards(0)
-        elif self.counter < 40:
-            self.turn_towards(90)
+        if self.get_heading() < 180:
+            self.right()
+        elif self.get_heading() > 180:
+            self.left()
+        else:
+            if self.get_position()[0] > self.arena_right()/2:
+                self.forward()
+            if self.can_shoot():
+                self.shoot()
 
         # Move towards opponent (or away if too close)
         #if self.distance() > self.missile_radius():

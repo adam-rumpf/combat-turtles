@@ -41,7 +41,7 @@ class Missile:
         after this number of steps.
         """
 
-        return 25
+        return 40
 
     #-------------------------------------------------------------------------
 
