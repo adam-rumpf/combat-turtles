@@ -1,6 +1,6 @@
 """Defines a turtle class using Tkinter."""
 
-### Note: May need to update the 40 ms (25 steps/sec) step timing description.
+### Note: May need to update the 33 ms (30 steps/sec) step timing description.
 
 ### In the template, list the public methods and sort by general purpose (action, opponent info, constant info, self info).
 ### Also reorder these methods by category.
@@ -30,14 +30,14 @@ class TkTurtle:
     to include their own custom attributes and methods, which the user should
     feel free to modify at will.
 
-    Turtle movement is handled using discrete steps, which occur every 40 ms
-    (at a rate of 25 steps/sec). The step() method is called once at the end
-    of each step, after which the turtle is moved directly to its new
-    position according to its current speed and heading. The visible movement-
-    related methods (such as forward(), backward(), left(), and right()) do
-    not actually move the Turtle, and instead update its internal speed and
-    heading attributes, which are then used to perform movement at the end of
-    the step.
+    Turtle movement is handled using discrete steps, which occur every 33 ms
+    (at a rate of approximately 30 steps/sec). The step() method is called
+    once at the end of each step, after which the turtle is moved directly to
+    its new position according to its current speed and heading. The visible
+    movement-related methods (such as forward(), backward(), left(), and
+    right()) do not actually move the Turtle, and instead update its internal
+    speed and heading attributes, which are then used to perform movement at
+    the end of the step.
 
     The following visible methods are meant for use in user-defined
     subclasses:
@@ -85,7 +85,7 @@ class TkTurtle:
         class_desc() -- (static method) returns a one-line description of the
             Combat Turtle AI
         setup() -- code run at the end of the turtle's initialization
-        step() -- code run during each step event (which occurs every 40 ms)
+        step() -- code run during each step event (which occurs every 33 ms)
     """
 
     # Static methods declare class constants to be accessed by other classes
@@ -234,7 +234,7 @@ class TkTurtle:
             should overwrite -- yes
 
         This method is meant to be overwritten in the submodules of TkTurtle.
-        It is called each step (every 40 ms), after which any movement and
+        It is called each step (every 33 ms), after which any movement and
         firing events are actually executed.
         """
 
@@ -298,7 +298,7 @@ class TkTurtle:
 
         # Calculate new coordinates by rotating shape template and offsetting
         coords = [0 for i in range(2*(len(self._shape_radius)+1))]
-        angle = (math.pi/180)*self._heading # convert heading to radians
+        angle = math.radians(self._heading) # convert heading to radians
         for i in range(len(self._shape_angle)):
             coords[2*i] = int(self._x + (self._shape_radius[i]*
                               math.cos(self._shape_angle[i]+angle)))
@@ -611,8 +611,8 @@ class TkTurtle:
         """
 
         # Set new coordinates
-        self._x += int(self._speed*math.cos((math.pi/180)*self._heading))
-        self._y += int(self._speed*math.sin((math.pi/180)*self._heading))
+        self._x += int(self._speed*math.cos(math.radians(self._heading)))
+        self._y += int(self._speed*math.sin(math.radians(self._heading)))
 
         # Check whether the destination intersects any blocks
         blocks = self._game.intersections((self._x, self._y))
@@ -922,8 +922,8 @@ class TkTurtle:
         # Turn towards heading if given an int or float
         else:
             # Calculate a point to turn towards to use min angle calculations
-            point = (int(self._x + 1000*math.cos((math.pi/180)*target)),
-                     int(self._y + 1000*math.sin((math.pi/180)*target)))
+            point = (int(self._x + 1000*math.cos(math.radians(target))),
+                     int(self._y + 1000*math.sin(math.radians(target))))
             print(point)###
             self.turn_towards(target=point)
 

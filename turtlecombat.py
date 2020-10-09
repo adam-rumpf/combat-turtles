@@ -9,7 +9,7 @@ import tc
 
 #=============================================================================
 
-def turtle_combat(tid1=-1, tid2=-1, aid=-1):
+def turtle_combat(tid1=-1, tid2=-1, aid=-1, cutoff=-1):
     """turtle_combat() -> None
     Turtle Combat game driver.
 
@@ -27,6 +27,7 @@ def turtle_combat(tid1=-1, tid2=-1, aid=-1):
             available combat turtle AI submodules)
         aid (int) [-1] -- index of arena layout (in the list of all available
             arena layouts)
+        cutoff (int) [-1] -- iteration cutoff for game (negative for no limit)
     """
 
     # In order to allow the user to place additional AI modules inside the ai/
@@ -116,7 +117,7 @@ def turtle_combat(tid1=-1, tid2=-1, aid=-1):
     print("Game in progress...")
     game = tc.tcgame.TurtleCombatGame(class1=turtle_classes[choice1],
                                       class2=turtle_classes[choice2],
-                                      layout=arena)
+                                      layout=arena, cutoff=cutoff)
 
     # Delete game object when done
     print("Closing Turtle Combat.")

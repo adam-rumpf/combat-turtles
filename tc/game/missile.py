@@ -154,8 +154,8 @@ class Missile:
             # If not already exploding, move and test for collisions/timers
 
             # Move forward
-            self.x += self.speed*math.cos((math.pi/180)*self.heading)
-            self.y += self.speed*math.sin((math.pi/180)*self.heading)
+            self.x += self.speed*math.cos(math.radians(self.heading))
+            self.y += self.speed*math.sin(math.radians(self.heading))
 
             # Determine whether to explode
             explode = False
