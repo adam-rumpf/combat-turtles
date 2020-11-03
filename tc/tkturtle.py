@@ -14,6 +14,7 @@ import math
 from .game.arena import Arena
 from .game.block import Block
 from .game.missile import Missile
+from .util.angles import Angle
 
 class TkTurtle:
     """Tkinter turtle class to use as the parent of Combat Turtle classes.
@@ -84,6 +85,8 @@ class TkTurtle:
             in distinguishing between different Combat Turtle AIs
         class_desc() -- (static method) returns a one-line description of the
             Combat Turtle AI
+        class_shape() -- (static method) returns either an integer index or a
+            radius tuple and an angle tuple to define the turtle's shape image
         setup() -- code run at the end of the turtle's initialization
         step() -- code run during each step event (which occurs every 33 ms)
     """
@@ -107,6 +110,31 @@ class TkTurtle:
         """
 
         return "Parent class of all Combat Turtle classes."
+
+    #-------------------------------------------------------------------------
+
+    def class_shape():
+        """TkTurtle.class_shape() -> (int or tuple)
+        Static method to define the Combat Turtle's shape image.
+
+        User visibility:
+            should call -- no
+            should overwrite -- yes
+
+        The return value can be either an integer or a tuple of tuples.
+
+        Returning an integer index selects one of the following preset shapes:
+            0 -- arrowhead (also default in case of unrecognized index)
+            1 -- pentagon
+            2 -- plough
+
+        A custom shape can be defined by returning a tuple of the form
+        (radius, angle), where radius is a tuple of radii and angle is a tuple
+        of angles (in radians) describing the polar coordinates of a polygon's
+        vertices.
+        """
+
+        return 0
 
     #=========================================================================
 
@@ -145,14 +173,17 @@ class TkTurtle:
         self._max_turn = 15 # maximum turning speed (deg/step)
         self._shoot_delay = 60 # delay between missile shots (steps)
 
-        # Define default shape polygon (points relative to (0,0)), expressed
-        # in polar coordinates (for more easily calculating rotations)
-        r1 = dim[0]/2
-        r2 = dim[1]/2
-        self._shape_angle = [0, math.pi/2, math.atan2(r2, -r1),
-                             math.atan2(-r2, -r1), -math.pi/2]
-        self._shape_radius = [r1, r2, math.sqrt(r1**2 + r2**2),
-                              math.sqrt(r1**2 + r2**2), r2]
+        # Define shape coordinates
+        cs = self.__class__.class_shape()
+        if type(cs) == int:
+            # Preset integer index
+            (self._shape_radius, self._shape_angle) = self._shape(dim, cs)
+        elif type(cs) == tuple and len(cs) == 2:
+            # Custom coordinates
+            (self._shape_radius, self._shape_angle) = cs
+        else:
+            # Default to arrowhead
+            (self._shape_radius, self._shape_angle) = self._shape(dim, 0)
 
         # Define variable attributes
         self._other = None # opponent turtle object
@@ -239,6 +270,45 @@ class TkTurtle:
         """
 
         pass
+
+    #-------------------------------------------------------------------------
+
+    def _shape(self, dim, index):
+        """TkTurtle._shape(dim, index) -> tuple
+        Returns the polar coordinates of the turtle's shape polygon.
+
+        User visibility:
+            should call -- no
+            should overwrite -- no
+
+        User-defined Combat Turtles can define their own sets of coordinates
+        for drawing the turtle's shape. This function returns one of the
+        preset shapes based on an integer index.
+        """
+
+        # Output coordinates based on integer index
+        if index == 1:
+            # Pentagon
+            r1 = dim[0]/2
+            r2 = dim[1]/2
+            radius = (r1, r2, r2, r2, r2, r1)
+            angle = (0, 2*math.pi/5, 4*math.pi/5, 6*math.pi/5, 8*math.pi/5, 0)
+        elif index == 2:
+            # Plough
+            r1 = dim[0]/2
+            r2 = dim[1]/2
+            radius = (r1, r2, math.sqrt(r1**2 + r2**2),
+                      math.sqrt(r1**2 + r2**2), r2)
+            angle = (0, math.pi/2, math.atan2(r2, -r1), math.atan2(-r2, -r1),
+                     -math.pi/2)
+        else:
+            # Default to arrowhead
+            r1 = dim[0]/2
+            r2 = dim[1]/2
+            radius = (r1, r2, 0, r2, r1)
+            angle = (0, 2*math.pi/3, math.pi, 4*math.pi/3, 0)
+
+        return (radius, angle)
 
     #-------------------------------------------------------------------------
 

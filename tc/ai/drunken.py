@@ -27,6 +27,27 @@ class CombatTurtle(tc.tkturtle.TkTurtle):
         """
 
         return "Wanders semi-randomly towards the opponent."
+    
+    #-------------------------------------------------------------------------
+
+    def class_shape():
+        """CombatTurtle.class_shape() -> (int or tuple)
+        Static method to define the Combat Turtle's shape image.
+
+        The return value can be either an integer or a tuple of tuples.
+
+        Returning an integer index selects one of the following preset shapes:
+            0 -- arrowhead (also default in case of unrecognized index)
+            1 -- pentagon
+            2 -- plough
+
+        A custom shape can be defined by returning a tuple of the form
+        (radius, angle), where radius is a tuple of radii and angle is a tuple
+        of angles (in radians) describing the polar coordinates of a polygon's
+        vertices.
+        """
+
+        return 0
 
     #=========================================================================
 
