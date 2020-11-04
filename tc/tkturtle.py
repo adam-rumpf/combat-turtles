@@ -164,7 +164,7 @@ class TkTurtle:
         (self._x, self._y) = coords
         self._heading = heading
         self._game = game
-        self._canvas = game.get_canvas()
+        self._canvas = game.canvas
         self._color = col
 
         # Define constant attributes
@@ -779,14 +779,14 @@ class TkTurtle:
             for b in blocks:
                 # Determine overlap on each side
                 overlap = [1000000 for i in range(4)] # ordered overlaps
-                if self._x >= b.get_left():
-                    overlap[0] = self._x - b.get_left()
-                if self._x <= b.get_right():
-                    overlap[1] = b.get_right() - self._x
-                if self._y >= b.get_bottom():
-                    overlap[2] = self._y - b.get_bottom()
-                if self._y <= b.get_top():
-                    overlap[3] = b.get_top() - self._y
+                if self.x >= b.left:
+                    overlap[0] = self.x - b.left
+                if self.x <= b.right:
+                    overlap[1] = b.right - self.x
+                if self.y >= b.bottom:
+                    overlap[2] = self.y - b.bottom
+                if self.y <= b.top:
+                    overlap[3] = b.top - self.y
 
                 # Find minimum nonzero overlap
                 mo = overlap.index(min(overlap))

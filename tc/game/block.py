@@ -7,6 +7,16 @@ class Block:
 
     Defines rectangular obstacles in the arena. Turtles cannot pass through
     blocks, and missiles explode on contact with blocks.
+
+    The following local read-only attributes can be used to access the
+    coordinates of the Block:
+        left, right, bottom, top -- returns the left/right/bottom/top
+            coordinates of the block
+
+    The following public methods can be used to test for collisions with the
+    Block:
+        contains(coords[, closed]) -- returns whether a given coordinate lies
+            inside this Block's boundaries (either open or closed)
     """
 
     #=========================================================================
@@ -18,7 +28,7 @@ class Block:
         Requires the following positional arguments:
             game (tcgame.TurtleCombatGame) -- game driver object
             left (int) -- smallest x-coordinate (px)
-            right (int) -- largest x-coordinate (px)
+            right (int) -- lartst x-coordinate (px)
             bottom (int) -- smallest y-coordinate (px)
             top (int) -- largest y-coordinate (px)
 
@@ -34,11 +44,11 @@ class Block:
 
         # Assign given attributes (ensuring order of coordinates)
         self.game = game
-        self.canvas = game.get_canvas() # canvas to draw self on
-        self.left = min(left, right)
-        self.right = max(left, right)
-        self.bottom = min(bottom, top)
-        self.top = max(bottom, top)
+        self.canvas = game.canvas # canvas to draw self on
+        self._left = min(left, right)
+        self._right = max(left, right)
+        self._bottom = min(bottom, top)
+        self._top = max(bottom, top)
         self.color = col
 
         # Draw the block
@@ -99,39 +109,67 @@ class Block:
         # Draw a rectangle on the game's canvas
         self.sprite = self.canvas.create_rectangle(self.left, self.bottom,
                           self.right, self.top, fill=self.color)
-    
+
     #-------------------------------------------------------------------------
 
-    def get_left(self):
-        """Block.get_left() -> None
+    @property
+    def left(self):
+        """Block.left -> None
         Returns the left coordinate of the block.
         """
 
-        return self.left
+        return self._left
+
+    @left.setter
+    def left(self, value):
+        """Do-nothing boundary setter to prevent overwriting."""
+
+        pass
 
     #-------------------------------------------------------------------------
 
-    def get_right(self):
-        """Block.get_right() -> None
+    @property
+    def right(self):
+        """Block.right -> None
         Returns the right coordinate of the block.
         """
 
-        return self.right
+        return self._right
+
+    @right.setter
+    def right(self, value):
+        """Do-nothing boundary setter to prevent overwriting."""
+
+        pass
 
     #-------------------------------------------------------------------------
 
-    def get_bottom(self):
-        """Block.get_bottom() -> None
+    @property
+    def bottom(self):
+        """Block.bottom -> None
         Returns the bottom coordinate of the block.
         """
 
-        return self.bottom
+        return self._bottom
+
+    @bottom.setter
+    def bottom(self, value):
+        """Do-nothing boundary setter to prevent overwriting."""
+
+        pass
 
     #-------------------------------------------------------------------------
 
-    def get_top(self):
-        """Block.get_top() -> None
+    @property
+    def top(self):
+        """Block.top -> None
         Returns the top coordinate of the block.
         """
 
-        return self.top
+        return self._top
+
+    @top.setter
+    def top(self, value):
+        """Do-nothing boundary setter to prevent overwriting."""
+
+        pass

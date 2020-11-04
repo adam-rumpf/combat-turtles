@@ -39,8 +39,8 @@ class TurtleCombatGame:
         """
 
         # Initialize game constants
-        self.size = size # arena size
-        self.step_time = 33 # time per step (ms)
+        self._size = size # arena size
+        self._step_time = 33 # time per step (ms)
         self.cutoff = cutoff # maximum number of iterations
 
         # Get turtle names
@@ -60,9 +60,9 @@ class TurtleCombatGame:
         self.root.title(title)
 
         # Set up arena canvas
-        self.canvas = tk.Canvas(self.root, width=size[0], height=size[1],
-                                bg="white", bd=4, relief="sunken")
-        self.canvas.grid(column=1, rowspan=2, padx=8, pady=8)
+        self._canvas = tk.Canvas(self.root, width=size[0], height=size[1],
+                                 bg="white", bd=4, relief="sunken")
+        self._canvas.grid(column=1, rowspan=2, padx=8, pady=8)
 
         # Set up name and health displays
         p1_label = tk.Label(self.root, text=self.p1_name,
@@ -73,7 +73,7 @@ class TurtleCombatGame:
         p2_label.grid(column=2, row=0, padx=8, sticky="S")
 
         # Initialize arena
-        self.arena = Arena(self, size=size, layout=layout)
+        self._arena = Arena(self, size=size, layout=layout)
 
         # Initialize players
         self.p1 = None # first player
@@ -138,52 +138,87 @@ class TurtleCombatGame:
             del self.p2
 
         # Delete arena
-        del self.arena
+        del self._arena
 
     #-------------------------------------------------------------------------
 
-    def get_step_time(self):
-        """TurtleCombatGame.get_step_time() -> int
+    @property
+    def step_time(self):
+        """TurtleCombatGame.step_time -> int
         Returns the time between game steps (ms).
         """
 
-        return self.step_time
+        return self._step_time
+
+    @step_time.setter
+    def step_time(self, value):
+        """Do-nothing step time setter to prevent overwriting."""
+
+        pass
 
     #-------------------------------------------------------------------------
 
-    def get_canvas(self):
-        """TurtleCombatGame.get_canvas() -> tkinter.Canvas
+    @property
+    def canvas(self):
+        """TurtleCombatGame.canvas -> tkinter.Canvas
         Returns the Canvas object representing the game arena.
         """
 
-        return self.canvas
+        return self._canvas
+
+    @canvas.setter
+    def canvas(self, value):
+        """Do-nothing canvas setter to prevent overwriting."""
+
+        pass
 
     #-------------------------------------------------------------------------
 
-    def get_arena(self):
-        """TurtleCombatGame.get_arena() -> tc.game.Arena
+    @property
+    def arena(self):
+        """TurtleCombatGame.arena -> tc.game.Arena
         Returns the game's Arena object.
         """
 
-        return self.arena
+        return self._arena
+
+    @arena.setter
+    def arena(self, value):
+        """Do-nothing arena setter to prevent overwriting."""
+
+        pass
 
     #-------------------------------------------------------------------------
 
-    def get_blocks(self):
-        """TurtleCombatGame.get_blocks() -> list
+    @property
+    def blocks(self):
+        """TurtleCombatGame.blocks -> list
         Returns a list of all Block objects in the arena.
         """
 
-        return self.arena.get_blocks()
+        return self._arena.get_blocks()
+
+    @blocks.setter
+    def blocks(self, value):
+        """Do-nothing block setter to prevent overwriting."""
+
+        pass
 
     #-------------------------------------------------------------------------
 
-    def get_size(self):
-        """TurtleCombatGame.get_size() -> tuple
+    @property
+    def size(self):
+        """TurtleCombatGame.size -> tuple
         Returns the dimensions of the arena, as a tuple of integers.
         """
 
-        return self.size
+        return self._size
+
+    @size.setter
+    def size(self, value):
+        """Do-nothing size setter to prevent overwriting."""
+
+        pass
 
     #-------------------------------------------------------------------------
 
@@ -198,7 +233,7 @@ class TurtleCombatGame:
         returned.
         """
 
-        return self.arena.intersections(coords)
+        return self._arena.intersections(coords)
 
     #-------------------------------------------------------------------------
 
@@ -271,47 +306,47 @@ class TurtleCombatGame:
         if hp1 <= 0 and hp2 <= 0:
             # Tie
             pos = self._message_position()
-            self.canvas.create_text(pos[0] + 2, pos[1] + 2,
-                                    text="Tie!",
-                                    font=("Helvetica", 32, "bold"),
-                                    fill="gray")
-            self.canvas.create_text(pos[0], pos[1],
-                                    text="Tie!",
-                                    font=("Helvetica", 32, "bold"),
-                                    fill="yellow")
+            self._canvas.create_text(pos[0] + 2, pos[1] + 2,
+                                     text="Tie!",
+                                     font=("Helvetica", 32, "bold"),
+                                     fill="gray")
+            self._canvas.create_text(pos[0], pos[1],
+                                     text="Tie!",
+                                     font=("Helvetica", 32, "bold"),
+                                     fill="yellow")
         elif hp1 <= 0:
             # Player 2 win
             pos = self._message_position()
-            self.canvas.create_text(pos[0] + 2, pos[1] + 2,
-                                    text=str(self.p2_name)+" wins!",
-                                    font=("Helvetica", 32, "bold"),
-                                    fill="gray")
-            self.canvas.create_text(pos[0], pos[1],
-                                    text=str(self.p2_name)+" wins!",
-                                    font=("Helvetica", 32, "bold"),
-                                    fill="blue")
+            self._canvas.create_text(pos[0] + 2, pos[1] + 2,
+                                     text=str(self.p2_name)+" wins!",
+                                     font=("Helvetica", 32, "bold"),
+                                     fill="gray")
+            self._canvas.create_text(pos[0], pos[1],
+                                     text=str(self.p2_name)+" wins!",
+                                     font=("Helvetica", 32, "bold"),
+                                     fill="blue")
         elif hp2 <= 0:
             # Player 1 win
             pos = self._message_position()
-            self.canvas.create_text(pos[0] + 2, pos[1] + 2,
-                                    text=str(self.p1_name)+" wins!",
-                                    font=("Helvetica", 32, "bold"),
-                                    fill="gray")
-            self.canvas.create_text(pos[0], pos[1],
-                                    text=str(self.p1_name)+" wins!",
-                                    font=("Helvetica", 32, "bold"),
-                                    fill="red")
+            self._canvas.create_text(pos[0] + 2, pos[1] + 2,
+                                     text=str(self.p1_name)+" wins!",
+                                     font=("Helvetica", 32, "bold"),
+                                     fill="gray")
+            self._canvas.create_text(pos[0], pos[1],
+                                     text=str(self.p1_name)+" wins!",
+                                     font=("Helvetica", 32, "bold"),
+                                     fill="red")
         elif self.cutoff > 0 and self.iteration >= self.cutoff:
             # Time limit cutoff
             pos = self._message_position()
-            self.canvas.create_text(pos[0] + 2, pos[1] + 2,
-                                    text="Out of time!",
-                                    font=("Helvetica", 32, "bold"),
-                                    fill="gray")
-            self.canvas.create_text(pos[0], pos[1],
-                                    text="Out of time!",
-                                    font=("Helvetica", 32, "bold"),
-                                    fill="yellow")
+            self._canvas.create_text(pos[0] + 2, pos[1] + 2,
+                                     text="Out of time!",
+                                     font=("Helvetica", 32, "bold"),
+                                     fill="gray")
+            self._canvas.create_text(pos[0], pos[1],
+                                     text="Out of time!",
+                                     font=("Helvetica", 32, "bold"),
+                                     fill="yellow")
         else:
             # Continue loop by resetting timer
             self.root.after(self.step_time, self.play_game)

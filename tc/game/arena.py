@@ -102,7 +102,7 @@ class Arena:
         self.size = size
 
         # Initialize block object list
-        self.blocks = []
+        self._blocks = []
 
         # Generate the walls defined by the layout (default to empty)
         if layout == 1:
@@ -125,7 +125,7 @@ class Arena:
         Arena destructor deletes all blocks in arena.
         """
 
-        del self.blocks[:]
+        del self._blocks[:]
 
     #-------------------------------------------------------------------------
 
@@ -135,9 +135,9 @@ class Arena:
         """
 
         # Define column block
-        self.blocks.append(Block(self.game, (self.size[0]/2)-80,
-                                 (self.size[0]/2)+80, (self.size[1]/2)-80,
-                                 (self.size[1]/2)+80))
+        self._blocks.append(Block(self.game, (self.size[0]/2)-80,
+                                  (self.size[0]/2)+80, (self.size[1]/2)-80,
+                                  (self.size[1]/2)+80))
 
     #-------------------------------------------------------------------------
 
@@ -147,14 +147,14 @@ class Arena:
         """
 
         # Define four small columns
-        self.blocks.append(Block(self.game, 200, 260, 200, 260))
-        self.blocks.append(Block(self.game, self.size[0]-260,
-                                 self.size[0]-200, 200, 260))
-        self.blocks.append(Block(self.game, 200, 260, self.size[1]-260,
-                                 self.size[1]-200))
-        self.blocks.append(Block(self.game, self.size[0]-260,
-                                 self.size[0]-200, self.size[1]-260,
-                                 self.size[1]-200))
+        self._blocks.append(Block(self.game, 200, 260, 200, 260))
+        self._blocks.append(Block(self.game, self.size[0]-260,
+                                  self.size[0]-200, 200, 260))
+        self._blocks.append(Block(self.game, 200, 260, self.size[1]-260,
+                                  self.size[1]-200))
+        self._blocks.append(Block(self.game, self.size[0]-260,
+                                  self.size[0]-200, self.size[1]-260,
+                                  self.size[1]-200))
 
     #-------------------------------------------------------------------------
 
@@ -164,12 +164,12 @@ class Arena:
         """
 
         # Define two wall portions
-        self.blocks.append(Block(self.game, (self.size[0]/2)-30,
-                                 (self.size[0]/2)+30, -40,
-                                 (self.size[1]/2)-60))
-        self.blocks.append(Block(self.game, (self.size[0]/2)-30,
-                                 (self.size[0]/2)+30, (self.size[1]/2)+60,
-                                 self.size[1]+40))
+        self._blocks.append(Block(self.game, (self.size[0]/2)-30,
+                                  (self.size[0]/2)+30, -40,
+                                  (self.size[1]/2)-60))
+        self._blocks.append(Block(self.game, (self.size[0]/2)-30,
+                                  (self.size[0]/2)+30, (self.size[1]/2)+60,
+                                  self.size[1]+40))
 
     #-------------------------------------------------------------------------
 
@@ -179,13 +179,13 @@ class Arena:
         """
 
         # Define two crossing wall portions
-        self.blocks.append(Block(self.game, (self.size[0]/2)-30,
-                                 (self.size[0]/2)+30,
-                                 math.floor(self.size[1]/3),
-                                 math.ceil(2*self.size[1]/3)))
-        self.blocks.append(Block(self.game, math.floor(self.size[0]/3),
-                                 math.ceil(2*self.size[0]/3),
-                                 (self.size[1]/2)-30, (self.size[1]/2)+30))
+        self._blocks.append(Block(self.game, (self.size[0]/2)-30,
+                                  (self.size[0]/2)+30,
+                                  math.floor(self.size[1]/3),
+                                  math.ceil(2*self.size[1]/3)))
+        self._blocks.append(Block(self.game, math.floor(self.size[0]/3),
+                                  math.ceil(2*self.size[0]/3),
+                                  (self.size[1]/2)-30, (self.size[1]/2)+30))
 
     #-------------------------------------------------------------------------
 
@@ -205,9 +205,16 @@ class Arena:
 
     #-------------------------------------------------------------------------
 
-    def get_blocks(self):
-        """Arena.get_blocks() -> list
+    @property
+    def blocks(self):
+        """Arena.blocks -> list
         Returns a list of all block objects in the arena.
         """
 
-        return self.blocks
+        return self._blocks
+
+    @blocks.setter
+    def blocks(self, value):
+        """Do-nothing block list setter to prevent overwriting."""
+
+        pass
