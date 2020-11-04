@@ -126,12 +126,13 @@ class TkTurtle:
         Returning an integer index selects one of the following preset shapes:
             0 -- arrowhead (also default in case of unrecognized index)
             1 -- pentagon
-            2 -- plough
+            2 -- plow
 
         A custom shape can be defined by returning a tuple of the form
         (radius, angle), where radius is a tuple of radii and angle is a tuple
         of angles (in radians) describing the polar coordinates of a polygon's
-        vertices.
+        vertices. The shape coordinates should be given for a turtle facing
+        east.
         """
 
         return 0
@@ -294,7 +295,7 @@ class TkTurtle:
             radius = (r1, r2, r2, r2, r2, r1)
             angle = (0, 2*math.pi/5, 4*math.pi/5, 6*math.pi/5, 8*math.pi/5, 0)
         elif index == 2:
-            # Plough
+            # Plow
             r1 = dim[0]/2
             r2 = dim[1]/2
             radius = (r1, r2, math.sqrt(r1**2 + r2**2),

@@ -39,12 +39,13 @@ class CombatTurtle(tc.tkturtle.TkTurtle):
         Returning an integer index selects one of the following preset shapes:
             0 -- arrowhead (also default in case of unrecognized index)
             1 -- pentagon
-            2 -- plough
+            2 -- plow
 
         A custom shape can be defined by returning a tuple of the form
         (radius, angle), where radius is a tuple of radii and angle is a tuple
         of angles (in radians) describing the polar coordinates of a polygon's
-        vertices.
+        vertices. The shape coordinates should be given for a turtle facing
+        east.
         """
 
         return 0
