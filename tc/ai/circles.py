@@ -68,7 +68,7 @@ class CombatTurtle(tc.tkturtle.TkTurtle):
         moving forward while turning, shooting when able.
         """
 
-        self.forward(self.spd)
-        self.left(self.turn_spd)
+        self.fd(self.spd)
+        self.lt(self.turn_spd)
         if self.can_shoot:
             self.shoot()

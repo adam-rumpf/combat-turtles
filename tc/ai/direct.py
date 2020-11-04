@@ -76,9 +76,9 @@ class CombatTurtle(tc.tkturtle.TkTurtle):
 
         self.counter += 1
         if self.heading < 180:
-            self.right()
+            self.rt()
         elif self.heading > 180:
-            self.left()
+            self.lt()
         else:
             if self.x > self.arena_right/2:
                 self.forward()

@@ -304,7 +304,7 @@ class TkTurtle:
             # Default to arrowhead
             r1 = dim[0]/2
             r2 = dim[1]/2
-            radius = (r1, r2, 0, r2, r1)
+            radius = (r1, 2*r2/math.sqrt(3), 0, 2*r2/math.sqrt(3), r1)
             angle = (0, 2*math.pi/3, math.pi, 4*math.pi/3, 0)
 
         return (radius, angle)
@@ -648,26 +648,8 @@ class TkTurtle:
         # Determine movement speed (with rate clamped between -1 and 1)
         self._speed = int(self.max_speed * max(min(rate, 1), -1))
 
-    #-------------------------------------------------------------------------
-
-    def fd(self, rate=1):
-        """TkTurtle.fd([rate]) -> None
-        Tells a turtle to move forward at a given fraction of its max speed.
-
-        Aliases: forward, fd
-
-        User visibility:
-            should call -- yes
-            should overwrite -- no
-
-        Accepts following optional positional arguments:
-            rate (float) [1] -- movement rate, as a float between -1 and 1,
-                with 0 meaning no movement, 1 meaning maximum forward speed,
-                -1 meaning maximum backward speed, and intermediate values
-                meaning a fraction of the maximum speed
-        """
-
-        self.forward(rate)
+    # Set aliases
+    fd = forward
 
     #-------------------------------------------------------------------------
 
@@ -691,47 +673,9 @@ class TkTurtle:
         # Equivalent to moving forward at negative rate
         self.forward(-rate)
 
-    #-------------------------------------------------------------------------
-
-    def back(self, rate=1):
-        """TkTurtle.back([rate]) -> None
-        Tells a turtle to move backward at a given fraction of its max speed.
-
-        Aliases: backward, back, bk
-
-        User visibility:
-            should call -- yes
-            should overwrite -- no
-
-        Accepts following optional positional arguments:
-            rate (float) [1] -- movement rate, as a float between -1 and 1,
-                with 0 meaning no movement, 1 meaning maximum backward speed,
-                -1 meaning maximum forward speed, and intermediate values
-                meaning a fraction of the maximum speed
-        """
-
-        self.backward(rate)
-
-    #-------------------------------------------------------------------------
-
-    def bk(self, rate=1):
-        """TkTurtle.bk([rate]) -> None
-        Tells a turtle to move backward at a given fraction of its max speed.
-
-        Aliases: backward, back, bk
-
-        User visibility:
-            should call -- yes
-            should overwrite -- no
-
-        Accepts following optional positional arguments:
-            rate (float) [1] -- movement rate, as a float between -1 and 1,
-                with 0 meaning no movement, 1 meaning maximum backward speed,
-                -1 meaning maximum forward speed, and intermediate values
-                meaning a fraction of the maximum speed
-        """
-
-        self.backward(rate)
+    # Set aliases
+    back = backward
+    bk = backward
 
     #-------------------------------------------------------------------------
 
@@ -848,26 +792,8 @@ class TkTurtle:
         # Determine turning speed (with rate clamped between -1 and 1)
         self._speed_turn = int(self.max_turn_speed * max(min(rate, 1), -1))
 
-    #-------------------------------------------------------------------------
-
-    def lt(self, rate=1):
-        """TkTurtle.lt([angle]) -> None
-        Tells a turtle to turn left by a given fraction of its turning speed.
-
-        Aliases: left, lt
-
-        User visibility:
-            should call -- yes
-            should overwrite -- no
-
-        Accepts the following optional keyword arguments:
-            rate (float) [1] -- turning rate, as a float between -1 and 1,
-                with 0 meaning no turning, 1 meaning maximum counterclockwise
-                speed, -1 meaning maximum clockwise speed, and intermediate
-                values meaning a fraction of the turning speed
-        """
-
-        self.left(rate)
+    # Set aliases
+    lt = left
 
     #-------------------------------------------------------------------------
 
@@ -891,26 +817,8 @@ class TkTurtle:
         # Equivalent to turning left at negative rate
         self.left(-rate)
 
-    #-------------------------------------------------------------------------
-
-    def rt(self, rate=1):
-        """TkTurtle.right([angle]) -> None
-        Tells a turtle to turn right by a given fraction of its turning speed.
-
-        Aliases: right, rt
-
-        User visibility:
-            should call -- yes
-            should overwrite -- no
-
-        Accepts the following optional keyword arguments:
-            rate (float) [1] -- turning rate, as a float between -1 and 1,
-                with 0 meaning no turning, 1 meaning maximum clockwise speed,
-                -1 meaning maximum counterclockwise speed, and intermediate
-                values meaning a fraction of the turning speed
-        """
-
-        self.right(rate)
+    # Set aliases
+    rt = right
 
     #-------------------------------------------------------------------------
 
