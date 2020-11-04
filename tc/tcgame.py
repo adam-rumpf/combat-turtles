@@ -101,7 +101,7 @@ class TurtleCombatGame:
         self.p1_health = tk.StringVar(value="") # player 1 health string
         self.p1_health_display = tk.Label(self.root)
         if self.p1 != None:
-            self.p1_health.set(str(self.p1.get_health()))
+            self.p1_health.set(str(self.p1.health))
             self.p1_health_display = tk.Label(self.root,
                                               textvariable=self.p1_health,
                                               font=("Helvetica", 12))
@@ -109,7 +109,7 @@ class TurtleCombatGame:
         self.p2_health = tk.StringVar(value="") # player 2 health string
         self.p2_health_display = tk.Label(self.root)
         if self.p2 != None:
-            self.p2_health.set(str(self.p2.get_health()))
+            self.p2_health.set(str(self.p2.health))
             self.p2_health_display = tk.Label(self.root,
                                               textvariable=self.p2_health,
                                               font=("Helvetica", 12))
@@ -175,14 +175,14 @@ class TurtleCombatGame:
         """
 
         return self.arena.get_blocks()
-    
+
     #-------------------------------------------------------------------------
-    
+
     def get_size(self):
         """TurtleCombatGame.get_size() -> tuple
         Returns the dimensions of the arena, as a tuple of integers.
         """
-        
+
         return self.size
 
     #-------------------------------------------------------------------------
@@ -199,35 +199,35 @@ class TurtleCombatGame:
         """
 
         return self.arena.intersections(coords)
-    
+
     #-------------------------------------------------------------------------
-    
+
     def _message_position(self):
         """TurtleCombatGame._message_position() -> tuple
         Determines the coordinates of messages to display on the arena canvas.
-        
+
         When the game ends, a message is displayed somewhere in the arena to
         announce the result. In order to avoid covering up the turtles, we
         choose one of five positions: the center or one of the corners.
-        
+
         If the center is free of turtles, the message is displayed there.
         Otherwise we choose the corner for which the sum of distances to each
         turtle is the greatest.
         """
-        
+
         # Get turtle coordinates and center coordinates
-        (x1, y1) = self.p1.get_position()
-        (x2, y2) = self.p2.get_position()
+        (x1, y1) = self.p1.position
+        (x2, y2) = self.p2.position
         (xc, yc) = (self.size[0]/2, self.size[1]/2)
-        
+
         # Define safety margin for text box size
         (xr, yr) = (200, 50)
-        
+
         # If the center is free, display there
         if ((x1 < xc-xr or x1 > xc+xr) and (x2 < xc-xr or x2 > xc+xr)
             and (y1 < yc-yr or y1 > yc+yr) and (y2 < yc-yr or y2 > yc+yr)):
             return (xc, yc)
-        
+
         # Otherwise find the corner furthest from both turtles
         corners = [(xr, yr), (self.size[0]-xr, yr), (xr, self.size[1]-yr),
                    (self.size[0]-xr, self.size[1]-yr)] # corner coordinates
@@ -260,11 +260,11 @@ class TurtleCombatGame:
         # Update player health displays
         hp1 = 1 # current player 1 health
         if self.p1 != None:
-            hp1 = max(self.p1.get_health(), 0)
+            hp1 = max(self.p1.health, 0)
             self.p1_health.set(str(hp1))
         hp2 = 1 # current player 2 health
         if self.p2 != None:
-            hp2 = max(self.p2.get_health(), 0)
+            hp2 = max(self.p2.health, 0)
             self.p2_health.set(str(hp2))
 
         # Decide whether to continue based on player health values

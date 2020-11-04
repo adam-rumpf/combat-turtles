@@ -57,8 +57,8 @@ class CombatTurtle(tc.tkturtle.TkTurtle):
         """
 
         # Define constant linear and angular speed factors
-        self.speed = 1.0
-        self.turn_speed = 1.0
+        self.spd = 1.0
+        self.turn_spd = 1.0
 
         ###
         self.counter = 0
@@ -75,14 +75,14 @@ class CombatTurtle(tc.tkturtle.TkTurtle):
         #self.left(0.075)
 
         self.counter += 1
-        if self.get_heading() < 180:
+        if self.heading < 180:
             self.right()
-        elif self.get_heading() > 180:
+        elif self.heading > 180:
             self.left()
         else:
-            if self.get_position()[0] > self.arena_right()/2:
+            if self.x > self.arena_right/2:
                 self.forward()
-            if self.can_shoot():
+            if self.can_shoot:
                 self.shoot()
 
         # Move towards opponent (or away if too close)

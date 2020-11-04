@@ -55,8 +55,8 @@ class CombatTurtle(tc.tkturtle.TkTurtle):
         """
 
         # Define constant linear and angular speed factors
-        self.speed = 1.0
-        self.turn_speed = 0.5
+        self.spd = 1.0
+        self.turn_spd = 0.5
 
     #-------------------------------------------------------------------------
 
@@ -68,7 +68,7 @@ class CombatTurtle(tc.tkturtle.TkTurtle):
         moving forward while turning, shooting when able.
         """
 
-        self.forward(self.speed)
-        self.left(self.turn_speed)
-        if self.can_shoot():
+        self.forward(self.spd)
+        self.left(self.turn_spd)
+        if self.can_shoot:
             self.shoot()
