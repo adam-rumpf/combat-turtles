@@ -162,7 +162,7 @@ class TkTurtle:
         # Assign given attributes
         self._name = name
         (self._x, self._y) = coords
-        self._heading = heading
+        self._heading = Angle(heading, "degrees")
         self._game = game
         self._canvas = game.canvas
         self._color = col
@@ -367,7 +367,7 @@ class TkTurtle:
 
         # Calculate new coordinates by rotating shape template and offsetting
         coords = [0 for i in range(2*(len(self._shape_radius)+1))]
-        angle = math.radians(self._heading) # convert heading to radians
+        angle = math.radians(self.heading) # convert heading to rad
         for i in range(len(self._shape_angle)):
             coords[2*i] = int(self._x + (self._shape_radius[i]*
                               math.cos(self._shape_angle[i]+angle)))
@@ -811,9 +811,14 @@ class TkTurtle:
         User visibility:
             should call -- yes
             should overwrite -- no
+
+        For the purposes of internal calculations, headings are stored as a
+        private Angle variable which automatically handles revolutions.
+        Accessing the variable returns the integer version of the heading,
+        which is always normalized to lie between (-180,180] degrees.
         """
 
-        return self._heading
+        return int(self._heading)
 
     @heading.setter
     def heading(self, value):
@@ -1028,8 +1033,8 @@ class TkTurtle:
 
     @property
     def other_heading(self):
-        """TkTurtle.other_heading -> tuple
-        Returns the heading direction (degrees) of the opponent Combat Turtle.
+        """TkTurtle.other_heading -> int
+        Returns the heading direction (deg) of the opponent Combat Turtle.
 
         User visibility:
             should call -- yes
@@ -1039,7 +1044,7 @@ class TkTurtle:
         if self._other == None:
             return None
 
-        return self._other.heading
+        return int(self._other.heading)
 
     @other_heading.setter
     def other_heading(self, value):
