@@ -97,7 +97,7 @@ class Missile:
 
         # Assign given attributes
         self.game = game
-        self.canvas = game.get_canvas() # canvas to draw self on
+        self.canvas = game.canvas # canvas to draw self on
         self.shooter = shooter
         self.target = target
         self.x = coords[0]

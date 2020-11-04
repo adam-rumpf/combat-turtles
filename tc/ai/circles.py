@@ -25,6 +25,27 @@ class CombatTurtle(tc.tkturtle.TkTurtle):
         """
 
         return "Moves in circles and periodically shoots."
+    
+    #-------------------------------------------------------------------------
+
+    def class_shape():
+        """CombatTurtle.class_shape() -> (int or tuple)
+        Static method to define the Combat Turtle's shape image.
+
+        The return value can be either an integer or a tuple of tuples.
+
+        Returning an integer index selects one of the following preset shapes:
+            0 -- arrowhead (also default in case of unrecognized index)
+            1 -- pentagon
+            2 -- plough
+
+        A custom shape can be defined by returning a tuple of the form
+        (radius, angle), where radius is a tuple of radii and angle is a tuple
+        of angles (in radians) describing the polar coordinates of a polygon's
+        vertices.
+        """
+
+        return 1
 
     #=========================================================================
 
@@ -34,8 +55,8 @@ class CombatTurtle(tc.tkturtle.TkTurtle):
         """
 
         # Define constant linear and angular speed factors
-        self.speed = 1.0
-        self.turn_speed = 0.5
+        self.spd = 1.0
+        self.turn_spd = 0.5
 
     #-------------------------------------------------------------------------
 
@@ -47,7 +68,7 @@ class CombatTurtle(tc.tkturtle.TkTurtle):
         moving forward while turning, shooting when able.
         """
 
-        self.forward(self.speed)
-        self.left(self.turn_speed)
-        if self.can_shoot():
+        self.fd(self.spd)
+        self.lt(self.turn_spd)
+        if self.can_shoot:
             self.shoot()

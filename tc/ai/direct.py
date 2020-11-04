@@ -27,6 +27,27 @@ class CombatTurtle(tc.tkturtle.TkTurtle):
         """
 
         return "Moves directly towards opponent while ignoring obstacles."
+    
+    #-------------------------------------------------------------------------
+
+    def class_shape():
+        """CombatTurtle.class_shape() -> (int or tuple)
+        Static method to define the Combat Turtle's shape image.
+
+        The return value can be either an integer or a tuple of tuples.
+
+        Returning an integer index selects one of the following preset shapes:
+            0 -- arrowhead (also default in case of unrecognized index)
+            1 -- pentagon
+            2 -- plough
+
+        A custom shape can be defined by returning a tuple of the form
+        (radius, angle), where radius is a tuple of radii and angle is a tuple
+        of angles (in radians) describing the polar coordinates of a polygon's
+        vertices.
+        """
+
+        return 0
 
     #=========================================================================
 
@@ -36,8 +57,8 @@ class CombatTurtle(tc.tkturtle.TkTurtle):
         """
 
         # Define constant linear and angular speed factors
-        self.speed = 1.0
-        self.turn_speed = 1.0
+        self.spd = 1.0
+        self.turn_spd = 1.0
 
         ###
         self.counter = 0
@@ -54,14 +75,14 @@ class CombatTurtle(tc.tkturtle.TkTurtle):
         #self.left(0.075)
 
         self.counter += 1
-        if self.get_heading() < 180:
-            self.right()
-        elif self.get_heading() > 180:
-            self.left()
+        if self.heading < 180:
+            self.rt()
+        elif self.heading > 180:
+            self.lt()
         else:
-            if self.get_position()[0] > self.arena_right()/2:
+            if self.x > self.arena_right/2:
                 self.forward()
-            if self.can_shoot():
+            if self.can_shoot:
                 self.shoot()
 
         # Move towards opponent (or away if too close)
