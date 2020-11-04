@@ -292,6 +292,12 @@ class TurtleCombatGame:
         if self.p2 != None:
             self.p2._step()
 
+        # Update other attributes
+        if self.p1 != None:
+            self.p1._get_other_attributes()
+        if self.p2 != None:
+            self.p2._get_other_attributes()
+
         # Update player health displays
         hp1 = 1 # current player 1 health
         if self.p1 != None:

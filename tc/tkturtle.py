@@ -53,8 +53,9 @@ class TkTurtle:
         cooldown -- returns number of steps between shooting missiles
         can_shoot -- returns whether the turtle is currently able to shoot
         other_position, other_heading, other_speed, other_turn_speed,
-            other_speed, other_health -- equivalent to the local attributes,
-            but returns the attributes of the opponent turtle
+            other_health -- equivalent to the local attributes, but returns
+            the attributes of the opponent turtle as of the end of the
+            previous step
         missile_speed -- returns the travel speed of missiles (px/step)
         missile_range -- returns the maximum range of missiles (px)
         missile_proximity -- returns the proximity radius of missiles (px)
@@ -350,6 +351,34 @@ class TkTurtle:
         """
 
         self._other = other
+        self._get_other_attributes()
+
+    #-------------------------------------------------------------------------
+
+    def _get_other_attributes(self):
+        """TkTurtle._get_other_attributes() -> None
+        Gets the public attributes of the opponent Combat Turtle.
+
+        User visibility:
+            should call -- no
+            should overwrite -- no
+
+        This method is called by the game driver after all Combat Turtles have
+        completed their moves for the current step. This object's methods that
+        measure the position of the other turtle are based on these end-of-
+        step updates from the previous step, in order to prevent asymmetry
+        from one turtle completing all of its step actions before the other.
+        """
+
+        if self._other == None:
+            return None
+
+        # Access other Combat Turtle's public properties
+        self._other_prev_position = self._other.position
+        self._other_prev_heading = self._other.heading
+        self._other_prev_speed = self._other.speed
+        self._other_prev_turn_speed = self._other.turn_speed
+        self._other_prev_health = self._other.health
 
     #-------------------------------------------------------------------------
 
@@ -873,7 +902,7 @@ class TkTurtle:
         if self._other == None:
             return None
 
-        return self._other.position
+        return self._other_prev_position
 
     @other_position.setter
     def other_position(self, value):
@@ -952,7 +981,7 @@ class TkTurtle:
         if self._other == None:
             return None
 
-        return int(self._other.heading)
+        return int(self._other_prev_heading)
 
     @other_heading.setter
     def other_heading(self, value):
@@ -1041,7 +1070,7 @@ class TkTurtle:
         if self._other == None:
             return None
 
-        return self._other.speed
+        return self._other_prev_speed
 
     @other_speed.setter
     def other_speed(self, value):
@@ -1064,7 +1093,7 @@ class TkTurtle:
         if self._other == None:
             return None
 
-        return self._other.turn_speed
+        return self._other_prev_turn_speed
 
     @other_turn_speed.setter
     def othspeed(self, value):
@@ -1107,7 +1136,7 @@ class TkTurtle:
         if self._other == None:
             return None
 
-        return self._other.health
+        return self._other_prev_health
 
     @other_health.setter
     def other_health(self, value):
