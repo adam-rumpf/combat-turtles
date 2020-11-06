@@ -5,10 +5,6 @@
 ### In the template, list the public methods and sort by general purpose (action, opponent info, constant info, self info).
 ### Also reorder these methods by category.
 
-### We may have to change the way that headings are handled, since turtles might spin around from handling absolute headings that are equivalent.
-### Look at all of the functions where headings are significant and see how they are handled.
-### Whenever comparing two headings, we generally want the smallest angle between them, with a sign indicating which is CCW and which is CW.
-
 import tkinter as tk
 import math
 from .game.arena import Arena

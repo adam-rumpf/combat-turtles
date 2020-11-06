@@ -6,6 +6,7 @@
 ### Add full instructions, including the game mechanics and what is and is not allowed to be used.
 ### In particular explain the geometry of the arena, how step events work, and public attributes/methods.
 ### Explain generally what should be included in the methods meant to be overwritten.
+### Explain what exactly happens within each step. The speed, turning speed, and shooting status are reset at the beginning of each step (so you need to explicitly tell the turtle to move every step to maintain constant speed). Then the user-defined step() method is called, after which the turtle is turned, then it moves, then it shoots (if instructed to).
 
 import tc.tcplayer
 
