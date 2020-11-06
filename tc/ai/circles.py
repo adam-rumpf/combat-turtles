@@ -1,5 +1,6 @@
 """Defines a test CombatTurtle object that simply moves in circles."""
 
+import math
 import tc.tkturtle
 
 class CombatTurtle(tc.tkturtle.TkTurtle):
@@ -36,8 +37,13 @@ class CombatTurtle(tc.tkturtle.TkTurtle):
 
         Returning an integer index selects one of the following preset shapes:
             0 -- arrowhead (also default in case of unrecognized index)
-            1 -- pentagon
+            1 -- turtle
             2 -- plow
+            3 -- triangle
+            4 -- kite
+            5 -- pentagon
+            6 -- hexagon
+            7 -- star
 
         A custom shape can be defined by returning a tuple of the form
         (radius, angle), where radius is a tuple of radii and angle is a tuple
@@ -46,7 +52,7 @@ class CombatTurtle(tc.tkturtle.TkTurtle):
         east.
         """
 
-        return 1
+        return 3
 
     #=========================================================================
 

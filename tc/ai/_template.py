@@ -8,11 +8,12 @@
 ### Explain generally what should be included in the methods meant to be overwritten.
 ### Explain what exactly happens within each step. The speed, turning speed, and shooting status are reset at the beginning of each step (so you need to explicitly tell the turtle to move every step to maintain constant speed). Then the user-defined step() method is called, after which the turtle is turned, then it moves, then it shoots (if instructed to).
 
+import math
 import tc.tcplayer
 
 class CombatTurtle(tc.tcplayer.CombatTurtleParent):
     """Template Combat Turtle class.
-    
+
     You may replace this docstring with any documentation you wish to include
     with this Combat Turtle AI, such as the general strategy it uses.
     """
@@ -22,7 +23,7 @@ class CombatTurtle(tc.tcplayer.CombatTurtleParent):
     def class_name():
         """CombatTurtle.class_name() -> str
         Static method to return the name of the Combat Turtle AI.
-        
+
         The returned name will be used in the AI selection menu by the main
         game driver, and in the game window to label each player.
         """
@@ -35,14 +36,14 @@ class CombatTurtle(tc.tcplayer.CombatTurtleParent):
     def class_desc():
         """CombatTurtle.class_desc() -> str
         Static method to return a description of the Combat Turtle AI.
-        
+
         This should be a one-line description. The returned string will be
         used in the AI selection menu by the main game driver.
         """
 
         ### Replace the returned string with a one-line description.
         return "This is a template class that does nothing on its own."
-    
+
     #-------------------------------------------------------------------------
 
     def class_shape():
@@ -53,8 +54,13 @@ class CombatTurtle(tc.tcplayer.CombatTurtleParent):
 
         Returning an integer index selects one of the following preset shapes:
             0 -- arrowhead (also default in case of unrecognized index)
-            1 -- pentagon
+            1 -- turtle
             2 -- plow
+            3 -- triangle
+            4 -- kite
+            5 -- pentagon
+            6 -- hexagon
+            7 -- star
 
         A custom shape can be defined by returning a tuple of the form
         (radius, angle), where radius is a tuple of radii and angle is a tuple
@@ -67,6 +73,11 @@ class CombatTurtle(tc.tcplayer.CombatTurtleParent):
         ### index (see guide above) or a 2-tuple of n-tuples describing the
         ### radii and angles (respectively) of the turtle's polar shape
         ### coordinates (relative to a turtle facing east).
+
+        ### The following is an example of an acceptable set of custom
+        ### coordinates:
+        ### return ((16, 14, 12, 14), (0, math.pi/2, math.pi, 3*math.pi/2))
+
         return 0
 
     #=========================================================================
