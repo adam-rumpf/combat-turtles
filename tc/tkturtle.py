@@ -1,10 +1,5 @@
 """Defines a turtle class using Tkinter."""
 
-### Note: May need to update the 33 ms (30 steps/sec) step timing description.
-
-### In the template, list the public methods and sort by general purpose (action, opponent info, constant info, self info).
-### Also reorder these methods by category.
-
 import tkinter as tk
 import math
 from .game.arena import Arena
@@ -988,24 +983,27 @@ class TkTurtle:
 
     #-------------------------------------------------------------------------
 
-    def relative_position(self):
+    def relative_position(self, target=None):
         """TkTurtle.relative_position -> tuple
-        Returns coordinates of the opponent Combat Turtle relative to self.
+        Returns position of a target coordinate relative to self.
 
         User visibility:
             should call -- yes
             should overwrite -- no
+
+        This method can be called in several different formats depending on
+        whether a target is specified:
+            None -- returns relative position of opponent turtle
+            tuple (int, int) -- returns relative position of the given
+                coordinate
         """
 
-        if self._other == None:
-            return None
-
-        # Get both sets of coordinates
-        own_coords = self.position
-        other_coords = self._other.position
+        # If no target, use opponent turtle's position
+        if target == None:
+            target = self.other_position
 
         # Return difference
-        return (other_coords[0]-own_coords[0], other_coords[1]-own_coords[1])
+        return (target[0] - self.x, target[1] - self.y)
 
     #-------------------------------------------------------------------------
 
@@ -1032,26 +1030,35 @@ class TkTurtle:
 
     #-------------------------------------------------------------------------
 
-    def relative_heading(self):
-        """TkTurtle.relative_heading() -> int
-        Returns the relative heading (deg) to the opponent turtle.
+    def relative_heading(self, target=None):
+        """TkTurtle.relative_heading([target]) -> int
+        Returns the relative heading (deg) to a target coordinate.
 
         User visibility:
             should call -- yes
             should overwrite -- no
 
+        This method can be called in several different formats depending on
+        whether a target is specified:
+            None -- returns relative heading towards opponent turtle
+            tuple (int, int) -- returns relative heading towards the given
+                coordinate
+
         The returned heading is a value between -180 degrees and 180 degrees,
         representing the smallest heading change that would turn this Combat
-        Turtle to face its opponent (positive represents counterclockwise,
+        Turtle to face the target (positive represents counterclockwise,
         negative represents clockwise).
         """
 
-        if self._other == None:
-            return None
+        # If no target, use opponent turtle's position
+        if target == None:
+            target = self.other_position
 
-        ### Calculate heading to other turtle. Find the angle between the
-        ### current heading vector and the vector to the other turtle, and
-        ### adjust the sign so that left is positive.
+        # Get position relative to target
+        (dx, dy) = self.relative_position(target)
+
+        # Calculate relative heading using arctan (Angle class mods result)
+        return int(math.degrees(Angle(math.atan2(-dy, dx) + math.pi)))
 
     #-------------------------------------------------------------------------
 
@@ -1077,24 +1084,22 @@ class TkTurtle:
         possible towards the specified target.
         """
 
-        # Default to opponent coordinates
+        # If no target, use opponent turtle's position
         if target == None:
-            self.turn_towards(target=self.other_position)
+            target = self.other_position
 
-        # Turn towards coordinates if given a tuple
-        if type(target) == type((0, 0)):
-            pass
-            ###
-            ### Turn left equal to the relative heading,
-            ### clamped at +/- maximum turn speed.
+        # If given a specific heading, generate a coordinate to turn towards
+        if type(target) == int or type(target) == float:
+            target = (int(self.x + 10000*math.cos(math.radians(target))),
+                     int(self.y + 10000*math.sin(math.radians(target))))
 
-        # Turn towards heading if given an int or float
-        else:
-            # Calculate a point to turn towards to use min angle calculations
-            point = (int(self._x + 1000*math.cos(math.radians(target))),
-                     int(self._y + 1000*math.sin(math.radians(target))))
-            print(point)###
-            self.turn_towards(target=point)
+        # Turn towards coordinates
+        if type(target) == tuple:
+            # Find relative heading to target
+            #print(target)
+            #print(self.relative_position(target))
+            rh = self.relative_heading(target)
+            print(rh)###
 
     #-------------------------------------------------------------------------
 

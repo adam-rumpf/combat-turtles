@@ -80,6 +80,21 @@ class CombatTurtle(tc.tkturtle.TkTurtle):
         # Turn towards opponent
         ###self.turn_towards()
         #self.left(0.075)
+        ###print(self.relative_position())
+        print("-"*20)
+        # print(self.relative_heading((self.x - 100, self.y))) # 0
+        # print(self.relative_heading((self.x - 100, self.y - 100))) # -45
+        # print(self.relative_heading((self.x, self.y - 100))) # -90
+        # print(self.relative_heading((self.x + 100, self.y - 100))) # -135
+        # print(self.relative_heading((self.x + 100, self.y))) # 180
+        # print(self.relative_heading((self.x + 100, self.y + 100))) # 135
+        # print(self.relative_heading((self.x, self.y + 100))) # 90
+        # print(self.relative_heading((self.x - 100, self.y + 100))) # 45
+        print(self.relative_heading(self.other_position))
+        #self.turn_towards()
+        # for t in range(12):
+        #     print(self.relative_heading((self.x + 100*math.cos(t*math.pi/6),
+        #                                  self.y + 100*math.sin(t*math.pi/6))))
 
         self.counter += 1
         if self.heading < 180:
