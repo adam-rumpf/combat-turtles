@@ -996,6 +996,10 @@ class TkTurtle:
             None -- returns relative position of opponent turtle
             tuple (int, int) -- returns relative position of the given
                 coordinate
+
+        The coordinates returned by this method represent the movement
+        required to get from this Combat Turtle's position to the specified
+        target position.
         """
 
         # If no target, use opponent turtle's position
@@ -1032,7 +1036,7 @@ class TkTurtle:
 
     def relative_heading(self, target=None):
         """TkTurtle.relative_heading([target]) -> int
-        Returns the relative heading (deg) to a target coordinate.
+        Returns the heading (deg) towards a target coordinate.
 
         User visibility:
             should call -- yes
@@ -1045,9 +1049,14 @@ class TkTurtle:
                 coordinate
 
         The returned heading is a value between -180 degrees and 180 degrees,
-        representing the smallest heading change that would turn this Combat
-        Turtle to face the target (positive represents counterclockwise,
-        negative represents clockwise).
+        representing the direction of travel from this Combat Turtle's
+        position to the specified target (with 0 degrees meaning due east).
+        This is based entirely on the coordinates of this Combat Turtle and
+        the target, and has nothing to do with this Turtle's current heading.
+
+        To find the change in heading required for this Combat Turtle to turn
+        towards the target based on its current direction, use
+        relative_heading_towards().
         """
 
         # If no target, use opponent turtle's position
@@ -1058,7 +1067,39 @@ class TkTurtle:
         (dx, dy) = self.relative_position(target)
 
         # Calculate relative heading using arctan (Angle class mods result)
-        return int(math.degrees(Angle(math.atan2(-dy, dx) + math.pi)))
+        return int(math.degrees(Angle(math.atan2(-dy, dx))))
+
+    #-------------------------------------------------------------------------
+
+    def relative_heading_towards(self, target=None):
+        """TkTurtle.relative_heading_towards([target]) -> int
+        Returns the change in heading (deg) needed to turn towards a target.
+
+        User visibility:
+            should call -- yes
+            should overwrite -- no
+
+        This method can be called in several different formats depending on
+        whether a target is specified:
+            None -- returns relative heading towards opponent turtle
+            tuple (int, int) -- returns relative heading towards the given
+                coordinate
+
+        The returned heading is a value between -180 degrees and 180 degrees,
+        representing the smallest change in heading required for this Combat
+        Turtle to turn towards the given target coordinate (positive for
+        counterclockwise, negative for clockwise).
+
+        To simply find the direction from this Combat Turtle to the target
+        (without regard for this Turtle's current direction), use
+        relative_heading().
+        """
+
+        # Calculate absolute heading towards target
+        ah = Angle(self.relative_heading(target), "degrees")
+
+        # Return difference in headings
+        return int(ah - self._heading)
 
     #-------------------------------------------------------------------------
 
