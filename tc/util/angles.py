@@ -1,4 +1,8 @@
-"""Defines a lightweight Python Angle class."""
+"""Defines a lightweight Python Angle class.
+
+This class was developed as a standalone module, available here:
+    https://github.com/adam-rumpf/python-angles
+"""
 
 import math
 
