@@ -155,7 +155,7 @@ class Missile:
 
             # Move forward
             self.x += self.speed*math.cos(math.radians(self.heading))
-            self.y += self.speed*math.sin(math.radians(self.heading))
+            self.y -= self.speed*math.sin(math.radians(self.heading))
 
             # Determine whether to explode
             explode = False

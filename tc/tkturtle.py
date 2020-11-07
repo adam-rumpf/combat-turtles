@@ -68,9 +68,12 @@ class TkTurtle:
         distance() -- returns the distance between a pair of coordinates (px),
             including distance to opponent turtle
         relative_position() -- returns the position of the opponent turtle
-            (px, px) relative to this turtle
-        relative_heading() -- returns the relative heading towards the
-            opponent turtle (deg, positive for CCW)
+            (or another coordinate) relative to this turtle
+        relative_heading() -- returns the heading pointing towards the
+            opponent turtle (or another coordinate) relative to this turtle
+        relative_heading_towards() -- returns the amount of turning required
+            to turn this turtle towards the opponent turtle (or another
+            coordinate)
         line_of_sight() -- returns whether or not the line to the opponent
             turtle is free of obstacles
 

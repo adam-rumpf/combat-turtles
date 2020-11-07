@@ -63,12 +63,7 @@ class CombatTurtle(tc.tkturtle.TkTurtle):
         Initialization code for direct Combat Turtle.
         """
 
-        # Define constant linear and angular speed factors
-        self.spd = 1.0
-        self.turn_spd = 1.0
-
-        ###
-        self.counter = 0
+        pass
 
     #-------------------------------------------------------------------------
 
@@ -78,52 +73,15 @@ class CombatTurtle(tc.tkturtle.TkTurtle):
         """
 
         # Turn towards opponent
-        ###self.turn_towards()
-        #self.left(0.075)
-        ###print(self.relative_position())
-        #print("-"*20)
-        # print(self.relative_heading((self.x - 100, self.y))) # 180
-        # print(self.relative_heading((self.x - 100, self.y - 100))) # 135
-        # print(self.relative_heading((self.x, self.y - 100))) # 90
-        # print(self.relative_heading((self.x + 100, self.y - 100))) # 45
-        # print(self.relative_heading((self.x + 100, self.y))) # 0
-        # print(self.relative_heading((self.x + 100, self.y + 100))) # -45
-        # print(self.relative_heading((self.x, self.y + 100))) # -90
-        # print(self.relative_heading((self.x - 100, self.y + 100))) # -135
-        ###print("heading = " + str(self.heading))###
-        # print(self.relative_heading_towards((self.x - 100, self.y))) # 90
-        # print(self.relative_heading_towards((self.x - 100, self.y - 100))) # 45
-        # print(self.relative_heading_towards((self.x, self.y - 100))) # 0
-        # print(self.relative_heading_towards((self.x + 100, self.y - 100))) # -45
-        # print(self.relative_heading_towards((self.x + 100, self.y))) # -90
-        # print(self.relative_heading_towards((self.x + 100, self.y + 100))) # -135
-        # print(self.relative_heading_towards((self.x, self.y + 100))) # 180
-        # print(self.relative_heading_towards((self.x - 100, self.y + 100))) # 135
         self.turn_towards()
-        ###self.turn_towards((self.x - 100, self.y))
-        # for t in range(12):
-        #     print(self.relative_heading((self.x + 100*math.cos(t*math.pi/6),
-        #                                  self.y + 100*math.sin(t*math.pi/6))))
-
-        # self.counter += 1
-        # if self.heading < 180:
-        #     self.rt()
-        # elif self.heading > 180:
-        #     self.lt()
-        # else:
-        #     if self.x > self.arena_right/2:
-        #         self.forward()
-        #     if self.can_shoot:
-        #         self.shoot()
-
-        self.forward()
 
         # Move towards opponent (or away if too close)
-        # if self.distance() > self.missile_radius:
-        #     self.forward(self.speed)
-        # else:
-        #     self.backward(self.speed)
+        if self.distance() > 4*self.missile_radius:
+            self.fd()
+        else:
+            self.bk()
 
-        ### Shoot if facing opponent
-
-        #print(self.turn_speed)
+        # Shoot if facing opponent
+        if (self.can_shoot == True and
+            abs(self.relative_heading_towards()) <= 10):
+            self.shoot()
