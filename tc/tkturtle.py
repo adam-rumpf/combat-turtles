@@ -436,7 +436,7 @@ class TkTurtle:
         for i in range(len(self._shape_angle)):
             coords[2*i] = int(self._x + (self._shape_radius[i]*
                               math.cos(self._shape_angle[i]+angle)))
-            coords[2*i+1] = int(self._y + (self._shape_radius[i]*
+            coords[2*i+1] = int(self._y - (self._shape_radius[i]*
                                 math.sin(self._shape_angle[i]+angle)))
         coords[-2] = coords[0]
         coords[-1] = coords[1]
@@ -779,7 +779,7 @@ class TkTurtle:
 
         # Set new coordinates
         self._x += int(self.speed*math.cos(math.radians(self.heading)))
-        self._y += int(self.speed*math.sin(math.radians(self.heading)))
+        self._y -= int(self.speed*math.sin(math.radians(self.heading)))
 
         # Check whether the destination intersects any blocks
         blocks = self._game.intersections((self.x, self.y))
@@ -809,6 +809,7 @@ class TkTurtle:
                     self._y -= overlap[2] - 1
                 else:
                     self._y += overlap[3] + 1
+                ### Double-check that this works due to the y-negation
 
     #-------------------------------------------------------------------------
 
@@ -920,8 +921,8 @@ class TkTurtle:
         left() and right() methods (or their aliases).
         """
 
-        # Change heading (negate angle due to origin at top of screen)
-        self._heading -= int(self._speed_turn)
+        # Change heading
+        self._heading += int(self._speed_turn)
 
     #-------------------------------------------------------------------------
 
@@ -1099,7 +1100,7 @@ class TkTurtle:
         ah = Angle(self.relative_heading(target), "degrees")
 
         # Return difference in headings
-        return int(ah - self._heading)
+        return int(ah - self.heading)
 
     #-------------------------------------------------------------------------
 
@@ -1137,10 +1138,12 @@ class TkTurtle:
         # Turn towards coordinates
         if type(target) == tuple:
             # Find relative heading to target
-            #print(target)
-            #print(self.relative_position(target))
-            rh = self.relative_heading(target)
-            print(rh)###
+            turn = self.relative_heading_towards(target)
+            turn = min(max(turn, -self.max_turn_speed), self.max_turn_speed)
+            turn /= self.max_turn_speed
+
+            # Turn in the needed direction
+            self.left(turn)
 
     #-------------------------------------------------------------------------
 

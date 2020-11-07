@@ -65,7 +65,7 @@ class Arena:
         """
 
         # All currently-defined arenas use the same initial headings
-        return 90
+        return -90
 
     #-------------------------------------------------------------------------
 
@@ -78,7 +78,7 @@ class Arena:
         """
 
         # All currently-defined arenas use the same initial headings
-        return -90
+        return 90
 
     #=========================================================================
 

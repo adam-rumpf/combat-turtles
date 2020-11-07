@@ -26,7 +26,7 @@ class CombatTurtle(tc.tkturtle.TkTurtle):
         """
 
         return "Moves in circles and periodically shoots."
-    
+
     #-------------------------------------------------------------------------
 
     def class_shape():
