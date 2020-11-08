@@ -3,7 +3,7 @@
 import math
 import tc.tkturtle
 
-class CombatTurtle(tc.tkturtle.TkTurtle):
+class CombatTurtle(tc.tkturtle.TurtleParent):
     """Drunken combat turtle.
 
     This is a slightly less randomized version of the random turtle. Its

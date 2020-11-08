@@ -4,7 +4,7 @@ import math
 import random
 import tc.tkturtle
 
-class CombatTurtle(tc.tkturtle.TkTurtle):
+class CombatTurtle(tc.tkturtle.TurtleParent):
     """Random combat turtle.
 
     This turtle's behavior in each step is completely randomized, and has

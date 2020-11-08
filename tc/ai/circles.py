@@ -3,7 +3,7 @@
 import math
 import tc.tkturtle
 
-class CombatTurtle(tc.tkturtle.TkTurtle):
+class CombatTurtle(tc.tkturtle.TurtleParent):
     """Test circular combat turtle.
 
     This turtle should simply travel in circles and periodically shoot.

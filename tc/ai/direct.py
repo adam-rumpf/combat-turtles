@@ -3,7 +3,7 @@
 import math
 import tc.tkturtle
 
-class CombatTurtle(tc.tkturtle.TkTurtle):
+class CombatTurtle(tc.tkturtle.TurtleParent):
     """Direct combat turtle.
 
     Its main strategy is to try to move directly towards the opponent, firing
