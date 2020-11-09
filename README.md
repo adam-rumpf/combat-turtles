@@ -20,7 +20,7 @@ This module was developed for Python 3.8.3.
 
 In an effort to maintain portability it uses only modules from the [Python Standard Library](https://docs.python.org/3/library/), including: `glob`, `inspect`, `math`, `os.path`, `random`, `tkinter`
 
-This module also makes use of an `Angle` class, developed as a standalone module available at [github.com/adam-rumpf/python-angles](https://github.com/adam-rumpf/python-angles), and included in its entirety in the `util/` folder.
+This module also makes use of an `Angle` class, developed as a standalone module available at [github.com/adam-rumpf/python-angles](https://github.com/adam-rumpf/python-angles), and included in its entirety in the `game/util/` folder.
 
 ## Credits
 
@@ -43,25 +43,25 @@ If you already know ahead of time which AIs and arena you wish to load, you can 
 
 ## Including a Custom AI Submodule
 
-AI submodules are located in the `tc/ai/` folder. Any `.py` file in this folder whose name does not begin with an underscore (`_`) is recognized by the game as an AI submodule, and will be loaded by the main driver when the `turtle_combat()` function is run.
+AI submodules are located in the `ai/` folder. Any `.py` file in this folder whose name does not begin with an underscore (`_`) is recognized by the game as an AI submodule, and will be loaded by the main driver when the `turtle_combat()` function is run.
 
 ### Minimal AI Submodule Contents
 
-See the included `_template.py` file for a template which includes the basic structure of a valid AI submodule, as well as documentation of the available attributes and methods. The following features are essential for any AI submodule:
-* Import `tc.tkturtle`, along with any modules required by your custom AI.
-* The submodule must define a `class` named `CombatTurtle` which extends `tc.tkturtle.TurtleParent`.
+See the included `_template.py` file in the `ai/` folder for a template which includes the basic structure of a valid AI submodule, as well as documentation of the available attributes and methods. The following features are essential for any AI submodule:
+* Import `game.tcturtle`, along with any modules required by your custom AI.
+* The submodule must define a `class` named `CombatTurtle` which extends `game.tcturtle.TurtleParent`.
 * The `class_name()`, `class_desc()`, and `class_shape()` static methods should all be overwritten to define the AI's name string, a brief description string, and an integer index for its shape (or a tuple of radii/angles to define a custom shape in polar coordinates). Note that the shape defines only how the turtle is displayed, and has no effect on the collision detection.
 * The `setup()` method should be overwritten with any special initialization code required by the AI (this method is called at the end of the object's `__init__()` method).
 * The `step()` method should be overwritten with the AI's step event code (this method is called once per step event). This is likely to be the heart of your AI, as it defines all of the decisions that your turtle makes within a step.
 
 ### Example Submodule
 
-The included submodules in the `tc/ai/` folder all define very simple turtle AIs that can be looked to as examples. Here we will consider the submoduled named "DirectTurtle", defined in `direct.py`. Excluding some of the docstrings, this is the entire submodule:
+The included submodules in the `ai/` folder all define very simple turtle AIs that can be looked to as examples. Here we will consider the submoduled named "DirectTurtle", defined in `direct.py`. Excluding some of the docstrings, this is the entire submodule:
 
 ```python
-import tc.tkturtle
+import game.tcturtle
 
-class CombatTurtle(tc.tkturtle.TurtleParent):
+class CombatTurtle(game.tcturtle.TurtleParent):
     """Direct combat turtle.
 
     Its main strategy is to try to move directly towards the opponent, firing
@@ -98,7 +98,7 @@ class CombatTurtle(tc.tkturtle.TurtleParent):
             self.shoot()
 ```
 
-To explain, it begins my importing `tc.tkturtle` and defining a class called `CombatTurtle` which extends `tc.tkturtle.TurtleParent`, as is required for all AI submodules.
+To explain, it begins my importing `game.tcturtle` and defining a class called `CombatTurtle` which extends `game.tcturtle.TurtleParent`, as is required for all AI submodules.
 
 The three static methods `class_name()`, `class_desc()`, and `class_shape()` define the turtle's name, brief description, and shape index, respectively.
 

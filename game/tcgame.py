@@ -1,8 +1,9 @@
 """Defines the main game driver class."""
 
 import tkinter as tk
-import tc.tkturtle
-from .game.arena import Arena
+import game.tcturtle
+import ai
+from .obj.arena import Arena
 
 class TurtleCombatGame:
     """A class to act as the main driver for a game of Turtle Combat.
@@ -97,7 +98,6 @@ class TurtleCombatGame:
             self.p2._set_other(self.p1)
 
         # Get players' health
-        ### May replace with a canvas health bar later
         self.p1_health = tk.StringVar(value="") # player 1 health string
         self.p1_health_display = tk.Label(self.root)
         if self.p1 != None:

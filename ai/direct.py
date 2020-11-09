@@ -1,14 +1,14 @@
-"""Defines a random CombatTurtle object."""
+"""Defines a direct CombatTurtle object."""
 
 import math
-import random
-import tc.tkturtle
+import game.tcturtle
 
-class CombatTurtle(tc.tkturtle.TurtleParent):
-    """Random combat turtle.
+class CombatTurtle(game.tcturtle.TurtleParent):
+    """Direct combat turtle.
 
-    This turtle's behavior in each step is completely randomized, and has
-    nothing to do with it or its opponent's position.
+    Its main strategy is to try to move directly towards the opponent, firing
+    missiles when it has clear line of sight. It does not pay much attention
+    to obstacles.
     """
 
     #-------------------------------------------------------------------------
@@ -18,7 +18,7 @@ class CombatTurtle(tc.tkturtle.TurtleParent):
         Static method to return the name of the Combat Turtle AI.
         """
 
-        return "RandomTurtle"
+        return "DirectTurtle"
 
     #-------------------------------------------------------------------------
 
@@ -27,8 +27,8 @@ class CombatTurtle(tc.tkturtle.TurtleParent):
         Static method to return a description of the Combat Turtle AI.
         """
 
-        return "Completely randomized behavior."
-    
+        return "Moves directly towards opponent while ignoring obstacles."
+
     #-------------------------------------------------------------------------
 
     def class_shape():
@@ -54,17 +54,13 @@ class CombatTurtle(tc.tkturtle.TurtleParent):
         east.
         """
 
-        return 7
+        return 0
 
     #=========================================================================
 
     def setup(self):
         """CombatTurtle.setup() -> None
-        Initialization code for Combat Turtle.
-
-        Sets up a timer variable to measure how long the turtle has gone
-        between firing, so that it can fire according to an exponential
-        distribution.
+        Initialization code for direct Combat Turtle.
         """
 
         pass
@@ -73,9 +69,20 @@ class CombatTurtle(tc.tkturtle.TurtleParent):
 
     def step(self):
         """CombatTurtle.setup() -> None
-        Step event code for Combat Turtle.
-
-        Randomize direction and move forward at a random speed.
+        Step event code for direct Combat Turtle.
         """
 
-        pass
+        # Turn towards opponent
+        self.turn_towards()
+
+        # Move towards opponent (or away if too close)
+        if self.distance() > 4*self.missile_radius:
+            self.forward()
+        else:
+            self.backward()
+
+        # Shoot if facing opponent and there is line of sight
+        if (self.can_shoot == True and
+            abs(self.relative_heading_towards()) <= 10 and
+            self.line_of_sight() == True):
+            self.shoot()

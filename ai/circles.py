@@ -1,9 +1,9 @@
 """Defines a test CombatTurtle object that simply moves in circles."""
 
 import math
-import tc.tkturtle
+import game.tcturtle
 
-class CombatTurtle(tc.tkturtle.TurtleParent):
+class CombatTurtle(game.tcturtle.TurtleParent):
     """Test circular combat turtle.
 
     This turtle should simply travel in circles and periodically shoot.

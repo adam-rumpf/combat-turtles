@@ -2,9 +2,9 @@
 
 import tkinter as tk
 import math
-from .game.arena import Arena
-from .game.block import Block
-from .game.missile import Missile
+from .obj.arena import Arena
+from .obj.block import Block
+from .obj.missile import Missile
 from .util.angles import Angle
 
 class TurtleParent:

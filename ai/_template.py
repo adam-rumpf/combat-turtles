@@ -9,9 +9,9 @@
 ### Explain what exactly happens within each step. The speed, turning speed, and shooting status are reset at the beginning of each step (so you need to explicitly tell the turtle to move every step to maintain constant speed). Then the user-defined step() method is called, after which the turtle is turned, then it moves, then it shoots (if instructed to).
 
 import math
-import tc.tkturtle
+import game.tcturtle
 
-class CombatTurtle(tc.tkturtle.TurtleParent):
+class CombatTurtle(game.tcturtle.TurtleParent):
     """Template Combat Turtle class.
 
     You may replace this docstring with any documentation you wish to include

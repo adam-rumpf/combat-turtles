@@ -1,14 +1,14 @@
-"""Defines a drunken CombatTurtle object."""
+"""Defines a random CombatTurtle object."""
 
 import math
-import tc.tkturtle
+import random
+import game.tcturtle
 
-class CombatTurtle(tc.tkturtle.TurtleParent):
-    """Drunken combat turtle.
+class CombatTurtle(game.tcturtle.TurtleParent):
+    """Random combat turtle.
 
-    This is a slightly less randomized version of the random turtle. Its
-    movement is mostly randomized, but biased towards moving in the opponent's
-    direction, and it shoots only when pointing towards the opponent.
+    This turtle's behavior in each step is completely randomized, and has
+    nothing to do with it or its opponent's position.
     """
 
     #-------------------------------------------------------------------------
@@ -18,7 +18,7 @@ class CombatTurtle(tc.tkturtle.TurtleParent):
         Static method to return the name of the Combat Turtle AI.
         """
 
-        return "DrunkenTurtle"
+        return "RandomTurtle"
 
     #-------------------------------------------------------------------------
 
@@ -27,7 +27,7 @@ class CombatTurtle(tc.tkturtle.TurtleParent):
         Static method to return a description of the Combat Turtle AI.
         """
 
-        return "Wanders semi-randomly towards the opponent."
+        return "Completely randomized behavior."
     
     #-------------------------------------------------------------------------
 
@@ -54,13 +54,17 @@ class CombatTurtle(tc.tkturtle.TurtleParent):
         east.
         """
 
-        return 5
+        return 7
 
     #=========================================================================
 
     def setup(self):
         """CombatTurtle.setup() -> None
         Initialization code for Combat Turtle.
+
+        Sets up a timer variable to measure how long the turtle has gone
+        between firing, so that it can fire according to an exponential
+        distribution.
         """
 
         pass
@@ -70,6 +74,8 @@ class CombatTurtle(tc.tkturtle.TurtleParent):
     def step(self):
         """CombatTurtle.setup() -> None
         Step event code for Combat Turtle.
+
+        Randomize direction and move forward at a random speed.
         """
 
         pass

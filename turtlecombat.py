@@ -5,7 +5,8 @@ of Turtle Combat and then starts the game.
 """
 
 import inspect
-import tc
+import game
+import ai
 
 #=============================================================================
 
@@ -32,27 +33,27 @@ def turtle_combat(tid1=-1, tid2=-1, aid=-1, cutoff=-1):
 
     # In order to allow the user to place additional AI modules inside the ai/
     # directory, we generate a list of strings which include the full
-    # addresses of the AI objects (for example, tc.ai.keyboard.CombatTurtle).
-    # These can then be used with the exec() or eval() function to instantiate
-    # the necessary turtle objects.
+    # addresses of the AI objects (for example, ai.direct.CombatTurtle). These
+    # can then be used with the exec() or eval() function to instantiate the
+    # necessary turtle objects.
     # All Combat Turtle AIs are required to use the class name "CombatTurtle",
     # so this only requires us to find the name of the module.
 
     # Build list of class names for each module that includes CombatTurtle
     print("Finding Combat Turtle AI modules...", end="")
     turtle_classes = []
-    for f in tc.ai.__all__:
+    for f in ai.__all__:
         # Use static method to test whether the module includes the class
         try:
-            eval("tc.ai." + f + ".CombatTurtle.class_name()")
-            turtle_classes.append("tc.ai." + f + ".CombatTurtle")
+            eval("ai." + f + ".CombatTurtle.class_name()")
+            turtle_classes.append("ai." + f + ".CombatTurtle")
         # If not, skip
         except AttributeError:
             pass
 
     # Quit if no valid modules were found
     if len(turtle_classes) == 0:
-        print("\nNo valid modules were found in the tc/ai/ directory.")
+        print("\nNo valid modules were found in the ai/ directory.")
         print("Please review the documentation to see the required format.")
         print("https://github.com/adam-rumpf/turtle-combat")
         return None
@@ -93,7 +94,7 @@ def turtle_combat(tid1=-1, tid2=-1, aid=-1, cutoff=-1):
 
     # Display arena choices
     print()
-    arena_names = tc.game.arena.Arena.get_names() # list of all arena layouts
+    arena_names = game.obj.arena.Arena.get_names() # list of all arena layouts
     _arena_table(arena_names)
 
     # Ask the user to choose an arena
@@ -115,13 +116,13 @@ def turtle_combat(tid1=-1, tid2=-1, aid=-1, cutoff=-1):
     # Create game object with chosen turtles and arena
     print("\nOpening Turtle Combat.")
     print("Game in progress...")
-    game = tc.tcgame.TurtleCombatGame(class1=turtle_classes[choice1],
+    gm = game.tcgame.TurtleCombatGame(class1=turtle_classes[choice1],
                                       class2=turtle_classes[choice2],
                                       layout=arena, cutoff=cutoff)
 
     # Delete game object when done
     print("Closing Turtle Combat.")
-    del game
+    del gm
 
 #-----------------------------------------------------------------------------
 
