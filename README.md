@@ -58,6 +58,8 @@ You __should not__ overwrite any other attributes or methods of the `TurtleParen
 
 (mechanics, steps, lack of "momentum", startup code, geometry of the arena [including -y and how headings work], blocks, arenas)
 
+<img src="images/coordinate_system" title="Turtle Combat coordinate system." width="400"/>
+
 ...
 
 ## Inherited Features
