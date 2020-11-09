@@ -46,9 +46,66 @@ AI submodules are located in the `tc/ai/` folder. Any `.py` file in this folder 
 See the included `_template.py` file for a template which includes the basic structure of a valid AI submodule, as well as documentation of the available attributes and methods. The following features are essential for any AI submodule:
 * Import `tc.tkturtle`, along with any modules required by your custom AI.
 * The submodule must define a `class` named `CombatTurtle` which extends `tc.tkturtle.TurtleParent`.
-* The `class_name()`, `class_desc()`, and `class_shape()` static methods should all be overwritten to define the AI's name string, a brief description string, and an integer index for its shape (or a tuple of radii/angles to define a custom shape in polar coordinates).
+* The `class_name()`, `class_desc()`, and `class_shape()` static methods should all be overwritten to define the AI's name string, a brief description string, and an integer index for its shape (or a tuple of radii/angles to define a custom shape in polar coordinates). Note that the shape defines only how the turtle is displayed, and has no effect on the collision detection.
 * The `setup()` method should be overwritten with any special initialization code required by the AI (this method is called at the end of the object's `__init__()` method).
 * The `step()` method should be overwritten with the AI's step event code (this method is called once per step event). This is likely to be the heart of your AI, as it defines all of the decisions that your turtle makes within a step.
+
+### Example Submodule
+
+The included submodules in the `tc/ai/` folder all define very simple turtle AIs that can be looked to as examples. Here we will consider the submoduled named "DirectTurtle", defined in `direct.py`. Excluding some of the docstrings, this is the entire submodule:
+
+```python
+import tc.tkturtle
+
+class CombatTurtle(tc.tkturtle.TurtleParent):
+    """Direct combat turtle.
+
+    Its main strategy is to try to move directly towards the opponent, firing
+    missiles when it has clear line of sight. It does not pay much attention
+    to obstacles.
+    """
+
+    def class_name():
+        return "DirectTurtle"
+
+    def class_desc():
+        return "Moves directly towards opponent while ignoring obstacles."
+
+    def class_shape():
+        return 0
+
+    def setup(self):
+        pass
+
+    def step(self):
+        # Turn towards opponent
+        self.turn_towards()
+
+        # Move towards opponent (or away if too close)
+        if self.distance() > 4*self.missile_radius:
+            self.forward()
+        else:
+            self.back()
+
+        # Shoot if facing opponent and there is line of sight
+        if (self.can_shoot and
+            abs(self.relative_heading_towards()) <= 10 and
+            self.line_of_sight()):
+            self.shoot()
+```
+
+To explain, it begins my importing `tc.tkturtle` and defining a class called `CombatTurtle` which extends `tc.tkturtle.TurtleParent`, as is required for all AI submodules.
+
+The three static methods `class_name()`, `class_desc()`, and `class_shape()` define the turtle's name, brief description, and shape index, respectively.
+
+The `setup()` method is overwritten here but is empty because this particular AI does not require any special initialization code. Note that we could have easily left this method out without affecting anything since the `TurtleParent` class' `setup()` method is also just a placeholder.
+
+Finally the `step()` method is overwritten to define this turtle's extremely simplistic AI behavior, which consists of only three directives each step:
+* First it calls `self.turn_towards()` to attempt to turn itself towards its opponent.
+* Then it decides whether to attempt to move towards or away from its opponent based on its current distance, `self.distance()`, from the opponent. Its distance cutoff is based on the explosive radius of a missile, `self.missile_radius`. If it is sufficiently far away from the opponent, it moves forward at full speed with `self.forward()`, and otherwise, it backs up at full speed with `self.backward()`.
+* Finally it decides whether to attempt to shoot, doing so if and only if three conditions are all met: its missile must not be on cooldown (`self.can_shoot`), it must be within `10` degrees of facing the opponent (`abs(self.relative_heading_towards()) <= 10`), and it must have a clear line of sight to the opponent (`self.line_of_sight()`). If all of these are `True`, then it fires a missile by calling `self.shoot()`.
+
+Of course this is an incredibly basic AI, but this example illustrates how simple AI sumodules can be. The main body of the program contained in the `step()` method is less than 10 lines of code. If you are just starting out with this program, a good place to start might be to think of ways to improve the example AIs. Get creative and have fun!
 
 ### Best Practices for AI Submodule Design
 
@@ -64,7 +121,7 @@ Note that computationally intensive AI modules may cause the game to slow down. 
 
 ...
 
-(mechanics, steps, lack of "momentum", startup code, geometry of the arena [including -y and how headings work], blocks, arenas, steps might slow down due to intensive calculations but the actual time does not matter to the outcome of the game)
+(mechanics, steps, lack of "momentum", startup code, geometry of the arena [including -y and how headings work], blocks, arenas, steps might slow down due to intensive calculations but the actual time does not matter to the outcome of the game, the fact that the turtle's shape doesn't matter)
 
 <img src="images/coordinate_system.png" title="Turtle Combat coordinate system." width="600"/>
 

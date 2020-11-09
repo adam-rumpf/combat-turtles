@@ -77,11 +77,12 @@ class CombatTurtle(tc.tkturtle.TurtleParent):
 
         # Move towards opponent (or away if too close)
         if self.distance() > 4*self.missile_radius:
-            self.fd()
+            self.forward()
         else:
-            self.bk()
+            self.backward()
 
-        # Shoot if facing opponent
+        # Shoot if facing opponent and there is line of sight
         if (self.can_shoot == True and
-            abs(self.relative_heading_towards()) <= 10):
+            abs(self.relative_heading_towards()) <= 10 and
+            self.line_of_sight() == True):
             self.shoot()
