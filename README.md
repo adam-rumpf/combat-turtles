@@ -10,6 +10,10 @@ The player is meant to write their own turtle AI by extending the `TurtleParent`
 
 This module is available for free from my [releases page](https://github.com/adam-rumpf/turtle-combat/releases) or as donationware from my [itch.io page](https://adam-rumpf.itch.io/turtle-combat). I encourage you to download it, use it in your own projects, and modify the source code as much as you like.
 
+## Game Overview
+
+(summarize what exactly the game consists of in a fun way, possibly use images; this is somewhat what the itch.io page should be more like)
+
 ## Dependencies
 
 This module was developed for Python 3.8.3.
@@ -102,7 +106,7 @@ The `setup()` method is overwritten here but is empty because this particular AI
 
 Finally the `step()` method is overwritten to define this turtle's extremely simplistic AI behavior, which consists of only three directives each step:
 * First it calls `self.turn_towards()` to attempt to turn itself towards its opponent.
-* Then it decides whether to attempt to move towards or away from its opponent based on its current distance, `self.distance()`, from the opponent. Its distance cutoff is based on the explosive radius of a missile, `self.missile_radius`. If it is sufficiently far away from the opponent, it moves forward at full speed with `self.forward()`, and otherwise, it backs up at full speed with `self.backward()`.
+* Then it decides whether to attempt to move towards or away from its opponent based on its current distance, `self.distance()`, from the opponent. Its distance cutoff is based on the explosive radius of a missile, `self.missile_radius`. If it is sufficiently far away from the opponent, it moves forward at full speed with `self.forward()`, and otherwise, it reverses at full speed with `self.backward()`.
 * Finally it decides whether to attempt to shoot, doing so if and only if three conditions are all met: its missile must not be on cooldown (`self.can_shoot`), it must be within `10` degrees of facing the opponent (`abs(self.relative_heading_towards()) <= 10`), and it must have a clear line of sight to the opponent (`self.line_of_sight()`). If all of these are `True`, then it fires a missile by calling `self.shoot()`.
 
 Of course this is an incredibly basic AI, but this example illustrates how simple AI sumodules can be. The main body of the program contained in the `step()` method is less than 10 lines of code. If you are just starting out with this program, a good place to start might be to think of ways to improve the example AIs. Get creative and have fun!
@@ -117,7 +121,7 @@ A large number of public attributes and methods are inherited from the `TurtlePa
 
 Note that computationally intensive AI modules may cause the game to slow down. For this reason, steps may not actually occur at a constant rate, and so your AI should not rely on real time in any way, instead counting step events (which is what all of the built-in game objects do). The inherited `self.time` attribute automatically keeps track of the current step number.
 
-## Game Overview
+## Gameplay Details
 
 ...
 
@@ -203,7 +207,7 @@ Aliases: `right`, `rt`
   * `self.turn_towards()` -- Turn to face the opponent turtle.
   * `self.turn_towards(int)` -- Turn to get heading to match a given heading (deg).
   * `self.turn_towards(tuple)` -- Turn to face a given coordinate tuple (px, px).
-Aliases: `turn_towards`, `turnto`
+Aliases: `turn_towards`, `turn_toward`, `turnto`
 * `self.shoot()` -- Fires a missile in the turtle's current direction. Missiles move at a constant speed until either colliding with a wall or block, getting close enough to the opponent turtle (`self.missile_proximity`), or after traveling a certain distance (`self.missile_range`), and which point they explode, damaging any turtle (including the one that fired it) within its explosive radius (`self.missile_radius`). Does nothing if the turtle is still on cooldown from the last shot.  
 Aliases: `shoot`, `fire`
 
@@ -224,7 +228,7 @@ If given no argument, the opponent's position is used.
 Aliases: `relative_heading`, `relhead`
 * `self.relative_heading_towards([target])` -- Calculates the change in heading required to turn this turtle to face a target coordinate (deg), meaning the minimum angle that this turtle would need to turn in order to face the target. Positive headings indicate counterclockwise turning while negative headings indicate clockwise turning. Similar to `self.relative_heading()`, but gives a heading relative to this turtle's current heading.  
 If given no argument, the opponent's position is used.  
-Aliases: `relative_heading_towards`, `towards`
+Aliases: `relative_heading_towards`, `relative_heading_toward`, `towards`, `toward`
 * `self.free_space(coord)` -- Determines whether or not the given coordinate is free of obstacles (`True` if inside the arena and free of obstacles, `False` if not). The coordinates for which this returns `True` are exactly the coordinates which turtles and missiles are allowed to occupy.  
 Aliases: `free_space`, `free`
 * `self.line_of_sight([target])` -- Determines whether or not there is a line of sight between this turtle and a target coordinate (`True` if so, `False` if not). A line of sight implies that, if this turtle were to immediately fire a missile while facing the specified coordinate, the missile would travel towards the target without obstruction from any block objects.  

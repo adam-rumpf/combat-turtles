@@ -65,7 +65,7 @@ class TurtleParent:
         left(), right() -- turns left or right at a given fraction of the
             turtle's maximum turning speed (aliases: lt, rt)
         turn_towards() -- turns as far as possible to face a given coordinate
-            (aliases: turnto)
+            (aliases: turn_toward, turnto)
         shoot() -- attempts to shoot a missile in the turtle's current facing
             direction (aliases: fire)
         distance() -- returns the distance between a pair of coordinates (px),
@@ -77,7 +77,7 @@ class TurtleParent:
             (aliases: relhead)
         relative_heading_towards() -- returns the amount of turning required
             to turn this turtle towards the opponent turtle (or another
-            coordinate) (aliases: towards)
+            coordinate) (aliases: relative_heading_toward, towards, toward)
         free_space() -- returns whether or not a given coordinate is free of
             obstacles (aliases: free)
         line_of_sight() -- returns whether or not the line to the opponent
@@ -1175,7 +1175,9 @@ class TurtleParent:
         return int(ah - self.heading)
     
     # Set aliases
+    relative_heading_toward = relative_heading_towards
     towards = relative_heading_towards
+    toward = relative_heading_towards
 
     #-------------------------------------------------------------------------
 
@@ -1221,6 +1223,7 @@ class TurtleParent:
             self.left(turn)
     
     # Set aliases
+    turn_toward = turn_towards
     turnto = turn_towards
 
     #-------------------------------------------------------------------------
