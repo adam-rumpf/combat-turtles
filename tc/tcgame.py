@@ -234,6 +234,21 @@ class TurtleCombatGame:
         """
 
         return self._arena.intersections(coords)
+    
+    #-------------------------------------------------------------------------
+
+    def blocked(self, coords):
+        """TurtleCombatGame.blocked(coords) -> bool
+        Returns whether a given coordinate intersects any block objects.
+
+        Requires the following positional arguments:
+            coords (tuple (int, int)) -- coordinate to test
+
+        Returns True if the coordinate intersects some block object and False
+        otherwise.
+        """
+
+        return self._arena.blocked(coords)
 
     #-------------------------------------------------------------------------
 
@@ -344,15 +359,43 @@ class TurtleCombatGame:
                                      fill="red")
         elif self.cutoff > 0 and self.iteration >= self.cutoff:
             # Time limit cutoff
-            pos = self._message_position()
-            self._canvas.create_text(pos[0] + 2, pos[1] + 2,
-                                     text="Out of time!",
-                                     font=("Helvetica", 32, "bold"),
-                                     fill="gray")
-            self._canvas.create_text(pos[0], pos[1],
-                                     text="Out of time!",
-                                     font=("Helvetica", 32, "bold"),
-                                     fill="yellow")
+            if hp1 < hp2:
+                # Player 1 win
+                pos = self._message_position()
+                self._canvas.create_text(pos[0] + 2, pos[1] + 2,
+                                         text=("Out of time!\n"+
+                                               str(self.p1_name)+" wins!"),
+                                         font=("Helvetica", 32, "bold"),
+                                         fill="gray")
+                self._canvas.create_text(pos[0], pos[1],
+                                         text=("Out of time!\n"+
+                                               str(self.p1_name)+" wins!"),
+                                         font=("Helvetica", 32, "bold"),
+                                         fill="red")
+            elif hp2 < hp1:
+                # Player 2 win
+                pos = self._message_position()
+                self._canvas.create_text(pos[0] + 2, pos[1] + 2,
+                                         text=("Out of time!\n"+
+                                               str(self.p2_name)+" wins!"),
+                                         font=("Helvetica", 32, "bold"),
+                                         fill="gray")
+                self._canvas.create_text(pos[0], pos[1],
+                                         text=("Out of time!\n"+
+                                               str(self.p2_name)+" wins!"),
+                                         font=("Helvetica", 32, "bold"),
+                                         fill="blue")
+            else:
+                # Tie
+                pos = self._message_position()
+                self._canvas.create_text(pos[0] + 2, pos[1] + 2,
+                                         text="Out of time!",
+                                         font=("Helvetica", 32, "bold"),
+                                         fill="gray")
+                self._canvas.create_text(pos[0], pos[1],
+                                         text="Out of time!",
+                                         font=("Helvetica", 32, "bold"),
+                                         fill="yellow")
         else:
             # Continue loop by resetting timer
             self.root.after(self.step_time, self.play_game)

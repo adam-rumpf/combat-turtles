@@ -54,6 +54,8 @@ class TurtleParent:
         missile_damage -- returns the damage dealt by a missile
         arena_left, arena_right, arena_top, arena_bottom -- returns the
             coordinates of the arena boundaries
+        time -- returns the number of steps that have passed since the game
+            began (updates at the end of each step)
 
     The following visible methods are meant for use in user-defined
     subclasses:
@@ -63,19 +65,23 @@ class TurtleParent:
         left(), right() -- turns left or right at a given fraction of the
             turtle's maximum turning speed (aliases: lt, rt)
         turn_towards() -- turns as far as possible to face a given coordinate
+            (aliases: turnto)
         shoot() -- attempts to shoot a missile in the turtle's current facing
-            direction
+            direction (aliases: fire)
         distance() -- returns the distance between a pair of coordinates (px),
-            including distance to opponent turtle
+            including distance to opponent turtle (aliases: dist)
         relative_position() -- returns the position of the opponent turtle
-            (or another coordinate) relative to this turtle
+            (or another coordinate) relative to this turtle (aliases: relpos)
         relative_heading() -- returns the heading pointing towards the
             opponent turtle (or another coordinate) relative to this turtle
+            (aliases: relhead)
         relative_heading_towards() -- returns the amount of turning required
             to turn this turtle towards the opponent turtle (or another
-            coordinate)
+            coordinate) (aliases: towards)
+        free_space() -- returns whether or not a given coordinate is free of
+            obstacles (aliases: free)
         line_of_sight() -- returns whether or not the line to the opponent
-            turtle is free of obstacles
+            turtle (or another coordinate) is free of obstacles (aliases: los)
 
     The following methods are meant to be overwritten in user-defined
     subclasses:
@@ -190,6 +196,7 @@ class TurtleParent:
         self._health = 100 # health points (turtle dies when health is zero)
         self._cooldown = 0 # delay until able to shoot next (steps)
         self._shooting = False # whether the turtle is attempting to shoot
+        self._time = 0 # current step number
 
         # Draw self
         self._redraw()
@@ -494,6 +501,9 @@ class TurtleParent:
 
         # Update sprite
         self._redraw()
+        
+        # Increment timer
+        self._time += 1
 
     #-------------------------------------------------------------------------
 
@@ -694,6 +704,9 @@ class TurtleParent:
 
         # Set shooting status
         self._shooting = True
+    
+    # Set aliases
+    fire = shoot
 
     #-------------------------------------------------------------------------
 
@@ -1031,6 +1044,9 @@ class TurtleParent:
         # Calculate Euclidean distance
         return math.sqrt((coords1[0]-coords2[0])**2 +
                          (coords1[1]-coords2[1])**2)
+    
+    # Set aliases
+    dist = distance
 
     #-------------------------------------------------------------------------
 
@@ -1059,6 +1075,9 @@ class TurtleParent:
 
         # Return difference
         return (target[0] - self.x, target[1] - self.y)
+    
+    # Set aliases
+    relpos = relative_position
 
     #-------------------------------------------------------------------------
 
@@ -1119,6 +1138,9 @@ class TurtleParent:
 
         # Calculate relative heading using arctan (Angle class mods result)
         return int(math.degrees(Angle(math.atan2(-dy, dx))))
+    
+    # Set aliases
+    relhead = relative_heading
 
     #-------------------------------------------------------------------------
 
@@ -1151,6 +1173,9 @@ class TurtleParent:
 
         # Return difference in headings
         return int(ah - self.heading)
+    
+    # Set aliases
+    towards = relative_heading_towards
 
     #-------------------------------------------------------------------------
 
@@ -1194,6 +1219,9 @@ class TurtleParent:
 
             # Turn in the needed direction
             self.left(turn)
+    
+    # Set aliases
+    turnto = turn_towards
 
     #-------------------------------------------------------------------------
 
@@ -1456,33 +1484,125 @@ class TurtleParent:
         """
 
         self._health -= hp
-
+    
+    #-------------------------------------------------------------------------
+    
+    def free_space(self, coord):
+        """TurtleParent.free_space(coord) -> bool
+        Determines whether a given coordinate is free of obstacles.
+        
+        User visibility:
+            should call -- yes
+            should overwrite -- no
+        
+        Requires the following positional arguments:
+            coord (tuple (int, int)) -- position coordinates (px, px)
+        
+        Returns True if the given coordinate is within the arena and does not
+        intersect with a Block object, and False otherwise.
+        """
+        
+        # Verify that the coordinates are within bounds
+        if (coord[0] < self.arena_left or coord[0] > self.arena_right or
+            coord[1] < self.arena_bottom or coord[1] > self.arena_top):
+            return False
+        
+        # Check whether the destination intersects any blocks
+        if self._game.blocked(coord) == True:
+            return False
+        
+        # If we made it past both tests, then the position must be free
+        return True
+    
+    # Set aliases
+    free = free_space
+    
+    #-------------------------------------------------------------------------
+    
+    def _sign(self, num):
+        """TurtleParent._sign(num) -> int
+        Returns the sign of a number.
+        
+        User visibility:
+            should call -- no
+            should overwrite -- no
+        
+        The sign of a number is 1 for positive, -1 for negative, and 0 for
+        zero.
+        """
+        
+        if num > 0:
+            return 1
+        elif num < 0:
+            return -1
+        else:
+            return 0
+    
     #-------------------------------------------------------------------------
 
-    def line_of_sight(self):
-        """TurtleParent.line_of_sight() -> bool
-        Returns whether there is a clear line of sight to the opponent turtle.
+    def line_of_sight(self, target=None):
+        """TurtleParent.line_of_sight([target]) -> bool
+        Returns whether there is a clear line of sight to a target.
 
         User visibility:
             should call -- yes
             should overwrite -- no
+        
+        This method can be called in several different formats depending on
+        whether a target is specified:
+            None -- target becomes opponent turtle's coordinates
+            tuple (int, int) -- line of sight to specified coordinate
 
-        Returns True if the line between the two turtles is free of obstacles
-        and False otherwise.
+        Returns True if the line between this turtle and the target coordinate
+        is free of obstacles and False otherwise. In particular, "free of
+        obstacles" means that, if this turtle were to fire a missile while
+        facing the target coordinate, the missile would reach the target
+        before colliding with any blocks.
         """
 
-        if self._other == None:
-            return None
-
-        ### Figure out how to quickly test sight lines. A quick and dirty way
-        ### would just be to sample a bunch of points along the sight line to
-        ### see whether any collide with a block, but this could be expensive
-        ### since it needs to be looped over every block, potentially every
-        ### step. However, most arenas should include less than 8 or so
-        ### blocks, and we don't really need to check the walls.
-        ### Specifically, we could immediately calculate all of the points
-        ### that a missile would pass through (given its speed and direction)
-        ### and test whether each point collides with a block.
+        # If no target, use opponent turtle's position
+        if target == None:
+            target = self.other_position
+        
+        # Get heading towards target
+        rh = math.radians(self.relative_heading(target))
+        
+        # Get initial signs of x- and y-direction differences
+        sx = self._sign(target[0] - self.x) # x-direction sign
+        sy = self._sign(target[1] - self.y) # y-direction sign
+        
+        # Handle the trivial case of the turtle's own coordinate
+        if sx == 0 and sy == 0:
+            return True
+        
+        # Test sample points on path to target
+        pt = list(self.position) # sample point
+        spd = self.missile_speed # move sample point at missile speed
+        iter = 0 # number of samples tested (for iteration cutoff)
+        while True:
+            # Loop repeats until either reaching an iteration cutoff, finding
+            # a block collision, or moving past the target coordinate
+            
+            # Move sample point
+            pt[0] += spd*math.cos(rh)
+            pt[1] -= spd*math.sin(rh)
+            
+            # If the point collides with a block, there is no clear path
+            if self.free_space(pt) == False:
+                return False
+            
+            # If the point has moved past the target, there must be clear path
+            if (self._sign(target[0] - pt[0]) != sx or
+                self._sign(target[1] - pt[1]) != sy):
+                return True
+            
+            # If past iteration cutoff, return False
+            iter += 1
+            if iter >= 100:
+                return False
+    
+    # Set aliases
+    los = line_of_sight
 
     #-------------------------------------------------------------------------
 
@@ -1561,5 +1681,28 @@ class TurtleParent:
     @arena_top.setter
     def arena_top(self, value):
         """Do-nothing arena boundary setter to prevent overwriting."""
+
+        pass
+    
+    #-------------------------------------------------------------------------
+
+    @property
+    def time(self):
+        """TurtleParent.time -> int
+        Keeps track of the step number of the current game.
+
+        User visibility:
+            should call -- yes
+            should overwrite -- no
+        
+        The time attribute is initialized as 0 when the game begins and
+        increments by 1 at the end of each step.
+        """
+
+        return self._time
+
+    @time.setter
+    def time(self, value):
+        """Do-nothing time setter to prevent overwriting."""
 
         pass

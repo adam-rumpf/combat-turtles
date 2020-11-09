@@ -202,6 +202,27 @@ class Arena:
 
         # Return a list of all blocks that intersect the given coordinate
         return [b for b in self.blocks if b.contains(coords)]
+    
+    #-------------------------------------------------------------------------
+
+    def blocked(self, coords):
+        """Arena.blocked(coords) -> bool
+        Returns a whether a given coordinate intersects any block objects.
+
+        Requires the following positional arguments:
+            coords (tuple (int, int)) -- coordinate to test
+
+        Returns True if at least one block object intersects the given
+        coordinate and False otherwise.
+        """
+
+        # Process all blocks and return True if there are any collisions
+        for b in self.blocks:
+            if b.contains(coords):
+                return True
+        
+        # If we made it through every block, there were no collisions
+        return False
 
     #-------------------------------------------------------------------------
 

@@ -41,24 +41,32 @@ If you already know ahead of time which AIs and arena you wish to load, you can 
 
 AI submodules are located in the `tc/ai/` folder. Any `.py` file in this folder whose name does not begin with an underscore (`_`) is recognized by the game as an AI submodule, and will be loaded by the main driver when the `turtle_combat()` function is run.
 
+### Minimal AI Submodule Contents
+
 See the included `_template.py` file for a template which includes the basic structure of a valid AI submodule, as well as documentation of the available attributes and methods. The following features are essential for any AI submodule:
 * Import `tc.tkturtle`, along with any modules required by your custom AI.
 * The submodule must define a `class` named `CombatTurtle` which extends `tc.tkturtle.TurtleParent`.
 * The `class_name()`, `class_desc()`, and `class_shape()` static methods should all be overwritten to define the AI's name string, a brief description string, and an integer index for its shape (or a tuple of radii/angles to define a custom shape in polar coordinates).
 * The `setup()` method should be overwritten with any special initialization code required by the AI (this method is called at the end of the object's `__init__()` method).
-* The `step()` method should be overwritten with the AI's step event code (this method is called once per step event).
+* The `step()` method should be overwritten with the AI's step event code (this method is called once per step event). This is likely to be the heart of your AI, as it defines all of the decisions that your turtle makes within a step.
 
-You are free to include any additional methods and attributes as part of your custom AI class, or even additional classes. For safety, it is recommended to restrict the AI to a single file, to import only modules from the Python Standard Library, and to avoid defining methods or attributes whose names begin with an underscore (`_`) since the `TurtleParent` class contains a large number of private members.
+### Best Practices for AI Submodule Design
 
-You __should not__ overwrite any other attributes or methods of the `TurtleParent` class. Doing so could break some of the internal workings of the game, or could give the AI an unfair advantage by allowing it to overwrite things such as the built-in movement limitations.
+You are free to include any additional methods and attributes as part of your custom AI class, or even additional classes. For safety, it is recommended to restrict the AI to a single file, to import only modules from the [Python Standard Library](https://docs.python.org/3/library/), and to avoid defining methods or attributes whose names begin with an underscore (`_`) since the `TurtleParent` class contains a large number of private members.
+
+You __should not__ overwrite any other attributes or methods of the `TurtleParent` class. Doing so could break some of the internal workings of the game, or could give the AI an unfair advantage by allowing it to overwrite things such as the built-in movement limitations. Instead, your turtle's actions should be prompted through use of the inherited [action methods](#action-methods) described below.
+
+A large number of public attributes and methods are inherited from the `TurtleParent` class in order to make AI design easier. See [below](#inherited-features) for a full listing. In particular, attributes exist for accessing [constants](#game-constants) that define the game, your turtle's [own state](#own-attributes), and your [opponent's state](#opponent-attributes), while methods exist for [taking actions](#action-methods) and [gathering information](#query-methods) about the game (such as how far apart the turtles are and whether there is a direct line of sight between them).
+
+Note that computationally intensive AI modules may cause the game to slow down. For this reason, steps may not actually occur at a constant rate, and so your AI should not rely on real time in any way, instead counting step events (which is what all of the built-in game objects do). The inherited `self.time` attribute automatically keeps track of the current step number.
 
 ## Game Overview
 
 ...
 
-(mechanics, steps, lack of "momentum", startup code, geometry of the arena [including -y and how headings work], blocks, arenas)
+(mechanics, steps, lack of "momentum", startup code, geometry of the arena [including -y and how headings work], blocks, arenas, steps might slow down due to intensive calculations but the actual time does not matter to the outcome of the game)
 
-<img src="images/coordinate_system.png" title="Turtle Combat coordinate system." width="400"/>
+<img src="images/coordinate_system.png" title="Turtle Combat coordinate system." width="600"/>
 
 ...
 
@@ -100,6 +108,7 @@ The following is a list of attributes which describe the turtle's own state.
 * `self.health` -- Current health (out of `100`).
 * `self.cooldown` -- Length of cooldown until this turtle can shoot again (steps).
 * `self.can_shoot` -- Whether this turtle is able to shoot (`True` if so, `False` if not).
+* `self.time` -- Number of steps that have passed since the beginning of the game. Begins at `0` and increments by `1` at the end of each step event.
 
 #### Opponent Attributes
 
@@ -137,7 +146,9 @@ Aliases: `right`, `rt`
   * `self.turn_towards()` -- Turn to face the opponent turtle.
   * `self.turn_towards(int)` -- Turn to get heading to match a given heading (deg).
   * `self.turn_towards(tuple)` -- Turn to face a given coordinate tuple (px, px).
-* `self.shoot()` -- Fires a missile in the turtle's current direction. Missiles move at a constant speed until either colliding with a wall or block, getting close enough to the opponent turtle (`self.missile_proximity`), or after traveling a certain distance (`self.missile_range`), and which point they explode, damaging any turtle (including the one that fired it) within its explosive radius (`self.missile_radius`). Does nothing if the turtle is still on cooldown from the last shot.
+Aliases: `turn_towards`, `turnto`
+* `self.shoot()` -- Fires a missile in the turtle's current direction. Missiles move at a constant speed until either colliding with a wall or block, getting close enough to the opponent turtle (`self.missile_proximity`), or after traveling a certain distance (`self.missile_range`), and which point they explode, damaging any turtle (including the one that fired it) within its explosive radius (`self.missile_radius`). Does nothing if the turtle is still on cooldown from the last shot.  
+Aliases: `shoot`, `fire`
 
 #### Query Methods
 
@@ -147,11 +158,18 @@ The following is a list of methods which return information about the current st
   * `self.distance()` -- Distance from self to opponent.
   * `self.distance(tuple)` -- Distance from self to a given coordinate tuple (px, px).
   * `self.distance(tuple, tuple)` -- Distance between a pair of given coordinate tuples (px, px).
+Aliases: `distance`, `dist`
 * `self.relative_position([target])` -- Calculates the relative position from this turtle to a target coordinate (px, px), meaning the change in this turtle's position required to reach the target coordinate.  
-If given no argument, the opponent's position is used.
+If given no argument, the opponent's position is used.  
+Aliases: `relative_position`, `relpos`
 * `self.relative_heading([target])` -- Calculates the heading from this turtle to a target coordinate (deg), meaning the direction required to move from this turtle's position to the target coordinate. Headings are normalized to the interval `(-180,180]` with `0` indicating east, `90` indicating north, `180` indicating west, and `-90` indicating south. Similar to `self.relative_heading_towards()`, but does not take this turtle's current heading into consideration.  
-If given no argument, the opponent's position is used.
+If given no argument, the opponent's position is used.  
+Aliases: `relative_heading`, `relhead`
 * `self.relative_heading_towards([target])` -- Calculates the change in heading required to turn this turtle to face a target coordinate (deg), meaning the minimum angle that this turtle would need to turn in order to face the target. Positive headings indicate counterclockwise turning while negative headings indicate clockwise turning. Similar to `self.relative_heading()`, but gives a heading relative to this turtle's current heading.  
-If given no argument, the opponent's position is used.
+If given no argument, the opponent's position is used.  
+Aliases: `relative_heading_towards`, `towards`
+* `self.free_space(coord)` -- Determines whether or not the given coordinate is free of obstacles (`True` if inside the arena and free of obstacles, `False` if not). The coordinates for which this returns `True` are exactly the coordinates which turtles and missiles are allowed to occupy.  
+Aliases: `free_space`, `free`
 * `self.line_of_sight([target])` -- Determines whether or not there is a line of sight between this turtle and a target coordinate (`True` if so, `False` if not). A line of sight implies that, if this turtle were to immediately fire a missile while facing the specified coordinate, the missile would travel towards the target without obstruction from any block objects.  
-If given no argument, the opponent's position is used.
+If given no argument, the opponent's position is used.  
+Aliases: `line_of_sight`, `los`
