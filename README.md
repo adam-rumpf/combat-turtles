@@ -35,6 +35,23 @@ Source code released under MIT License
 
 This section is meant to provide an overview of how the Turtle Combat game works mechanically, and how a player can create and implement their own custom AI submodule.
 
+## Contents
+
+* [Running the Game](#running-the-game)
+* [Including a Custom AI Submodule](#including-a-custom-ai-submodule)
+  * [Minimal AI Submodule Contents](#minimal-ai-submodule-contents)
+  * [Example Submodule](#example-submodule)
+  * [Best Practices for AI Submodule Design](#best-practices-for-ai-submodule-design)
+* [Gameplay Details](#gameplay-details)
+* [Inherited Features](#inherited-features)
+  * [Built-In Attributes](#built-in-attributes)
+    * [Game Constants](#game-constants)
+    * [Own Attributes](#own-attributes)
+    * [Opponent Attributes](#opponent-attributes)
+  * [Built-In Methods](#built-in-methods)
+    * [Action Methods](#action-methods)
+    * [Query Methods](#query-methods)
+
 ## Running the Game
 
 To begin a game of Turtle Combat, run the main driver `turtlecombat.py` and execute the function `turtle_combat()`. This will take you through a series of command line entries where the available turtle AIs and arenas will be displayed and selected.
