@@ -8,7 +8,7 @@ from .obj.missile import Missile
 from .util.angles import Angle
 
 class TurtleParent:
-    """Tkinter turtle class to use as the parent of Combat Turtle classes.
+    """Class to use as the parent of Combat Turtle classes.
 
     This class is meant to reproduce much of the functionality of the standard
     'turtle' class, but with less overhead due to the step-based gameplay. It
@@ -16,83 +16,109 @@ class TurtleParent:
     subclasses that define the different players, visible frontend methods for
     use in defining AI subclasses, and a variety of hidden utility methods.
 
-    All attributes and methods are meant to be considered private.
-    User-defined subclasses should not attempt to access the attributes or
-    methods of any other objects. It is encouraged for user-defined subclasses
-    to include their own custom attributes and methods, which the user should
-    feel free to modify at will.
+    All attributes and methods are meant to be private. User-defined
+    subclasses should not attempt to access the attributes or methods of any
+    other objects. It is encouraged for user-defined subclasses to include
+    their own custom attributes and methods, which the user should feel free
+    to modify at will.
 
     Turtle movement is handled using discrete steps, which occur every 33 ms
     (at a rate of approximately 30 steps/sec). The step() method is called
     once at the end of each step, after which the turtle is moved directly to
     its new position according to its current speed and heading. The visible
     movement-related methods (such as forward(), backward(), left(), and
-    right()) do not actually move the Turtle, and instead update its internal
+    right()) do not actually move the turtle, and instead update its internal
     speed and heading attributes, which are then used to perform movement at
     the end of the step.
-
-    The following local read-only attributes are meant for use in user-defined
-    subclasses:
-        max_speed, max_turn_speed -- returns the values of the turtle's
-            constant attributes, including: maximum speed (px/step) and
-            maximum turning speed (deg/step)
-        position, heading, speed, turn_speed, health -- returns the values of
-            the turtle's variable attributes, including: position (px, px),
-            heading (deg), speed (px/step), turning speed (deg/step), and
-            health
-        shoot_delay -- returns delay between shooting missiles (steps)
-        cooldown -- returns number of steps between shooting missiles
-        can_shoot -- returns whether the turtle is currently able to shoot
-        other_position, other_heading, other_speed, other_turn_speed,
-            other_health -- equivalent to the local attributes, but returns
-            the attributes of the opponent turtle as of the end of the
-            previous step
-        missile_speed -- returns the travel speed of missiles (px/step)
-        missile_range -- returns the maximum range of missiles (px)
-        missile_proximity -- returns the proximity radius of missiles (px)
-        missile_radius -- returns the explosion radius of missiles (px)
-        missile_damage -- returns the damage dealt by a missile
-        arena_left, arena_right, arena_top, arena_bottom -- returns the
-            coordinates of the arena boundaries
-        time -- returns the number of steps that have passed since the game
-            began (updates at the end of each step)
-
-    The following visible methods are meant for use in user-defined
-    subclasses:
-        forward(), backward() -- attempts to move forward or backward at a
-            given fraction of the turtle's maximum speed (aliases: fd, back,
-            bk)
-        left(), right() -- turns left or right at a given fraction of the
-            turtle's maximum turning speed (aliases: lt, rt)
-        turn_towards() -- turns as far as possible to face a given coordinate
-            (aliases: turn_toward, turnto)
-        shoot() -- attempts to shoot a missile in the turtle's current facing
-            direction (aliases: fire)
-        distance() -- returns the distance between a pair of coordinates (px),
-            including distance to opponent turtle (aliases: dist)
-        relative_position() -- returns the position of the opponent turtle
-            (or another coordinate) relative to this turtle (aliases: relpos)
-        relative_heading() -- returns the heading pointing towards the
-            opponent turtle (or another coordinate) relative to this turtle
-            (aliases: relhead)
-        relative_heading_towards() -- returns the amount of turning required
-            to turn this turtle towards the opponent turtle (or another
-            coordinate) (aliases: relative_heading_toward, towards, toward)
-        free_space() -- returns whether or not a given coordinate is free of
-            obstacles (aliases: free)
-        line_of_sight() -- returns whether or not the line to the opponent
-            turtle (or another coordinate) is free of obstacles (aliases: los)
-
+    
     The following methods are meant to be overwritten in user-defined
     subclasses:
         class_name() -- (static method) returns the name of the class for use
-            in distinguishing between different Combat Turtle AIs
+            in distinguishing between different turtle AIs
         class_desc() -- (static method) returns a one-line description of the
-            Combat Turtle AI
+            turtle AI
         class_shape() -- (static method) returns either an integer index or a
             radius tuple and an angle tuple to define the turtle's shape image
         setup() -- code run at the end of the turtle's initialization
-        step() -- code run during each step event (which occurs every 33 ms)
+        step() -- code run during each step event
+    
+    This class also defines a large number of public attributes and methods
+    for use in subclasses, summarized below.
+    
+    The following read-only attributes can be used to access game constants:
+        max_speed -- maximum linear speed of a turtle (px/step)
+        max_turn_speed -- maximum turning speed of a turtle (deg/step)
+        shoot_delay -- cooldown period (steps) between missile shots
+        missile_speed -- constant linear speed of a missile (px/step)
+        missile_range -- maximum range of a missile (px)
+        missile_proximity -- trigger proximity of a missile (px)
+        missile_radius -- explosive radius of a missile (px)
+        missile_damage -- damage dealt by a missile explosion (hp)
+        arena_left -- minimum x-coordinate of arena
+        arena_right -- maximum x-coordinate of arena
+        arena_bottom -- minimum y-coordinate of arena
+        arena_top -- maximum y-coordinate of arena
+    
+    The following read-only attributes can be used to access the turtle's own
+    status:
+        x -- current x-coordinate (px)
+        y -- current y-coordinate (px)
+        position -- current coordinate tuple (px, px)
+        heading -- current heading (deg) normalized to (-180,180]
+        speed -- current linear speed (px/step)
+        turn_speed -- current turning speed (deg/step)
+        health -- current remaining health (hp)
+        cooldown -- current cooldown before another missile can be fired
+            (steps)
+        can_shoot -- whether or not the turtle is currently able to shoot
+        time -- number of steps that have passed since the game began
+    
+    The following read-only attributes can be used to access the opponent
+    turtle's status (as of the end of the previous step):
+        other_x -- opponent's previous x-coordinate (px)
+        other_y -- opponent's previous y-coordinate (px)
+        other_position -- opponent's previous coordinate tuple (px, px)
+        other_heading -- opponent's previous heading (deg) normalized to
+            (-180,180]
+        other_speed -- opponent's previous linear speed (px/step)
+        other_turn_speed -- opponent's previous turning speed (deg/step)
+        other_health -- opponent's previous health (hp)
+    
+    The following methods should be used to instruct the turtle to take
+    actions:
+        forward([rate]) -- moves forward in current direction at a given
+            fraction of its maximum speed (aliases: forward, fd)
+        backward([rate]) -- moves backward in current direction at a given
+            fraction of its maximum speed (aliases: backward, back, bk)
+        left([rate]) -- turns counterclockwise at a given fraction of its
+            maximum turning speed (aliases: left, lt)
+        right([rate]) -- turns clockwise at a given fraction of its maximum
+            turning speed (aliases: right, rt)
+        turn_towards([args]) -- turns as far as possible towards a given
+            target, either at maximum turning speed or exactly enough to face
+            the target exactly (aliases: turn_towards, turn_towards, turnto)
+        shoot() -- fire missile in current direction and set cooldown to
+            prevent shooting again for a set number of steps (aliases: shoot,
+            fire)
+    
+    The following methods should be used to gather information about the
+    current state of the game:
+        distance([args]) -- returns distance between a given pair of
+            coordinates (px) (aliases: distance, dist)
+        relative_position([target]) -- returns the relative position of a
+            target relative to this turtle (px, px) (aliases:
+            relative_position, relpos)
+        relative_heading([target]) -- returns the heading from this turtle to
+            a target (deg) (aliases: relative_heading, relhead)
+        relative_heading_towards([target]) -- returns the smallest heading
+            change required to turn this turtle towards a target (deg)
+            (aliases: relative_heading_twards, relative_heading_toward,
+            towards, toward)
+        free_space(coord) -- returns whether a given coordinate is free of
+            obstacles (aliases: free_space, free)
+        line_of_sight([target]) -- returns whether there is a direct line of
+            sight between this turtle and a target (aliases: line_of_sight,
+            los)
     """
 
     # Static methods declare class constants to be accessed by other classes

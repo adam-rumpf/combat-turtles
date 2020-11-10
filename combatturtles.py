@@ -1,4 +1,4 @@
-"""Main Turtle Combat script.
+"""Main Combat Turtles script.
 
 Running this script automatically loads all necessary modules to play a game
 of Turtle Combat and then starts the game.
@@ -10,9 +10,9 @@ import ai
 
 #=============================================================================
 
-def turtle_combat(tid1=-1, tid2=-1, aid=-1, cutoff=-1):
-    """turtle_combat() -> None
-    Turtle Combat game driver.
+def combat_turtles(tid1=-1, tid2=-1, aid=-1, cutoff=-1):
+    """combat_turtles() -> None
+    Combat Turtles game driver.
 
     By default this function will present the user with options for the game
     setup, including which turtle AI modules to use and which arena layout to
@@ -114,14 +114,14 @@ def turtle_combat(tid1=-1, tid2=-1, aid=-1, cutoff=-1):
     print("\nArena: " + arena_names[arena])
 
     # Create game object with chosen turtles and arena
-    print("\nOpening Turtle Combat.")
+    print("\nOpening Combat Turtles.")
     print("Game in progress...")
     gm = game.tcgame.TurtleCombatGame(class1=turtle_classes[choice1],
                                       class2=turtle_classes[choice2],
                                       layout=arena, cutoff=cutoff)
 
     # Delete game object when done
-    print("Closing Turtle Combat.")
+    print("Closing Combat Turtles.")
     del gm
 
 #-----------------------------------------------------------------------------
@@ -169,4 +169,4 @@ def _arena_table(arenas):
 # tid2 -- player 2 ID
 # aid -- arena ID
 # cutoff -- game time limit (steps)
-turtle_combat()
+combat_turtles()
