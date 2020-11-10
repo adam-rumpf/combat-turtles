@@ -116,6 +116,9 @@ class Missile:
         # Initialize countdown timer
         self.countdown = Missile.get_lifespan() # time until explosion (steps)
         self.exploding = 0 # time since explosion began (steps)
+        
+        # Initialize list of points to define smoke trail line
+        self.path = [self.x, self.y]
 
         # Draw self
         self._redraw()
@@ -130,6 +133,14 @@ class Missile:
         # Delete sprite (if it has been defined)
         try:
             self.canvas.delete(self.sprite)
+        except AttributeError:
+            pass
+        except tk.TclError:
+            pass
+        
+        # Delete smoke trail (if it has been defined)
+        try:
+            self.canvas.delete(self.trail)
         except AttributeError:
             pass
         except tk.TclError:
@@ -156,6 +167,9 @@ class Missile:
             # Move forward
             self.x += self.speed*math.cos(math.radians(self.heading))
             self.y -= self.speed*math.sin(math.radians(self.heading))
+            
+            # Add point to smoke trail
+            self.path += [self.x, self.y]
 
             # Determine whether to explode
             explode = False
@@ -206,11 +220,27 @@ class Missile:
         appearance on the screen.
         """
 
-        # Delete existing sprite (undefined during initial draw)
+        # Delete sprite (if it has been defined)
         try:
             self.canvas.delete(self.sprite)
         except AttributeError:
             pass
+        except tk.TclError:
+            pass
+        
+        # Delete smoke trail (if it has been defined)
+        try:
+            self.canvas.delete(self.trail)
+        except AttributeError:
+            pass
+        except tk.TclError:
+            pass
+        
+        # Draw smoke trail
+        if len(self.path) >= 4:
+            self.trail = self.canvas.create_line(self.path, width=2,
+                                                 dash=(1,2),
+                                                 fill="light gray")
 
         # Draw sprite depending on whether the missile has exploded
         if self.exploding <= 0:

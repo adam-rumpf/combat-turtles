@@ -311,7 +311,7 @@ class TurtleParent:
             # Plow
             r1 = 14
             r2 = 8
-            radius = (r1, r2, math.sqrt(r1**2 + r2**2),
+            radius = (2*r1/3, r2, math.sqrt(r1**2 + r2**2),
                       math.sqrt(r1**2 + r2**2), r2)
             angle = (0, math.pi/2, math.atan2(r2, -r1), math.atan2(-r2, -r1),
                      -math.pi/2)

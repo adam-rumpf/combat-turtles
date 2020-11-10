@@ -12,7 +12,11 @@ This module is available for free from my [releases page](https://github.com/ada
 
 ## Game Overview
 
-(summarize what exactly the game consists of in a fun way, possibly use images; this is somewhat what the itch.io page should be more like)
+*Turtle Combat* is an arena combat game in which two AI-controlled turtle robots fight to the death. Each turtle begins on one side of an arena full of obstacles. Turtles are free to move around the arena, negotiate obstacles, take cover, and aim and fire short-range explosive missiles at each other as their AIs dictate. The object of the game is to destroy the enemy turtle before it destroys you.
+
+<img src="images/screenshot_wall.png" width="200"/> <img src="images/screenshot_column.png" width="200"/> <img src="images/screenshot_explosion.png" width="200"/>
+
+Turtle AIs are written in Python and imported into the game by adding submodules to its `ai/` folder. Because the game, itself, is written entirely in Python, these AIs can be as simple or as complicated as the player wishes. A template and several example AI files are included in this distribution to give you a start, and a large number of built-in attributes and methods have been defined to make the process of AI design faster and easier. See the [instructions](#instructions) below for a complete guide.
 
 ## Dependencies
 
@@ -73,7 +77,7 @@ See the included `_template.py` file in the `ai/` folder for a template which in
 
 ### Example Submodule
 
-The included submodules in the `ai/` folder all define very simple turtle AIs that can be looked to as examples. Here we will consider the submoduled named "DirectTurtle", defined in `direct.py`. Excluding some of the docstrings, this is the entire submodule:
+The included submodules in the `ai/` folder all define very simple turtle AIs that can be looked to as examples. Here we will consider the submodule named "DirectTurtle", defined in `direct.py`. Excluding some of the docstrings, this is the entire submodule:
 
 ```python
 import game.tcturtle
@@ -126,13 +130,13 @@ Finally the `step()` method is overwritten to define this turtle's extremely sim
 * Then it decides whether to attempt to move towards or away from its opponent based on its current distance, `self.distance()`, from the opponent. Its distance cutoff is based on the explosive radius of a missile, `self.missile_radius`. If it is sufficiently far away from the opponent, it moves forward at full speed with `self.forward()`, and otherwise, it reverses at full speed with `self.backward()`.
 * Finally it decides whether to attempt to shoot, doing so if and only if three conditions are all met: its missile must not be on cooldown (`self.can_shoot`), it must be within `10` degrees of facing the opponent (`abs(self.relative_heading_towards()) <= 10`), and it must have a clear line of sight to the opponent (`self.line_of_sight()`). If all of these are `True`, then it fires a missile by calling `self.shoot()`.
 
-Of course this is an incredibly basic AI, but this example illustrates how simple AI sumodules can be. The main body of the program contained in the `step()` method is less than 10 lines of code. If you are just starting out with this program, a good place to start might be to think of ways to improve the example AIs. Get creative and have fun!
+Of course this is an incredibly basic AI, but this example illustrates how simple AI submodules can be. The main body of the program contained in the `step()` method is less than 10 lines of code. If you are just starting out with this program, a good place to start might be to think of ways to improve the example AIs. Get creative and have fun!
 
 ### Best Practices for AI Submodule Design
 
 You are free to include any additional methods and attributes as part of your custom AI class, or even additional classes. For safety, it is recommended to restrict the AI to a single file, to import only modules from the [Python Standard Library](https://docs.python.org/3/library/), and to avoid defining methods or attributes whose names begin with an underscore (`_`) since the `TurtleParent` class contains a large number of private members.
 
-You __should not__ overwrite any other attributes or methods of the `TurtleParent` class. Doing so could break some of the internal workings of the game, or could give the AI an unfair advantage by allowing it to overwrite things such as the built-in movement limitations. Instead, your turtle's actions should be prompted through use of the inherited [action methods](#action-methods) described below.
+You __should not__ attempt to overwrite or access any attributes or methods of the `TurtleParent` class aside from those mentioned [above](#minimal-ai-submodule-contents) for overwriting or those mentioned [below](#inherited-features) for accessing. Doing so could break some of the internal workings of the game, or could give the AI an unfair advantage by allowing it to overwrite things such as the built-in movement limitations. Instead, your turtle's actions should be prompted through use of the inherited [action methods](#action-methods) described below.
 
 A large number of public attributes and methods are inherited from the `TurtleParent` class in order to make AI design easier. See [below](#inherited-features) for a full listing. In particular, attributes exist for accessing [constants](#game-constants) that define the game, your turtle's [own state](#own-attributes), and your [opponent's state](#opponent-attributes), while methods exist for [taking actions](#action-methods) and [gathering information](#query-methods) about the game (such as how far apart the turtles are and whether there is a direct line of sight between them).
 
@@ -140,13 +144,19 @@ Note that computationally intensive AI modules may cause the game to slow down. 
 
 ## Gameplay Details
 
-...
+The game takes place in an `800` by `800` pixel arena with one combat turtle placed on either side. At any given time, each turtle has a well-defined position (as a pair of integer pixel coordinates) and heading (as an integer heading between `-179` and `180`) which change as the turtles move and turn. The `TurtleParent` class defines some inherited attributes that can be used to access a turtle's [own position](#own-attributes) or the [opponent's position](#opponent-attributes).
 
-(mechanics, steps, lack of "momentum", startup code, geometry of the arena [including -y and how headings work], blocks, arenas, steps might slow down due to intensive calculations but the actual time does not matter to the outcome of the game, the fact that the turtle's shape doesn't matter)
+The coordinate system is defined so that the origin of the arena is at the top left, meaning that the positive y-direction is down, the negative y-direction is up, the positive x-direction is right, and the negative x-direction is left. Headings are always normalized to take values in the interval `(-180,180]` with `0` representing east, `90` representing north, `-90` representing south, and `180` representing west. Headings "wrap around" during calculations, so as a turtle turns counterclockwise its heading value increases, eventually wrapping around from `180` to `-179`, and as a turtle turns clockwise its heading value decreases, eventually wrapping around from `-179` to `180`. The following diagram summarizes how the coordinates and headings are set up:
 
 <img src="images/coordinate_system.png" title="Turtle Combat coordinate system." width="600"/>
 
-...
+The game begins with both turtles running their `setup()` methods, after which a step event occurs at a rate of approximately 30 steps per second (although this rate is not fixed and may slow down if either turtle AI requires expensive computations). Turtles have no "momentum", meaning that their linear speeds and rotational speeds are both set to zero at the beginning of each step, so in order for a turtle to move continuously it must be given a movement instruction *every step*. After these internal attributes are reset, each turtle's `step()` method is called. If this method included any [movement or shooting](#action-methods) instructions, and the movement or shooting is allowed, then the turtle is moved or a missile is fired at the end of the step.
+
+Some arenas contain block objects as obstacles. Turtles cannot move through blocks, nor can they move outside of the arena's boundaries, and attempting to move into a block limits the turtle's movement (although they can still "slide along" the boundary of a block by attempting to move into it at an angle). Missiles immediately explode on contact with a block or an arena boundary. The `TurtleParent` class defines some [inherited methods](#query-methods) that can be used to determine whether a given coordinate is free or not and whether the turtle has a clear line of sight to a given coordinate.
+
+Missiles are fired in the direction that the turtle was facing when its `self.shoot()` method was called. A missile travels at a constant speed in a straight line until either colliding with an obstacle or arena boundary, until passing within a proximity distance of the opponent turtle, or until reaching a maximum distance cutoff. In any of these events, the missile explodes, dealing `20` damage to any turtle within its explosive radius (including the turtle that fired it). As soon as a turtle fires a missile, it enters a cooldown phase where it is not allowed to shoot again for a set number of steps. There are inherited attributes which can be used to access the constants that define a [missile's behavior](#game-constants) as well as the turtle's own [cooldown status](#own-attributes).
+
+Each turtle begins with `100` health, and the goal of the game is to reduce the opponent to `0` health. If both turtles reach `0` health during the same step (which could occur if a single explosion hits them both) then the game ends in a tie. The main driver function `turtle_combat()` has an optional cutoff argument to place a time limit (as a number of steps) on the simulation. If the time limit is reached before either turtle dies, then the winner is the turtle with more health (if both have equal health the the game ends in a tie).
 
 ## Inherited Features
 

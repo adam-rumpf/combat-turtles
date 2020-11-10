@@ -77,5 +77,5 @@ class CombatTurtle(game.tcturtle.TurtleParent):
 
         Randomize direction and move forward at a random speed.
         """
-
+        
         pass

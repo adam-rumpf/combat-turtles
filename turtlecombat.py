@@ -164,6 +164,9 @@ def _arena_table(arenas):
 
 #=============================================================================
 
-# Execute function
-###turtle_combat()
-turtle_combat(0, 1, 2) ### arguments for fast testing
+# Execute function (add optional arguments to streamline process)
+# tid1 -- player 1 ID
+# tid2 -- player 2 ID
+# aid -- arena ID
+# cutoff -- game time limit (steps)
+turtle_combat()

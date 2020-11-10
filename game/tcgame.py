@@ -271,7 +271,7 @@ class TurtleCombatGame:
         (xc, yc) = (self.size[0]/2, self.size[1]/2)
 
         # Define safety margin for text box size
-        (xr, yr) = (200, 50)
+        (xr, yr) = (300, 80)
 
         # If the center is free, display there
         if ((x1 < xc-xr or x1 > xc+xr) and (x2 < xc-xr or x2 > xc+xr)
