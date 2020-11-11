@@ -2,13 +2,11 @@
 
 A Python module for programming turtle robots to compete against each other in arena combat.
 
-See the author's notes for this game [here](https://adam-rumpf.github.io/programs/combat_turtles.html).
-
 _Combat Turtles_ is meant as a learning tool for intermediate-level Python students. It defines a combat game in which programmable [turtle robots](https://en.wikipedia.org/wiki/Turtle_(robot)) move around a battlefield firing missiles to destroy each other. A parent class, `TurtleParent`, defines a variety of basic attributes and methods for these turtle robots, and an `ai/` folder contains a variety of subclasses of this parent class which define different turtle AIs. The main driver script `combatturtles.py` loads selected AI subclasses to compete against each other in combat.
 
 The player is meant to write their own turtle AI by extending the `TurtleParent` class and overwriting a few key methods. The game is run using discrete step events (at a rate of approximately 30 steps/second), with each turtle defining its actions on a per-step basis. Custom AI submodules (in the form of standalone `.py` files) can be added to the `ai/` directory to import the player's AI into the game. Several example and template subclasses are included in this directory to get the player started. See also the [documentation below](#instructions) for a detailed guide to writing custom AIs. Python students might enjoy competing against each other to see whom can come up with the best AI, while Python instructors might consider running a class tournament to encourage students to learn more about object-oriented programming.
 
-This module is available for free from my [releases page](https://github.com/adam-rumpf/turtle-combat/releases) or as donationware from my [itch.io page](https://adam-rumpf.itch.io/combat-turtles). I encourage you to download it, use it in your own projects, and modify the source code as much as you like.
+**This is a work in progress.** I am still in the process of adding features and fixing bugs, but if you are interested in playing with the latest public beta, please see the [releases](https://github.com/adam-rumpf/combat-turtles/releases) page.
 
 ## Game Overview
 
@@ -136,7 +134,7 @@ Of course this is an incredibly basic AI, but this example illustrates how simpl
 
 You are free to include any additional methods and attributes as part of your custom AI class, or even additional classes. For safety, it is recommended to restrict the AI to a single file, to import only modules from the [Python Standard Library](https://docs.python.org/3/library/), and to avoid defining methods or attributes whose names begin with an underscore (`_`) since the `TurtleParent` class contains a large number of private members.
 
-You __should not__ attempt to overwrite or access any attributes or methods of the `TurtleParent` class aside from those mentioned [above](#minimal-ai-submodule-contents) for overwriting or those mentioned [below](#inherited-features) for accessing. Doing so could break some of the internal workings of the game, or could give the AI an unfair advantage by allowing it to overwrite things such as the built-in movement limitations. Instead, your turtle's actions should be prompted through use of the inherited [action methods](#action-methods) described below.
+You **should not** attempt to overwrite or access any attributes or methods of the `TurtleParent` class aside from those mentioned [above](#minimal-ai-submodule-contents) for overwriting or those mentioned [below](#inherited-features) for accessing. Doing so could break some of the internal workings of the game, or could give the AI an unfair advantage by allowing it to overwrite things such as the built-in movement limitations. Instead, your turtle's actions should be prompted through use of the inherited [action methods](#action-methods) described below.
 
 A large number of public attributes and methods are inherited from the `TurtleParent` class in order to make AI design easier. See [below](#inherited-features) for a full listing. In particular, attributes exist for accessing [constants](#game-constants) that define the game, your turtle's [own state](#own-attributes), and your [opponent's state](#opponent-attributes), while methods exist for [taking actions](#action-methods) and [gathering information](#query-methods) about the game (such as how far apart the turtles are and whether there is a direct line of sight between them).
 
