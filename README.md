@@ -2,9 +2,9 @@
 
 A Python module for programming turtle robots to compete against each other in arena combat.
 
-_Combat Turtles_ is meant as a learning tool for intermediate-level Python students. It defines a combat game in which programmable [turtle robots](https://en.wikipedia.org/wiki/Turtle_(robot)) move around a battlefield firing missiles to destroy each other. A parent class, `TurtleParent`, defines a variety of basic attributes and methods for these turtle robots, and an `ai/` folder contains a variety of subclasses of this parent class which define different turtle AIs. The main driver script `combatturtles.py` loads selected AI subclasses to compete against each other in combat.
+_Combat Turtles_ is meant as a learning tool for intermediate-level [Python](https://www.python.org/) students. It defines a combat game in which programmable [turtle robots](https://en.wikipedia.org/wiki/Turtle_(robot)) move around a battlefield firing missiles to destroy each other. A parent class, `TurtleParent`, defines a variety of basic attributes and methods for these turtle robots, and an `ai/` folder contains a variety of subclasses of this parent class which define different turtle AIs. The main driver script `combatturtles.py` loads selected AI subclasses to compete against each other in combat.
 
-The player is meant to write their own turtle AI by extending the `TurtleParent` class and overwriting a few key methods. The game is run using discrete step events (at a rate of approximately 30 steps/second), with each turtle defining its actions on a per-step basis. Custom AI submodules (in the form of standalone `.py` files) can be added to the `ai/` directory to import the player's AI into the game. Several example and template subclasses are included in this directory to get the player started. See also the [documentation below](#instructions) for a detailed guide to writing custom AIs. Python students might enjoy competing against each other to see whom can come up with the best AI, while Python instructors might consider running a class tournament to encourage students to learn more about object-oriented programming.
+The player can create their own turtle AIs by extending the `TurtleParent` class and overwriting a few key methods. The game is run using discrete step events (at a rate of approximately 30 steps/second), with each turtle defining its actions on a per-step basis. Custom AI submodules (in the form of standalone `.py` files) can be added to the `ai/` directory to import the player's AI into the game. Several example and template subclasses are included in this directory to get the player started. See also the [documentation below](#instructions) for a detailed guide to writing custom AIs. Python students might enjoy competing against each other to see whom can come up with the best AI, while Python instructors might consider running a class tournament to encourage students to learn more about object-oriented programming.
 
 **This is a work in progress.** I am still in the process of adding features and fixing bugs, but if you are interested in playing with the latest public beta, please see the [releases](https://github.com/adam-rumpf/combat-turtles/releases) page.
 
@@ -14,15 +14,13 @@ _Combat Turtles_ is an arena combat game in which two AI-controlled turtle robot
 
 <img src="images/screenshot_wall.png" width="250"/> <img src="images/screenshot_column.png" width="250"/> <img src="images/screenshot_explosion.png" width="250"/>
 
-Turtle AIs are written in Python and imported into the game by adding submodules to its `ai/` folder. Because the game, itself, is written entirely in Python, these AIs can be as simple or as complicated as the player wishes. A template and several example AI files are included in this distribution to give you a start, and a large number of built-in attributes and methods have been defined to make the process of AI design faster and easier. See the [instructions](#instructions) below for a complete guide.
+Turtle AIs are written in Python and imported into the game by adding submodules to its `ai/` folder. Because the game, itself, is written entirely in Python, these AIs can be as simple or as complicated as the player wishes, and can make use of the full range of data structures and modules available in Python. A template and several example AI files are included in this distribution to give you a start, and a large number of built-in attributes and methods have been defined to make the process of AI design faster and easier. See the [instructions](#instructions) below for a complete guide.
 
 ## Dependencies
 
 This module was developed for Python 3.8.3.
 
 In an effort to maintain portability it uses only modules from the [Python Standard Library](https://docs.python.org/3/library/), including: `glob`, `inspect`, `math`, `os.path`, `random`, `tkinter`
-
-This module also makes use of an `Angle` class, developed as a standalone module available at [github.com/adam-rumpf/python-angles](https://github.com/adam-rumpf/python-angles), and included in its entirety in the `game/util/` folder.
 
 ## Credits
 
@@ -56,7 +54,7 @@ This section is meant to provide an overview of how the _Combat Turtles_ game wo
 
 ## Running the Game
 
-To begin a game of _Combat Turtles_, run the main driver `combatturtles.py` and execute the function `combat_turtles()`. This will take you through a series of command line entries where the available turtle AIs and arenas will be displayed and selected.
+To begin a game of _Combat Turtles_, run the main driver `combatturtles.py` found in the root of this directory and execute the function `combat_turtles()`. This will take you through a series of command line entries where the available turtle AIs and arenas will be displayed and selected.
 
 If you already know ahead of time which AIs and arena you wish to load, you can streamline this process by including their indices as arguments of the `combat_turtles()` function. For example, `combat_turtles(0, 1, 2)` would attempt to begin the game with AI `0` playing against AI `1` in arena `2`. Note that the AI indices are based on the alphabetical order of the AI submodules in the `ai/` folder, and thus these indices may change as you add files to this folder.
 
@@ -81,13 +79,7 @@ The included submodules in the `ai/` folder all define very simple turtle AIs th
 import game.tcturtle
 
 class CombatTurtle(game.tcturtle.TurtleParent):
-    """Direct combat turtle.
-
-    Its main strategy is to try to move directly towards the opponent, firing
-    missiles when it has clear line of sight. It does not pay much attention
-    to obstacles.
-    """
-
+    
     def class_name():
         return "DirectTurtle"
 
@@ -123,7 +115,7 @@ The three static methods `class_name()`, `class_desc()`, and `class_shape()` def
 
 The `setup()` method is overwritten here but is empty because this particular AI does not require any special initialization code. Note that we could have easily left this method out without affecting anything since the `TurtleParent` class' `setup()` method is also just a placeholder.
 
-Finally the `step()` method is overwritten to define this turtle's extremely simplistic AI behavior, which consists of only three directives each step:
+Finally the `step()` method is overwritten to define this turtle's extremely simplistic AI behavior, which consists of only three directives followed in each step:
 * First it calls `self.turn_towards()` to attempt to turn itself towards its opponent.
 * Then it decides whether to attempt to move towards or away from its opponent based on its current distance, `self.distance()`, from the opponent. Its distance cutoff is based on the explosive radius of a missile, `self.missile_radius`. If it is sufficiently far away from the opponent, it moves forward at full speed with `self.forward()`, and otherwise, it reverses at full speed with `self.backward()`.
 * Finally it decides whether to attempt to shoot, doing so if and only if three conditions are all met: its missile must not be on cooldown (`self.can_shoot`), it must be within `10` degrees of facing the opponent (`abs(self.relative_heading_towards()) <= 10`), and it must have a clear line of sight to the opponent (`self.line_of_sight()`). If all of these are `True`, then it fires a missile by calling `self.shoot()`.
@@ -134,7 +126,7 @@ Of course this is an incredibly basic AI, but this example illustrates how simpl
 
 You are free to include any additional methods and attributes as part of your custom AI class, or even additional classes. For safety, it is recommended to restrict the AI to a single file, to import only modules from the [Python Standard Library](https://docs.python.org/3/library/), and to avoid defining methods or attributes whose names begin with an underscore (`_`) since the `TurtleParent` class contains a large number of private members.
 
-You **should not** attempt to overwrite or access any attributes or methods of the `TurtleParent` class aside from those mentioned [above](#minimal-ai-submodule-contents) for overwriting or those mentioned [below](#inherited-features) for accessing. Doing so could break some of the internal workings of the game, or could give the AI an unfair advantage by allowing it to overwrite things such as the built-in movement limitations. Instead, your turtle's actions should be prompted through use of the inherited [action methods](#action-methods) described below.
+You **should not** attempt to overwrite or access any attributes or methods of the `TurtleParent` class aside from those mentioned [above](#minimal-ai-submodule-contents) for overwriting or those mentioned [below](#inherited-features) for accessing. Doing so could break some of the internal workings of the game, or could give the AI an unfair advantage by allowing it to override rules such as the built-in movement limitations. Instead, your turtle's actions should be prompted through use of the inherited [action methods](#action-methods) described below.
 
 A large number of public attributes and methods are inherited from the `TurtleParent` class in order to make AI design easier. See [below](#inherited-features) for a full listing. In particular, attributes exist for accessing [constants](#game-constants) that define the game, your turtle's [own state](#own-attributes), and your [opponent's state](#opponent-attributes), while methods exist for [taking actions](#action-methods) and [gathering information](#query-methods) about the game (such as how far apart the turtles are and whether there is a direct line of sight between them).
 
@@ -148,9 +140,9 @@ The coordinate system is defined so that the origin of the arena is at the top l
 
 <img src="images/coordinate_system.png" title="Combat Turtles coordinate system." width="600"/>
 
-The game begins with both turtles running their `setup()` methods, after which a step event occurs at a rate of approximately 30 steps per second (although this rate is not fixed and may slow down if either turtle AI requires expensive computations). Turtles have no "momentum", meaning that their linear speeds and rotational speeds are both set to zero at the beginning of each step, so in order for a turtle to move continuously it must be given a movement instruction _every step_. After these internal attributes are reset, each turtle's `step()` method is called. If this method included any [movement or shooting](#action-methods) instructions, and the movement or shooting is allowed, then the turtle is moved or a missile is fired at the end of the step.
+The game begins with both turtles running their `setup()` methods, after which a step event occurs at a rate of approximately 30 steps per second (although this rate is not fixed and may slow down if either turtle AI requires expensive computations). Turtles have no "momentum", meaning that their linear speeds and rotational speeds are both set to zero at the beginning of each step, so in order for a turtle to move continuously it must be given a movement instruction _every step_. After these internal attributes are reset, each turtle's `step()` method is called. If this method included any [movement or shooting](#action-methods) instructions, and the movement or shooting is allowed by the game rules, then the turtle is moved or a missile is fired at the end of the step.
 
-Specifically, the following actions are taken, in order, by each turtle during each step:
+Specifically, the following actions are taken, in order, by the turtle during each step:
 1. The turtle's speed and turning speed are set to zero, and its shooting instruction is set to `False`.
 1. The turtle's missile cooldown is decremented.
 1. The turtle's user-defined `step()` method is called, during which movement and shooting instructions can be issued.
@@ -168,7 +160,7 @@ Each turtle begins with `100` health, and the goal of the game is to reduce the 
 
 ## Inherited Features
 
-This section describes the attributes and methods built into the `TurtleParent` class for use in custom AI subclasses. In defining a subclass you are free to add your own methods and attributes, as long as they do not conflict with any of the built-in members (except for those meant for overwriting as [described above](#including-a-custom-ai-submodule)).
+This section describes the attributes and methods built into the `TurtleParent` class for use in custom AI subclasses. In defining a subclass you are free to add your own methods and attributes, as long as they do not conflict with any of the built-in members (except for those meant for overwriting as [described above](#minimal-ai-submodule-contents)).
 
 ### Built-In Attributes
 
@@ -202,8 +194,8 @@ The following is a list of attributes which describe the turtle's own state.
 * `self.speed` -- Current speed (px/step). Note that a turtle's speed is reset to `0` at the beginning of each step and can only become nonzero after the turtle's [movement methods](#action-methods) have been called.
 * `self.turn_speed` -- Current turning speed (deg/step). Note that a turtle's turning speed is reset to `0` at the beginning of each step and can only become nonzero after the turtle's [turning methods](#action-methods) have been called.
 * `self.health` -- Current health (out of `100`).
-* `self.cooldown` -- Length of cooldown until this turtle can shoot again (steps).
-* `self.can_shoot` -- Whether this turtle is able to shoot (`True` if so, `False` if not).
+* `self.cooldown` -- Length of cooldown until this turtle can shoot again (steps). The turtle can shoot if and only if this values is `0`.
+* `self.can_shoot` -- Whether this turtle is able to shoot (`True` if so, `False` if not). Equivalent to `self.cooldown == 0`.
 * `self.time` -- Number of steps that have passed since the beginning of the game. Begins at `0` and increments by `1` at the end of each step event.
 
 #### Opponent Attributes
@@ -228,13 +220,13 @@ The following is a list of void methods which cause the turtle to perform action
 
 Note that these methods do not, by themselves, actually cause the turtle to move or shoot: they all set the values of hidden internal variables that specify what the turtle will try to do during the step event. The actual movement is taken care of with hidden internal methods that apply game rules such as enforcing collisions and missile cooldown.
 
-Also note that turtles begin each step with no movement instructions. If you want your turtle to continuously move, it needs to be given movement instructions _every step_.
+Also note that turtles begin each step with no movement instructions. If you want your turtle to continuously move, it must be given movement instructions _every step_.
 
 * `self.forward([rate])` -- Attempts to move the turtle forward in its current direction. Turtles are blocked by the arena's boundaries and block objects. The optional `rate` argument can take any value between `-1` and `1`, and indicates the fraction of the turtle's maximum speed (`self.max_speed`) to travel at, with `1` indicating full speed forward, `0` indicating no movement, `-1` indicating full speed backward, and intermediate values indicating intermediate speeds.  
 Aliases: `forward`, `fd`
 * `self.backward([rate])` -- Analogous to `self.forward()`, but with positive `rate` indicating backward movement and negative `rate` indicating forward movement.  
 Aliases: `backward`, `back`, `bk`
-* `self.left([rate])` -- Turns the turtle left. The optional `rate` argument can take any value between `-1` and `1`, and indicates the fraction of the turtle's maximum turning speed (`self.max_turn_speed`) to turn at, with `1` indicating full speed counterclockwise, `0` indicating no turning, `-1` indicating full speed clockwise, and intermediate values indicating intermediate turning speeds.  
+* `self.left([rate])` -- Turns the turtle left (counterclockwise). The optional `rate` argument can take any value between `-1` and `1`, and indicates the fraction of the turtle's maximum turning speed (`self.max_turn_speed`) to turn at, with `1` indicating full speed counterclockwise, `0` indicating no turning, `-1` indicating full speed clockwise, and intermediate values indicating intermediate turning speeds.  
 Aliases: `left`, `lt`
 * `self.right([rate])` -- Analogous to `self.left()`, but with positive `rate` indicating clockwise turning and negative `rate` indicating counterclockwise movement.  
 Aliases: `right`, `rt`
@@ -242,15 +234,16 @@ Aliases: `right`, `rt`
   * `self.turn_towards()` -- Turn to face the opponent turtle.
   * `self.turn_towards(int)` -- Turn to get heading to match a given heading (deg).
   * `self.turn_towards(tuple)` -- Turn to face a given coordinate tuple (px, px).
-Aliases: `turn_towards`, `turn_toward`, `turnto`
-* `self.shoot()` -- Fires a missile in the turtle's current direction. Missiles move at a constant speed until either colliding with a wall or block, getting close enough to the opponent turtle (`self.missile_proximity`), or after traveling a certain distance (`self.missile_range`), and which point they explode, damaging any turtle (including the one that fired it) within its explosive radius (`self.missile_radius`). Does nothing if the turtle is still on cooldown from the last shot.  
+
+  Aliases: `turn_towards`, `turn_toward`, `turnto`
+* `self.shoot()` -- Fires a missile in the turtle's current direction. Missiles move at a constant speed until either colliding with a wall or block, getting close enough to the opponent turtle (`self.missile_proximity`), or after traveling a certain distance (`self.missile_range`), and which point they explode, dealing damage (`self.missile_damage`) to any turtle (including the one that fired it) within its explosive radius (`self.missile_radius`). Does nothing if the turtle is still on cooldown from the last shot.  
 Aliases: `shoot`, `fire`
 
 #### Query Methods
 
 The following is a list of methods which return information about the current state of the game, including the turtle's own position, the other turtle's position, and information about the arena. These are similar to the [own attributes](#own-attributes) and [opponent attributes](#opponent-attributes) above, but implemented as methods rather than attributes since they require (potentially optional) arguments.
 
-* `self.distance([args])` -- Calculates distances between coordinates (px). The distance calculated depends on the inputs:
+* `self.distance([args])` -- Calculates Euclidean distances between coordinates (px). The distance calculated depends on the inputs:
   * `self.distance()` -- Distance from self to opponent.
   * `self.distance(tuple)` -- Distance from self to a given coordinate tuple (px, px).
   * `self.distance(tuple, tuple)` -- Distance between a pair of given coordinate tuples (px, px).
@@ -259,10 +252,12 @@ The following is a list of methods which return information about the current st
 * `self.relative_position([target])` -- Calculates the relative position from this turtle to a target coordinate (px, px), meaning the change in this turtle's position required to reach the target coordinate.  
 If given no argument, the opponent's position is used.  
 Aliases: `relative_position`, `relpos`
-* `self.relative_heading([target])` -- Calculates the heading from this turtle to a target coordinate (deg), meaning the direction required to move from this turtle's position to the target coordinate. Headings are normalized to the interval `(-180,180]` with `0` indicating east, `90` indicating north, `180` indicating west, and `-90` indicating south. Similar to `self.relative_heading_towards()`, but does not take this turtle's current heading into consideration.  
+* `self.relative_heading([target])` -- Calculates the heading from this turtle to a target coordinate (deg), meaning the direction required to move from this turtle's position to the target coordinate. Headings are normalized to the interval `(-180,180]` with `0` indicating east, `90` indicating north, `180` indicating west, and `-90` indicating south.  
+Similar to `self.relative_heading_towards()`, but does not take this turtle's current heading into consideration.  
 If given no argument, the opponent's position is used.  
 Aliases: `relative_heading`, `relhead`
-* `self.relative_heading_towards([target])` -- Calculates the change in heading required to turn this turtle to face a target coordinate (deg), meaning the minimum angle that this turtle would need to turn in order to face the target. Positive headings indicate counterclockwise turning while negative headings indicate clockwise turning. Similar to `self.relative_heading()`, but gives a heading relative to this turtle's current heading.  
+* `self.relative_heading_towards([target])` -- Calculates the change in heading required to turn this turtle to face a target coordinate (deg), meaning the minimum angle that this turtle would need to turn in order to face the target. Positive headings indicate counterclockwise turning while negative headings indicate clockwise turning.  
+Similar to `self.relative_heading()`, but gives a heading relative to this turtle's current heading.  
 If given no argument, the opponent's position is used.  
 Aliases: `relative_heading_towards`, `relative_heading_toward`, `towards`, `toward`
 * `self.free_space(coord)` -- Determines whether or not the given coordinate is free of obstacles (`True` if inside the arena and free of obstacles, `False` if not). The coordinates for which this returns `True` are exactly the coordinates which turtles and missiles are allowed to occupy.  
