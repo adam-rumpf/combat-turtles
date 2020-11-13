@@ -1354,7 +1354,7 @@ class TurtleParent:
         # If given a specific heading, generate a coordinate to turn towards
         if type(target) == int or type(target) == float:
             target = (int(self.x + 10000*math.cos(math.radians(target))),
-                     int(self.y + 10000*math.sin(math.radians(target))))
+                     int(self.y - 10000*math.sin(math.radians(target))))
 
         # Turn towards coordinates
         if type(target) == tuple:
