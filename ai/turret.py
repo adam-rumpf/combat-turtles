@@ -79,8 +79,6 @@ class CombatTurtle(game.tcturtle.TurtleParent):
         self.turn_towards()
 
         # Shoot if facing opponent, there is line of sight, and close enough
-        if (self.can_shoot == True and
-            abs(self.relative_heading_towards()) <= 5 and
-            self.line_of_sight() == True and
-            self.distance() <= self.missile_range):
+        if (self.can_shoot and abs(self.relative_heading_towards()) <= 5 and
+            self.line_of_sight() and self.distance() <= self.missile_range):
             self.shoot()

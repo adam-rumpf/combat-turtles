@@ -81,15 +81,14 @@ class CombatTurtle(game.tcturtle.TurtleParent):
         
         # Determine behavior based on whether there is line of sight and the
         # opponent is close enough to shoot at
-        if (self.line_of_sight() == True and
-            self.distance() <= self.shoot_dist):
+        if self.line_of_sight() and self.distance() <= self.shoot_dist:
             # If there is a clear shot, turn towards opponent and shoot
             
             # Turn towards opponent
             self.turn_towards()
             
             # Shoot if able
-            if self.can_shoot == True:
+            if self.can_shoot:
                 self.shoot()
         else:
             # If there is no clear shot, attempt to move to goal coordinate

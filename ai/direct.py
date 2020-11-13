@@ -86,7 +86,6 @@ class CombatTurtle(game.tcturtle.TurtleParent):
             self.backward()
 
         # Shoot if facing opponent and there is line of sight
-        if (self.can_shoot == True and
-            abs(self.relative_heading_towards()) <= 10 and
-            self.line_of_sight() == True):
+        if (self.can_shoot and abs(self.relative_heading_towards()) <= 10 and
+            self.line_of_sight()):
             self.shoot()
