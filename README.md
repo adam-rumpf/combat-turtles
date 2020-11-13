@@ -68,7 +68,7 @@ See the included `_template.py` file in the `ai/` folder for a template which in
 * Import `game.tcturtle`, along with any modules required by your custom AI.
 * The submodule must define a `class` named `CombatTurtle` which extends `game.tcturtle.TurtleParent`.
 * The `class_name()`, `class_desc()`, and `class_shape()` static methods should all be overwritten to define the AI's name string, a brief description string, and an integer index for its shape (or a tuple of radii/angles to define a custom shape in polar coordinates). Note that the shape defines only how the turtle is displayed, and has no effect on the collision detection.
-* The `setup()` method should be overwritten with any special initialization code required by the AI (this method is called at the end of the object's `__init__()` method).
+* The `setup()` method should be overwritten with any special initialization code required by the AI. This method is called exactly once, before the first step event of the game.
 * The `step()` method should be overwritten with the AI's step event code (this method is called once per step event). This is likely to be the heart of your AI, as it defines all of the decisions that your turtle makes within a step.
 
 ### Example Submodule

@@ -232,9 +232,6 @@ class TurtleParent:
         # Initialize list of currently-active missiles shot by this turtle
         self._missiles = []
 
-        # Call setup function (contains setup code for specific submodule)
-        self.setup()
-
     #-------------------------------------------------------------------------
 
     def __str__(self):
@@ -918,6 +915,10 @@ class TurtleParent:
         is to prevent the user from having to overload the constructor in
         their own submodule, in which case they would need to replicate its
         argument list and attribute definitions.
+        
+        Note that, for technical reasons, this is actually called by the main
+        game driver before the first step event rather than being called
+        within this object's __init__ method.
         """
 
         pass

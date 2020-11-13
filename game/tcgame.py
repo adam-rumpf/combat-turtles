@@ -139,6 +139,12 @@ class TurtleCombatGame:
             self.root.bind("<space>", lambda e : self.p2._keyboard_shoot())
 
         self.root.update()
+        
+        # Run AI setup code
+        if self.p1 != None:
+            self.p1.setup()
+        if self.p2 != None:
+            self.p2.setup()
 
         # Begin game (after a delay, to allow the arena to initialize)
         self.iteration = 0 # number of steps that the game has gone through

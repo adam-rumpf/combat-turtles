@@ -32,7 +32,7 @@ Specifically, all of the following must be included in a valid AI submodule:
 
 4. The submodule should overwrite the parent class' setup() method. This is
     optional, but should include any special initialization code required by
-    your AI, and is run at the end of the turtle object's initialization.
+    your AI, and is run before the first step event of the game.
 
 5. The submodule should overwrite the parent class' step() method. This method
     is called during each of the game's step events (which occur at a rate of
