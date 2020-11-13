@@ -4,6 +4,7 @@ import tkinter as tk
 import game.tcturtle
 import ai
 from .obj.arena import Arena
+from .obj.missile import Missile
 
 class TurtleCombatGame:
     """A class to act as the main driver for a game of Turtle Combat.
@@ -322,8 +323,16 @@ class TurtleCombatGame:
         """
 
         self.iteration += 1
+        
+        # Activate the step event of all missiles
+        if self.p1 != None:
+            for m in self.p1._missiles:
+                m._step()
+        if self.p2 != None:
+            for m in self.p2._missiles:
+                m._step()
 
-        # Activate the step event of all game objects
+        # Activate the step event of all turtles
         if self.p1 != None:
             self.p1._step()
         if self.p2 != None:

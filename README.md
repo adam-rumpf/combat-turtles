@@ -148,9 +148,8 @@ Specifically, the following actions are taken, in order, by the turtle during ea
 1. The turtle's user-defined `step()` method is called, during which movement and shooting instructions can be issued.
 1. The turtle turns as instructed.
 1. The turtle moves forward or backward as instructed.
-1. Any missiles currently active in the arena are moved at their constant speed.
 1. The turtle shoots if instructed to.
-1. All graphics update and all step counts are incremented.
+1. All missile objects move, all graphics update, and all step counts are incremented.
 
 Some arenas contain block objects as obstacles. Turtles cannot move through blocks, nor can they move outside of the arena's boundaries, and attempting to move into a block limits the turtle's movement (although they can still "slide along" the boundary of a block by attempting to move into it at an angle). Missiles immediately explode on contact with a block or an arena boundary. The `TurtleParent` class defines some [inherited methods](#query-methods) that can be used to determine whether a given coordinate is free or not and whether the turtle has a clear line of sight to a given coordinate.
 

@@ -1134,10 +1134,6 @@ class TurtleParent:
         # Move turtle
         self._move()
 
-        # Update all missiles
-        for m in self._missiles:
-            m._step()
-
         # Attempt to shoot
         self._shoot()
 
