@@ -84,7 +84,7 @@ class CombatTurtle(game.tcturtle.TurtleParent):
         return "DirectTurtle"
 
     def class_desc():
-        return "Moves directly towards opponent while ignoring obstacles."
+        return "Moves directly towards opponent and ignores obstacles."
 
     def class_shape():
         return 0
