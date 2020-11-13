@@ -1274,7 +1274,6 @@ class TurtleParent:
                     self._y -= overlap[2] - 1
                 else:
                     self._y += overlap[3] + 1
-                ### Double-check that this works due to the y-negation
     
     #=========================================================================
     # Turning methods
@@ -1761,17 +1760,3 @@ class TurtleParent:
             return -1
         else:
             return 0
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    

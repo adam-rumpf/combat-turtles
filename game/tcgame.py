@@ -114,6 +114,28 @@ class TurtleCombatGame:
                                               textvariable=self.p2_health,
                                               font=("Helvetica", 12))
         self.p2_health_display.grid(column=2, row=1, padx=8, sticky="N")
+        
+        # Set up listeners for keyboard events (for KeyboardTurtle AI)
+        if class1 == "ai.keyboard.CombatTurtle":
+            self.root.bind("<Up>", lambda e : self.p1._keyboard_move(1))
+            self.root.bind("w", lambda e : self.p1._keyboard_move(1))
+            self.root.bind("<Down>", lambda e : self.p1._keyboard_move(-1))
+            self.root.bind("s", lambda e : self.p1._keyboard_move(-1))
+            self.root.bind("<Left>", lambda e : self.p1._keyboard_turn(1))
+            self.root.bind("a", lambda e : self.p1._keyboard_turn(1))
+            self.root.bind("<Right>", lambda e : self.p1._keyboard_turn(-1))
+            self.root.bind("d", lambda e : self.p1._keyboard_turn(-1))
+            self.root.bind("<space>", lambda e : self.p1._keyboard_shoot())
+        if class2 == "ai.keyboard.CombatTurtle":
+            self.root.bind("<Up>", lambda e : self.p2._keyboard_move(1))
+            self.root.bind("w", lambda e : self.p2._keyboard_move(1))
+            self.root.bind("<Down>", lambda e : self.p2._keyboard_move(-1))
+            self.root.bind("s", lambda e : self.p2._keyboard_move(-1))
+            self.root.bind("<Left>", lambda e : self.p2._keyboard_turn(1))
+            self.root.bind("a", lambda e : self.p2._keyboard_turn(1))
+            self.root.bind("<Right>", lambda e : self.p2._keyboard_turn(-1))
+            self.root.bind("d", lambda e : self.p2._keyboard_turn(-1))
+            self.root.bind("<space>", lambda e : self.p2._keyboard_shoot())
 
         self.root.update()
 
