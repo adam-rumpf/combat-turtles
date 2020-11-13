@@ -2,8 +2,8 @@
 
 # Title: DrunkenTurtle
 # Author: Adam Rumpf
-# Version: 1.0.0
-# Date: 11/12/2020
+# Version: 1.0.1
+# Date: 11/13/2020
 
 import math
 import random
