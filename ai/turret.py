@@ -1,6 +1,6 @@
 # Built-In Example AI
 
-# Title: DirectTurtle
+# Title: TurretTurtle
 # Author: Adam Rumpf
 # Version: 1.0.0
 # Date: 11/12/2020
@@ -8,11 +8,10 @@
 import game.tcturtle
 
 class CombatTurtle(game.tcturtle.TurtleParent):
-    """Direct combat turtle.
+    """Turret combat turtle.
 
-    Its main strategy is to try to move directly towards the opponent, firing
-    missiles when it has clear line of sight. It does not pay much attention
-    to obstacles.
+    Stays completely while turning to face the opponent turtle, shooting when
+    within range.
     """
 
     #-------------------------------------------------------------------------
@@ -22,7 +21,7 @@ class CombatTurtle(game.tcturtle.TurtleParent):
         Static method to return the name of the Combat Turtle AI.
         """
 
-        return "DirectTurtle"
+        return "TurretTurtle"
 
     #-------------------------------------------------------------------------
 
@@ -31,7 +30,7 @@ class CombatTurtle(game.tcturtle.TurtleParent):
         Static method to return a description of the Combat Turtle AI.
         """
 
-        return "Moves directly towards opponent."
+        return "Stays still and shoots opponent when close enough."
 
     #-------------------------------------------------------------------------
 
@@ -58,7 +57,7 @@ class CombatTurtle(game.tcturtle.TurtleParent):
         east.
         """
 
-        return 0
+        return 3
 
     #=========================================================================
 
@@ -79,14 +78,9 @@ class CombatTurtle(game.tcturtle.TurtleParent):
         # Turn towards opponent
         self.turn_towards()
 
-        # Move towards opponent (or away if too close)
-        if self.distance() > 4*self.missile_radius:
-            self.forward()
-        else:
-            self.backward()
-
-        # Shoot if facing opponent and there is line of sight
+        # Shoot if facing opponent, there is line of sight, and close enough
         if (self.can_shoot == True and
-            abs(self.relative_heading_towards()) <= 10 and
-            self.line_of_sight() == True):
+            abs(self.relative_heading_towards()) <= 5 and
+            self.line_of_sight() == True and
+            self.distance() <= self.missile_range):
             self.shoot()

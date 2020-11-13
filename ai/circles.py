@@ -56,7 +56,7 @@ class CombatTurtle(game.tcturtle.TurtleParent):
         east.
         """
 
-        return 3
+        return 6
 
     #=========================================================================
 

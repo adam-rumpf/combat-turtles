@@ -6,14 +6,16 @@
 # Date: 11/12/2020
 
 import math
+import random
 import game.tcturtle
 
 class CombatTurtle(game.tcturtle.TurtleParent):
     """Drunken combat turtle.
-
-    This is a slightly less randomized version of the random turtle. Its
-    movement is mostly randomized, but biased towards moving in the opponent's
-    direction, and it shoots only when pointing towards the opponent.
+    
+    This is a variant of DirectTurtle whose behavior is slightly
+    unpredictable. It generally moves towards its opponent, but its target
+    heading and approach distance vary sinusoidally over time, and its
+    decisions about whether to shoot are slightly randomized.
     """
 
     #-------------------------------------------------------------------------
@@ -68,7 +70,13 @@ class CombatTurtle(game.tcturtle.TurtleParent):
         Initialization code for Combat Turtle.
         """
 
-        pass
+        # Define parameters for variations
+        self.wander_amp = 15 # amplitude of sinusoidal wandering noise (deg)
+        self.wander_wl = 43 # wavelength of sinusoidal wandering noise (steps)
+        self.approach_amp = 1.5*self.missile_radius # amplitude of sinusoidal
+                                                    # approach radius
+        self.approach_wl = 81 # wavelength of sinusoidal approach radius
+        self.shoot_prob = 0.1 # probability to shoot when the option exists
 
     #-------------------------------------------------------------------------
 
@@ -77,4 +85,28 @@ class CombatTurtle(game.tcturtle.TurtleParent):
         Step event code for Combat Turtle.
         """
 
-        pass
+        # Get direction towards opponent and add sinusoidal noise
+        dir = self.relative_heading()
+        dir += self.wander_amp*math.sin((2*math.pi*self.time)/self.wander_wl)
+        
+        # Turn towards the specified heading
+        self.turn_towards(dir)
+        
+        # Determine minimum approach distance by adding noise
+        dist = 4*self.missile_radius
+        dist += self.approach_amp*math.sin((2*math.pi*self.time)
+                                           /self.approach_wl)
+
+        # Move towards opponent (or away if too close)
+        if self.distance() > dist:
+            self.forward()
+        else:
+            self.backward()
+
+        # Shoot if facing opponent and there is line of sight
+        if (self.can_shoot == True and
+            abs(self.relative_heading_towards()) <= 10 and
+            self.line_of_sight() == True):
+            # Roll for random chance to shoot
+            if random.random() < self.shoot_prob:
+                self.shoot()
