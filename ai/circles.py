@@ -1,12 +1,16 @@
-"""Defines a test CombatTurtle object that simply moves in circles."""
+# Built-In Example AI
 
-import math
+# Title: CircleTurtle
+# Author: Adam Rumpf
+# Version: 1.0.0
+# Date: 11/12/2020
+
 import game.tcturtle
 
 class CombatTurtle(game.tcturtle.TurtleParent):
     """Test circular combat turtle.
 
-    This turtle should simply travel in circles and periodically shoot.
+    This turtle simply travels in circles and periodically shoots.
     """
 
     #-------------------------------------------------------------------------
@@ -70,12 +74,9 @@ class CombatTurtle(game.tcturtle.TurtleParent):
     def step(self):
         """CombatTurtle.setup() -> None
         Step event code for Combat Turtle.
-
-        This turtle's behavior is completely constant and consists of simply
-        moving forward while turning, shooting when able.
         """
 
-        self.fd(self.spd)
-        self.lt(self.turn_spd)
+        self.forward(self.spd)
+        self.left(self.turn_spd)
         if self.can_shoot:
             self.shoot()

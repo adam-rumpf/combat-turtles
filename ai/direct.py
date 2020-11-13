@@ -1,6 +1,10 @@
-"""Defines a direct CombatTurtle object."""
+# Built-In Example AI
 
-import math
+# Title: DirectTurtle
+# Author: Adam Rumpf
+# Version: 1.0.0
+# Date: 11/12/2020
+
 import game.tcturtle
 
 class CombatTurtle(game.tcturtle.TurtleParent):
@@ -60,7 +64,7 @@ class CombatTurtle(game.tcturtle.TurtleParent):
 
     def setup(self):
         """CombatTurtle.setup() -> None
-        Initialization code for direct Combat Turtle.
+        Initialization code for Combat Turtle.
         """
 
         pass
@@ -69,7 +73,7 @@ class CombatTurtle(game.tcturtle.TurtleParent):
 
     def step(self):
         """CombatTurtle.setup() -> None
-        Step event code for direct Combat Turtle.
+        Step event code for Combat Turtle.
         """
 
         # Turn towards opponent

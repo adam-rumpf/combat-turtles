@@ -1,132 +1,130 @@
+"""This file is meant to be used as a template for writing your own combat
+turtle AI submodules. It includes the minimal set of statements required to
+define a valid AI submodule. See the other files included in this folder for
+full examples of simple AI submodules, as well as the Readme for a full
+explanation of how the game works. Online documentation can be found in this
+project's GitHub repository at: https://github.com/adam-rumpf/combat-turtles
+
+To create a custom combat turtle AI, create a new .py file in the ai/ folder
+with a name that does not begin with an underscore (_) (file names beginning
+with an underscore are ignored by the main game driver). The minimal program
+contents for defining a valid AI are included in this template file, but to
+summarize, the submodule must define a class which extends the included
+combat turtle parent class and overwrites several of its key methods.
+
+Specifically, all of the following must be included in a valid AI submodule:
+
+1. The submodule must import the combat turtle parent class by using the
+    following import statement:
+        import game.tcturtle
+
+2. The submodule must define a class called "CombatTurtle" which extends the
+    parent class by using the following class definition:
+        class CombatTurtle(game.tcturtle.TurtleParent):
+
+3. The submodule must overwrite three of the parent class' static methods,
+    including all of the following:
+        class_name() -- returns a name string for the AI
+        class_desc() -- returns a brief description string for the AI
+        class_shape() -- returns either an integer index or a radial
+                        coordinate tuple for defining the shape of the turtle
+                        to be drawn in-game (see below for details)
+
+4. The submodule should overwrite the parent class' setup() method. This is
+    optional, but should include any special initialization code required by
+    your AI, and is run at the end of the turtle object's initialization.
+
+5. The submodule should overwrite the parent class' step() method. This method
+    is called during each of the game's step events (which occur at a rate of
+    approximately 30 steps/second) and is likely where the bulk of your AI's
+    code will go, as it defines the turtle's actions during the course of the
+    game.
+
+The parent class defines a large number of public attributes and methods for
+use in subclass design. Brief descriptions of the available attributes and
+methods are included below. See the Readme for more detailed descriptions, or
+see the docstrings in the parent class' file in game/tcturtle.py.
+
+DO NOT ATTEMPT TO ACCESS OR OVERWRITE ANY PARENT CLASS MEMBERS NOT ON THIS
+LIST! Doing so could break the game, or could give your turtle an unfair
+advantage by circumventing the rules.
+
+The following read-only attributes can be used to access game constants:
+    max_speed -- maximum linear speed of a turtle (px/step)
+    max_turn_speed -- maximum turning speed of a turtle (deg/step)
+    shoot_delay -- cooldown period (steps) between missile shots
+    missile_speed -- constant linear speed of a missile (px/step)
+    missile_range -- maximum range of a missile (px)
+    missile_proximity -- trigger proximity of a missile (px)
+    missile_radius -- explosive radius of a missile (px)
+    missile_damage -- damage dealt by a missile explosion (hp)
+    arena_left -- minimum x-coordinate of arena
+    arena_right -- maximum x-coordinate of arena
+    arena_bottom -- minimum y-coordinate of arena
+    arena_top -- maximum y-coordinate of arena
+
+The following read-only attributes can be used to access the turtle's own
+status:
+    x -- current x-coordinate (px)
+    y -- current y-coordinate (px)
+    position -- current coordinate tuple (px, px)
+    heading -- current heading (deg) normalized to (-180,180]
+    speed -- current linear speed (px/step)
+    turn_speed -- current turning speed (deg/step)
+    health -- current remaining health (hp)
+    cooldown -- current cooldown before another missile can be fired (steps)
+    can_shoot -- whether or not the turtle is currently able to shoot
+    time -- number of steps that have passed since the game began
+
+The following read-only attributes can be used to access the opponent turtle's
+status (as of the end of the previous step):
+    other_x -- opponent's previous x-coordinate (px)
+    other_y -- opponent's previous y-coordinate (px)
+    other_position -- opponent's previous coordinate tuple (px, px)
+    other_heading -- opponent's previous heading (deg) normalized to
+        (-180,180]
+    other_speed -- opponent's previous linear speed (px/step)
+    other_turn_speed -- opponent's previous turning speed (deg/step)
+    other_health -- opponent's previous health (hp)
+
+The following methods should be used to instruct the turtle to take actions:
+    forward([rate]) -- moves forward in current direction at a given fraction
+        of its maximum speed (aliases: forward, fd)
+    backward([rate]) -- moves backward in current direction at a given
+        fraction of its maximum speed (aliases: backward, back, bk)
+    left([rate]) -- turns counterclockwise at a given fraction of its maximum
+        turning speed (aliases: left, lt)
+    right([rate]) -- turns clockwise at a given fraction of its maximum
+        turning speed (aliases: right, rt)
+    turn_towards([args]) -- turns as far as possible towards a given target
+        either at maximum turning speed or exactly enough to face the target
+        exactly (aliases: turn_towards, turn_towards, turnto)
+    shoot() -- fire missile in current direction and set cooldown to prevent
+        shooting again for a set number of steps (aliases: shoot, fire)
+
+The following methods should be used to gather information about the current
+state of the game:
+    distance([args]) -- returns distance between a given pair of coordinates
+        (px) (aliases: distance, dist)
+    relative_position([target]) -- returns the relative position of a target
+          relative to this turtle (px, px) (aliases: relative_position,
+          relpos)
+    relative_heading([target]) -- returns the heading from this turtle to a
+          target (deg) (aliases: relative_heading, relhead)
+    relative_heading_towards([target]) -- returns the smallest heading change
+          required to turn this turtle towards a target (deg) (aliases:
+          relative_heading_twards, relative_heading_toward, towards, toward)
+    free_space(coord) -- returns whether a given coordinate is free of
+          obstacles (aliases: free_space, free)
+    line_of_sight([target]) -- returns whether there is a direct line of sight
+          between this turtle and a target (aliases: line_of_sight, los)
+"""
+
 # Title: ### AI name ###
 # Author: ### Author name ###
 # Version: ### major.minor[.build[.revision]] ###
 # Date: ### MM/DD/YYYY ###
 
-# This file is meant to be used as a template for writing your own combat
-# turtle AI submodules. It includes the minimal set of statements required to
-# define a valid AI submodule. See the other files included in this folder for
-# full examples of simple AI submodules, as well as the Readme for a full
-# explanation of how the game works. Online documentation can be found in this
-# project's GitHub repository at: https://github.com/adam-rumpf/combat-turtles
-#
-# To create a custom combat turtle AI, create a new .py file in the ai/ folder
-# with a name that does not begin with an underscore (_) (file names beginning
-# with an underscore are ignored by the main game driver). The minimal program
-# contents for defining a valid AI are included in this template file, but to
-# summarize, the submodule must define a class which extends the included
-# combat turtle parent class and overwrites several of its key methods.
-#
-# Specifically, all of the following must be included in a valid AI submodule:
-#
-# 1. The submodule must import the combat turtle parent class by using the
-#    following import statement:
-#        import game.tcturtle
-#
-# 2. The submodule must define a class called "CombatTurtle" which extends the
-#    parent class by using the following class definition:
-#        class CombatTurtle(game.tcturtle.TurtleParent):
-#
-# 3. The submodule must overwrite three of the parent class' static methods,
-#    including all of the following:
-#        class_name() -- returns a name string for the AI
-#        class_desc() -- returns a brief description string for the AI
-#        class_shape() -- returns either an integer index or a radial
-#                         coordinate tuple for defining the shape of the
-#                         turtle to be drawn in-game (see below for details)
-#
-# 4. The submodule should overwrite the parent class' setup() method. This is
-#    optional, but should include any special initialization code required by
-#    your AI, and is run at the end of the turtle object's initialization.
-#
-# 5. The submodule should overwrite the parent class' step() method. This
-#    method is called during each of the game's step events (which occur at a
-#    rate of approximately 30 steps/second) and is likely where the bulk of
-#    your AI's code will go, as it defines the turtle's actions during the
-#    course of the game.
-#
-# The parent class defines a large number of public attributes and methods for
-# use in subclass design. Brief descriptions of the available attributes and
-# methods are included below. See the Readme for more detailed descriptions,
-# or see the docstrings in the parent class' file in game/tcturtle.py.
-#
-# DO NOT ATTEMPT TO ACCESS OR OVERWRITE ANY PARENT CLASS MEMBERS NOT ON THIS
-# LIST! Doing so could break the game, or could give your turtle an unfair
-# advantage by circumventing the rules.
-#
-# The following read-only attributes can be used to access game constants:
-#     max_speed -- maximum linear speed of a turtle (px/step)
-#     max_turn_speed -- maximum turning speed of a turtle (deg/step)
-#     shoot_delay -- cooldown period (steps) between missile shots
-#     missile_speed -- constant linear speed of a missile (px/step)
-#     missile_range -- maximum range of a missile (px)
-#     missile_proximity -- trigger proximity of a missile (px)
-#     missile_radius -- explosive radius of a missile (px)
-#     missile_damage -- damage dealt by a missile explosion (hp)
-#     arena_left -- minimum x-coordinate of arena
-#     arena_right -- maximum x-coordinate of arena
-#     arena_bottom -- minimum y-coordinate of arena
-#     arena_top -- maximum y-coordinate of arena
-#
-# The following read-only attributes can be used to access the turtle's own
-# status:
-#     x -- current x-coordinate (px)
-#     y -- current y-coordinate (px)
-#     position -- current coordinate tuple (px, px)
-#     heading -- current heading (deg) normalized to (-180,180]
-#     speed -- current linear speed (px/step)
-#     turn_speed -- current turning speed (deg/step)
-#     health -- current remaining health (hp)
-#     cooldown -- current cooldown before another missile can be fired (steps)
-#     can_shoot -- whether or not the turtle is currently able to shoot
-#     time -- number of steps that have passed since the game began
-#
-# The following read-only attributes can be used to access the opponent
-# turtle's status (as of the end of the previous step):
-#     other_x -- opponent's previous x-coordinate (px)
-#     other_y -- opponent's previous y-coordinate (px)
-#     other_position -- opponent's previous coordinate tuple (px, px)
-#     other_heading -- opponent's previous heading (deg) normalized to
-#         (-180,180]
-#     other_speed -- opponent's previous linear speed (px/step)
-#     other_turn_speed -- opponent's previous turning speed (deg/step)
-#     other_health -- opponent's previous health (hp)
-#
-# The following methods should be used to instruct the turtle to take actions:
-#     forward([rate]) -- moves forward in current direction at a given
-#         fraction of its maximum speed (aliases: forward, fd)
-#     backward([rate]) -- moves backward in current direction at a given
-#         fraction of its maximum speed (aliases: backward, back, bk)
-#     left([rate]) -- turns counterclockwise at a given fraction of its
-#         maximum turning speed (aliases: left, lt)
-#     right([rate]) -- turns clockwise at a given fraction of its maximum
-#         turning speed (aliases: right, rt)
-#     turn_towards([args]) -- turns as far as possible towards a given target
-#         either at maximum turning speed or exactly enough to face the target
-#         exactly (aliases: turn_towards, turn_towards, turnto)
-#     shoot() -- fire missile in current direction and set cooldown to prevent
-#         shooting again for a set number of steps (aliases: shoot, fire)
-#
-# The following methods should be used to gather information about the current
-# state of the game:
-#     distance([args]) -- returns distance between a given pair of coordinates
-#         (px) (aliases: distance, dist)
-#     relative_position([target]) -- returns the relative position of a target
-#          relative to this turtle (px, px) (aliases: relative_position,
-#          relpos)
-#     relative_heading([target]) -- returns the heading from this turtle to a
-#          target (deg) (aliases: relative_heading, relhead)
-#     relative_heading_towards([target]) -- returns the smallest heading
-#          change required to turn this turtle towards a target (deg)
-#          (aliases: relative_heading_twards, relative_heading_toward,
-#          towards, toward)
-#     free_space(coord) -- returns whether a given coordinate is free of
-#          obstacles (aliases: free_space, free)
-#     line_of_sight([target]) -- returns whether there is a direct line of
-#          sight between this turtle and a target (aliases: line_of_sight,
-#          los)
-
-import math
 import game.tcturtle
 
 class CombatTurtle(game.tcturtle.TurtleParent):
@@ -147,6 +145,7 @@ class CombatTurtle(game.tcturtle.TurtleParent):
         """
 
         ### Replace the returned string with the turtle's name.
+
         return "TemplateTurtle"
 
     #-------------------------------------------------------------------------
@@ -160,6 +159,7 @@ class CombatTurtle(game.tcturtle.TurtleParent):
         """
 
         ### Replace the returned string with a one-line description.
+
         return "This is a template class that does nothing on its own."
 
     #-------------------------------------------------------------------------
@@ -206,6 +206,7 @@ class CombatTurtle(game.tcturtle.TurtleParent):
         """
 
         ### Place any desired initialization code here.
+
         pass
 
     #-------------------------------------------------------------------------
@@ -216,4 +217,5 @@ class CombatTurtle(game.tcturtle.TurtleParent):
         """
 
         ### Place any desired step event code here.
+
         pass

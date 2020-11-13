@@ -1,4 +1,9 @@
-"""Defines a drunken CombatTurtle object."""
+# Built-In Example AI
+
+# Title: DrunkenTurtle
+# Author: Adam Rumpf
+# Version: 1.0.0
+# Date: 11/12/2020
 
 import math
 import game.tcturtle

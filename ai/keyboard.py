@@ -1,3 +1,10 @@
+# Built-In AI
+
+# Title: KeyboardTurtle
+# Author: Adam Rumpf
+# Version: 1.0.0
+# Date: 11/12/2020
+
 # Note: This included AI should not be looked to as an example for your own AI
 # module design. In order to implement keyboard control it is necessary for
 # this class to overwrite some of the hidden TurtleParent class methods, which
