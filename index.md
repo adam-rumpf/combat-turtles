@@ -1,7 +1,3 @@
-# Combat Turtles
-
-A Python module for programming turtle robots to compete against each other in arena combat.
-
 _Combat Turtles_ is meant as a learning tool for intermediate-level [Python](https://www.python.org/) students. It defines a combat game in which programmable [turtle robots](https://en.wikipedia.org/wiki/Turtle_(robot)) move around a battlefield firing missiles to destroy each other. A parent class, `TurtleParent`, defines a variety of basic attributes and methods for these turtle robots, and an `ai/` folder contains a variety of subclasses of this parent class which define different turtle AIs. The main driver script `combatturtles.py` loads selected AI subclasses to compete against each other in combat.
 
 The player can create their own turtle AIs by extending the `TurtleParent` class and overwriting a few key methods. The game is run using discrete step events (at a rate of approximately 30 steps/second), with each turtle defining its actions on a per-step basis. Custom AI submodules (in the form of standalone `.py` files) can be added to the `ai/` directory to import the player's AI into the game. Several example and template subclasses are included in this directory to get the player started. See also the [documentation below](#instructions) for a detailed guide to writing custom AIs. Python students might enjoy competing against each other to see whom can come up with the best AI, while Python instructors might consider running a class tournament to encourage students to learn more about object-oriented programming.
@@ -12,7 +8,7 @@ The player can create their own turtle AIs by extending the `TurtleParent` class
 
 _Combat Turtles_ is an arena combat game in which two AI-controlled turtle robots fight to the death. Each turtle begins on one side of an arena full of obstacles. Turtles are free to move around the arena, negotiate obstacles, take cover, and aim and fire short-range explosive missiles at each other as their AIs dictate. The object of the game is to destroy the enemy turtle before it destroys you.
 
-<img src="https://raw.githubusercontent.com/adam-rumpf/combat-turtles/master/images/screenshot_wall.png" width="250"/> <img src="https://raw.githubusercontent.com/adam-rumpf/combat-turtles/master/images/screenshot_column.png" width="250"/> <img src="https://raw.githubusercontent.com/adam-rumpf/combat-turtles/master/images/screenshot_explosion.png" width="250"/>
+<img src="https://raw.githubusercontent.com/adam-rumpf/combat-turtles/master/images/screenshot_wall.png" width="180"/> <img src="https://raw.githubusercontent.com/adam-rumpf/combat-turtles/master/images/screenshot_column.png" width="180"/> <img src="https://raw.githubusercontent.com/adam-rumpf/combat-turtles/master/images/screenshot_explosion.png" width="180"/>
 
 Turtle AIs are written in Python and imported into the game by adding submodules to its `ai/` folder. Because the game, itself, is written entirely in Python, these AIs can be as simple or as complicated as the player wishes, and can make use of the full range of data structures and modules available in Python. A template and several example AI files are included in this distribution to give you a start, and a large number of built-in attributes and methods have been defined to make the process of AI design faster and easier. See the [instructions](#instructions) below for a complete guide.
 
@@ -84,7 +80,7 @@ class CombatTurtle(game.tcturtle.TurtleParent):
         return "DirectTurtle"
 
     def class_desc():
-        return "Moves directly towards opponent while ignoring obstacles."
+        return "Moves directly towards opponent and ignores obstacles."
 
     def class_shape():
         return 0
