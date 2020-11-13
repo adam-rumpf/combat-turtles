@@ -191,7 +191,7 @@ The following is a list of attributes which describe the turtle's own state.
 * `self.speed` -- Current speed (px/step). Note that a turtle's speed is reset to `0` at the beginning of each step and can only become nonzero after the turtle's [movement methods](#action-methods) have been called.
 * `self.turn_speed` -- Current turning speed (deg/step). Note that a turtle's turning speed is reset to `0` at the beginning of each step and can only become nonzero after the turtle's [turning methods](#action-methods) have been called.
 * `self.health` -- Current health (out of `100`).
-* `self.cooldown` -- Length of cooldown until this turtle can shoot again (steps). The turtle can shoot if and only if this values is `0`.
+* `self.cooldown` -- Length of cooldown until this turtle can shoot again (steps). The turtle can shoot if and only if this value is `0`.
 * `self.can_shoot` -- Whether this turtle is able to shoot (`True` if so, `False` if not). Equivalent to `self.cooldown == 0`.
 * `self.time` -- Number of steps that have passed since the beginning of the game. Begins at `0` and increments by `1` at the end of each step event.
 
