@@ -1242,6 +1242,10 @@ class TurtleParent:
         # Set new coordinates
         self._x += int(self.speed*math.cos(math.radians(self.heading)))
         self._y -= int(self.speed*math.sin(math.radians(self.heading)))
+        
+        # Bound coordinates to arena size
+        self._x = min(self.arena_right, max(self.arena_left, self._x))
+        self._y = min(self.arena_top, max(self.arena_bottom, self._y))
 
         # Check whether the destination intersects any blocks
         blocks = self._game.intersections((self.x, self.y))
