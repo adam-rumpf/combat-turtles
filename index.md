@@ -197,7 +197,7 @@ The following is a list of attributes which describe the turtle's own state.
 
 #### Opponent Attributes
 
-The following is a list of attributes which describe the opponent turtle's state. Both turtles act simultaneously during the step event, and so these attributes are based on the opponent's attributes as of the end of the previous step.
+The following is a list of attributes which describe the opponent turtle's state. Both turtles act simultaneously during the step event, and so these attributes are based on the opponent's attributes as of the end of the previous step (with the exception of the `self.other_cooldown` and `self.other_can_shoot` attributes, which are up-to-date for the current step)..
 
 * `self.other_x` -- Opponent's previous horizontal coordinate (px).
 * `self.other_y` -- Opponent's previous vertical coordinate (px).
@@ -206,6 +206,8 @@ The following is a list of attributes which describe the opponent turtle's state
 * `self.other_speed` -- Opponent's previous speed (px/step).
 * `self.other_turn_speed` -- Opponent's previous turning speed (deg/step).
 * `self.other_health` -- Opponent's previous health (out of `100`).
+* `self.other_cooldown` -- Length of cooldown until the opponent can shoot again (steps), as of the current step. The opponent can shoot if and only if this value is `0`.
+* `self.other_can_shoot` -- Whether the opponent is able to shoot during the current step (`True` if so, `False` if not). Equivalent to `self.other_cooldown == 0`.
 
 ### Built-In Methods
 
