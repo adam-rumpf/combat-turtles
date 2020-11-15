@@ -3,7 +3,8 @@ turtle AI submodules. It includes the minimal set of statements required to
 define a valid AI submodule. See the other files included in this folder for
 full examples of simple AI submodules, as well as the Readme for a full
 explanation of how the game works. Online documentation can be found in this
-project's GitHub repository at: https://github.com/adam-rumpf/combat-turtles
+project's GitHub repository at:
+    https://github.com/adam-rumpf/combat-turtles
 
 To create a custom combat turtle AI, create a new .py file in the ai/ folder
 with a name that does not begin with an underscore (_) (file names beginning
@@ -14,15 +15,15 @@ combat turtle parent class and overwrites several of its key methods.
 
 Specifically, all of the following must be included in a valid AI submodule:
 
-1. The submodule must import the combat turtle parent class by using the
+ 1. The submodule must import the combat turtle parent class by using the
     following import statement:
         import game.tcturtle
 
-2. The submodule must define a class called "CombatTurtle" which extends the
+ 2. The submodule must define a class called "CombatTurtle" which extends the
     parent class by using the following class definition:
         class CombatTurtle(game.tcturtle.TurtleParent):
 
-3. The submodule must overwrite three of the parent class' static methods,
+ 3. The submodule must overwrite three of the parent class' static methods,
     including all of the following:
         class_name() -- returns a name string for the AI
         class_desc() -- returns a brief description string for the AI
@@ -30,11 +31,11 @@ Specifically, all of the following must be included in a valid AI submodule:
                         coordinate tuple for defining the shape of the turtle
                         to be drawn in-game (see below for details)
 
-4. The submodule should overwrite the parent class' setup() method. This is
+ 4. The submodule should overwrite the parent class' setup() method. This is
     optional, but should include any special initialization code required by
     your AI, and is run before the first step event of the game.
 
-5. The submodule should overwrite the parent class' step() method. This method
+ 5. The submodule should overwrite the parent class' step() method. This method
     is called during each of the game's step events (which occur at a rate of
     approximately 30 steps/second) and is likely where the bulk of your AI's
     code will go, as it defines the turtle's actions during the course of the
