@@ -2,8 +2,8 @@
 
 # Title: WandererTurtle
 # Author: Adam Rumpf
-# Version: 1.0.1
-# Date: 11/13/2020
+# Version: 1.0.2
+# Date: 11/14/2020
 
 import random
 import game.tcturtle
@@ -129,7 +129,7 @@ class CombatTurtle(game.tcturtle.TurtleParent):
         """
         
         rh = random.randrange(-179, 181) # random heading
-        rt = random.randrange(5, 30) # random timer
+        rt = random.randrange(5, 31) # random timer
         
         return (rh, rt)
         

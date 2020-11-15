@@ -2,12 +2,12 @@
 
 # Title: KeyboardTurtle
 # Author: Adam Rumpf
-# Version: 1.0.0
-# Date: 11/12/2020
+# Version: 1.0.1
+# Date: 11/14/2020
 
 # Note: This included AI should not be looked to as an example for your own AI
 # module design. In order to implement keyboard control it is necessary for
-# this class to overwrite some of the hidden TurtleParent class methods, which
+# this class to override some of the hidden TurtleParent class methods, which
 # you SHOULD NOT do in your own custom AI modules.
 
 import math
