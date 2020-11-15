@@ -74,7 +74,8 @@ class TurtleParent:
         time -- number of steps that have passed since the game began
     
     The following read-only attributes can be used to access the opponent
-    turtle's status (as of the end of the previous step):
+    turtle's status (as of the end of the previous step, except for the
+    cooldown count, which is current):
         other_x -- opponent's previous x-coordinate (px)
         other_y -- opponent's previous y-coordinate (px)
         other_position -- opponent's previous coordinate tuple (px, px)
@@ -83,6 +84,8 @@ class TurtleParent:
         other_speed -- opponent's previous linear speed (px/step)
         other_turn_speed -- opponent's previous turning speed (deg/step)
         other_health -- opponent's previous health (hp)
+        other_cooldown -- opponent's current cooldown length (steps)
+        other_can_shoot -- whether the opponent can currently shoot
     
     The following methods should be used to instruct the turtle to take
     actions:
@@ -898,6 +901,52 @@ class TurtleParent:
 
         pass
     
+    #-------------------------------------------------------------------------
+
+    @property
+    def other_cooldown(self):
+        """TurtleParent.other_cooldown -> int
+        Returns the (current) cooldown of the opponent Combat Turtle.
+
+        User visibility:
+            should call -- yes
+            should overwrite -- no
+        """
+
+        if self._other == None:
+            return None
+
+        return self._other_cooldown
+
+    @other_cooldown.setter
+    def other_cooldown(self, value):
+        """Do-nothing other cooldown setter to prevent overwriting."""
+
+        pass
+    
+    #-------------------------------------------------------------------------
+
+    @property
+    def other_can_shoot(self):
+        """TurtleParent.other_can_shoot -> int
+        Returns whether the opponent Combat Turtle can currently shoot.
+
+        User visibility:
+            should call -- yes
+            should overwrite -- no
+        """
+
+        if self._other == None:
+            return None
+
+        return self.other_cooldown <= 0
+
+    @other_can_shoot.setter
+    def other_can_shoot(self, value):
+        """Do-nothing other shoot status setter to prevent overwriting."""
+
+        pass
+    
     #=========================================================================
     # Placeholder methods (for overwriting in subclasses)
     #=========================================================================
@@ -1170,6 +1219,7 @@ class TurtleParent:
         self._other_prev_speed = self._other.speed
         self._other_prev_turn_speed = self._other.turn_speed
         self._other_prev_health = self._other.health
+        self._other_cooldown = max(0, self._other.cooldown - 1)
     
     #=========================================================================
     # Linear movement methods

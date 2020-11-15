@@ -77,7 +77,8 @@ status:
     time -- number of steps that have passed since the game began
 
 The following read-only attributes can be used to access the opponent turtle's
-status (as of the end of the previous step):
+status (as of the end of the previous step, except for the cooldown count,
+which is current):
     other_x -- opponent's previous x-coordinate (px)
     other_y -- opponent's previous y-coordinate (px)
     other_position -- opponent's previous coordinate tuple (px, px)
@@ -86,6 +87,8 @@ status (as of the end of the previous step):
     other_speed -- opponent's previous linear speed (px/step)
     other_turn_speed -- opponent's previous turning speed (deg/step)
     other_health -- opponent's previous health (hp)
+    other_cooldown -- opponent's current cooldown length (steps)
+    other_can_shoot -- whether the opponent can currently shoot
 
 The following methods should be used to instruct the turtle to take actions:
     forward([rate]) -- moves forward in current direction at a given fraction
