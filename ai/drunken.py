@@ -2,8 +2,8 @@
 
 # Title: DrunkenTurtle
 # Author: Adam Rumpf
-# Version: 1.0.1
-# Date: 11/13/2020
+# Version: 1.1.0
+# Date: 11/20/2020
 
 import math
 import random
@@ -86,7 +86,7 @@ class CombatTurtle(game.tcturtle.TurtleParent):
         """
 
         # Get direction towards opponent and add sinusoidal noise
-        dir = self.relative_heading()
+        dir = self.heading_towards()
         dir += self.wander_amp*math.sin((2*math.pi*self.time)/self.wander_wl)
         
         # Turn towards the specified heading

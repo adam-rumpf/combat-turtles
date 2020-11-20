@@ -113,11 +113,12 @@ state of the game:
     relative_position([target]) -- returns the relative position of a target
           relative to this turtle (px, px) (aliases: relative_position,
           relpos)
-    relative_heading([target]) -- returns the heading from this turtle to a
-          target (deg) (aliases: relative_heading, relhead)
+    heading_towards([target]) -- returns the heading from this turtle to a
+          target (deg) (aliases: heading_towards, heading_toward, towards,
+          toward)
     relative_heading_towards([target]) -- returns the smallest heading change
           required to turn this turtle towards a target (deg) (aliases:
-          relative_heading_twards, relative_heading_toward, towards, toward)
+          relative_heading_twards, relative_heading_toward)
     free_space(coord) -- returns whether a given coordinate is free of
           obstacles (aliases: free_space, free)
     line_of_sight([target]) -- returns whether there is a direct line of sight

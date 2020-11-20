@@ -4,7 +4,7 @@ A Python module for programming turtle robots to compete against each other in a
 
 _Combat Turtles_ is meant as a learning tool for intermediate-level [Python](https://www.python.org/) students. It defines a combat game in which programmable [turtle robots](https://en.wikipedia.org/wiki/Turtle_(robot)) move around a battlefield firing missiles to destroy each other. A parent class, `TurtleParent`, defines a variety of basic attributes and methods for these turtle robots, and an `ai/` folder contains a variety of subclasses of this parent class which define different turtle AIs. The main driver script `combatturtles.py` loads selected AI subclasses to compete against each other in combat.
 
-The player can create their own turtle AIs by extending the `TurtleParent` class and overwriting a few key methods. The game is run using discrete step events (at a rate of approximately 30 steps/second), with each turtle defining its actions on a per-step basis. Custom AI submodules (in the form of standalone `.py` files) can be added to the `ai/` directory to import the player's AI into the game. Several example and template subclasses are included in this directory to get the player started. See also the [documentation below](#instructions) for a detailed guide to writing custom AIs. Python students might enjoy competing against each other to see whom can come up with the best AI, while Python instructors might consider running a class tournament to encourage students to learn more about object-oriented programming.
+The player can create their own turtle AIs by extending the `TurtleParent` class and overwriting a few key methods. The game is run using discrete step events (at a rate of approximately 30 steps/second), with each turtle defining its actions on a per-step basis. Custom AI submodules (in the form of standalone `.py` files) can be dropped into the `ai/` directory to import the player's AI into the game. Several example and template subclasses are included in this directory to get the player started. See also the [documentation below](#instructions) for a detailed guide to writing custom AIs. Python students might enjoy competing against each other to see whom can come up with the best AI, while Python instructors might consider running a class tournament to encourage students to learn more about object-oriented programming.
 
 **This is a work in progress.** I am still in the process of adding features and fixing bugs, but if you are interested in playing with the latest public beta, please see the [releases](https://github.com/adam-rumpf/combat-turtles/releases) page.
 
@@ -253,16 +253,16 @@ The following is a list of methods which return information about the current st
 * `self.relative_position([target])` -- Calculates the relative position from this turtle to a target coordinate (px, px), meaning the change in this turtle's position required to reach the target coordinate.  
 If given no argument, the opponent's position is used.  
 Aliases: `relative_position`, `relpos`
-* `self.relative_heading([target])` -- Calculates the heading from this turtle to a target coordinate (deg), meaning the direction required to move from this turtle's position to the target coordinate. Headings are normalized to the interval `(-180,180]` with `0` indicating east, `90` indicating north, `180` indicating west, and `-90` indicating south.  
+* `self.heading_towards([target])` -- Calculates the heading from this turtle to a target coordinate (deg), meaning the direction required to move from this turtle's position to the target coordinate. Headings are normalized to the interval `(-180,180]` with `0` indicating east, `90` indicating north, `180` indicating west, and `-90` indicating south.  
 Similar to `self.relative_heading_towards()`, but does not take this turtle's current heading into consideration.  
 If given no argument, the opponent's position is used.  
-Aliases: `relative_heading`, `relhead`
+Aliases: `heading_towards`, `heading_toward`, `towards`, `toward`
 * `self.relative_heading_towards([target])` -- Calculates the change in heading required to turn this turtle to face a target coordinate (deg), meaning the minimum angle that this turtle would need to turn in order to face the target. Positive headings indicate counterclockwise turning while negative headings indicate clockwise turning.  
-Similar to `self.relative_heading()`, but gives a heading relative to this turtle's current heading.  
+Similar to `self.heading_towards()`, but gives a heading relative to this turtle's current heading.  
 If given no argument, the opponent's position is used.  
-Aliases: `relative_heading_towards`, `relative_heading_toward`, `towards`, `toward`
+Aliases: `relative_heading_towards`, `relative_heading_toward`
 * `self.free_space(coord)` -- Determines whether or not the given coordinate is free of obstacles (`True` if inside the arena and free of obstacles, `False` if not). The coordinates for which this returns `True` are exactly the coordinates which turtles and missiles are allowed to occupy.  
 Aliases: `free_space`, `free`
-* `self.line_of_sight([target])` -- Determines whether or not there is a line of sight between this turtle and a target coordinate (`True` if so, `False` if not). A line of sight implies that, if this turtle were to immediately fire a missile while facing the specified coordinate, the missile would travel towards the target without obstruction from any block objects.  
+* `self.line_of_sight([target])` -- Determines whether or not there is a line of sight between this turtle and a target coordinate (`True` if so, `False` if not). A line of sight implies that, if this turtle were to immediately fire a missile while facing the specified coordinate, the missile would reach the target without obstruction from any block objects.  
 If given no argument, the opponent's position is used.  
 Aliases: `line_of_sight`, `los`

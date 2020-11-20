@@ -111,12 +111,12 @@ class TurtleParent:
         relative_position([target]) -- returns the relative position of a
             target relative to this turtle (px, px) (aliases:
             relative_position, relpos)
-        relative_heading([target]) -- returns the heading from this turtle to
-            a target (deg) (aliases: relative_heading, relhead)
+        heading_towards([target]) -- returns the heading from this turtle to
+            a target (deg) (aliases: heading_towards, heading_toward, towards,
+            toward)
         relative_heading_towards([target]) -- returns the smallest heading
             change required to turn this turtle towards a target (deg)
-            (aliases: relative_heading_twards, relative_heading_toward,
-            towards, toward)
+            (aliases: relative_heading_twards, relative_heading_toward)
         free_space(coord) -- returns whether a given coordinate is free of
             obstacles (aliases: free_space, free)
         line_of_sight([target]) -- returns whether there is a direct line of
@@ -1618,8 +1618,8 @@ class TurtleParent:
     
     #-------------------------------------------------------------------------
 
-    def relative_heading(self, target=None):
-        """TurtleParent.relative_heading([target]) -> int
+    def heading_towards(self, target=None):
+        """TurtleParent.heading_towards([target]) -> int
         Returns the heading (deg) towards a target coordinate.
 
         User visibility:
@@ -1654,7 +1654,9 @@ class TurtleParent:
         return int(math.degrees(Angle(math.atan2(-dy, dx))))
     
     # Set aliases
-    relhead = relative_heading
+    heading_toward = heading_towards
+    towards = heading_towards
+    toward = heading_towards
 
     #-------------------------------------------------------------------------
 
@@ -1683,15 +1685,13 @@ class TurtleParent:
         """
 
         # Calculate absolute heading towards target
-        ah = Angle(self.relative_heading(target), "degrees")
+        ah = Angle(self.heading_towards(target), "degrees")
 
         # Return difference in headings
         return int(ah - self.heading)
     
     # Set aliases
     relative_heading_toward = relative_heading_towards
-    towards = relative_heading_towards
-    toward = relative_heading_towards
     
     #-------------------------------------------------------------------------
     
@@ -1752,7 +1752,7 @@ class TurtleParent:
             target = self.other_position
         
         # Get heading towards target
-        rh = math.radians(self.relative_heading(target))
+        rh = math.radians(self.heading_towards(target))
         
         # Get initial signs of x- and y-direction differences
         sx = self._sign(target[0] - self.x) # x-direction sign
