@@ -3,7 +3,7 @@
 # Title: GridTurtle
 # Author: Adam Rumpf
 # Version: 1.0.0
-# Date: 11/12/2020
+# Date: 11/26/2020
 
 import game.tcturtle
 
@@ -64,7 +64,7 @@ class CombatTurtle(game.tcturtle.TurtleParent):
         east.
         """
 
-        return 2
+        return 4
 
     #=========================================================================
 
