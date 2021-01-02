@@ -25,7 +25,7 @@ In an effort to maintain portability it uses only modules from the [Python Stand
 ## Credits
 
 Combat Turtles  
-Copyright (c) 2020 Adam Rumpf  
+Copyright (c) 2021 Adam Rumpf  
 [adam-rumpf.github.io](https://adam-rumpf.github.io/)
 
 Source code released under MIT License  
