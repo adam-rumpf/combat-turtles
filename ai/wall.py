@@ -79,5 +79,13 @@ class CombatTurtle(game.tcturtle.TurtleParent):
         """CombatTurtle.setup() -> None
         Step event code for Combat Turtle.
         """
+        
+        # Outline:
+        # Turn and move towards the opponent as long as there's line of sight.
+        # Otherwise, attempt to move towards opponent while scanning ahead of self.
+        # If there's an obstacle, begin wall hugging behavior, which is based on scanning a point to left of self.
+        # As long as that point is free, turn right while moving forward until it becomes blocked for the first time.
+        # As long as that point is blocked, move forward.
+        # After sticking to a wall, turn left whenever the point to the turtle's left is unblocked.
 
         pass
