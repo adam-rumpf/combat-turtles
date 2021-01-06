@@ -3,20 +3,20 @@
 # Title: WallTurtle
 # Author: Adam Rumpf
 # Version: 1.0.0
-# Date: 11/26/2020
+# Date: 1/5/2021
 
+import math
 import game.tcturtle
 
 class CombatTurtle(game.tcturtle.TurtleParent):
     """Wall-hugging combat turtle.
 
-    A turtle that attempts to navigate around obstacles by hugging walls using
-    a left-hand rule.
+    A turtle that attempts to navigate around obstacles by "feeling" the walls
+    around it.
     
     When it has direct line of sight to the opponent, it moves directly
     towards it. Otherwise it moves towards the opponent until hitting a wall,
-    at which point it wraps around the wall by keeping its left side against
-    it.
+    at which point it attempts to turn so that the way ahead is free.
     """
 
     #-------------------------------------------------------------------------
@@ -71,7 +71,9 @@ class CombatTurtle(game.tcturtle.TurtleParent):
         Initialization code for Combat Turtle.
         """
 
-        pass
+        # Define the relative polar coordinates around the turtle to scan
+        self.nose_rel = (8, 0.0) # just ahead of turtle's front
+        self.hand_rel = (8, math.pi/2) # to left of turtle
 
     #-------------------------------------------------------------------------
 
@@ -80,12 +82,47 @@ class CombatTurtle(game.tcturtle.TurtleParent):
         Step event code for Combat Turtle.
         """
         
-        # Outline:
-        # Turn and move towards the opponent as long as there's line of sight.
-        # Otherwise, attempt to move towards opponent while scanning ahead of self.
-        # If there's an obstacle, begin wall hugging behavior, which is based on scanning a point to left of self.
-        # As long as that point is free, turn right while moving forward until it becomes blocked for the first time.
-        # As long as that point is blocked, move forward.
-        # After sticking to a wall, turn left whenever the point to the turtle's left is unblocked.
+        # Determine behavior based on whether there is line of sight
+        if (self.line_of_sight() == True):
+            # If there is line of sight, move directly towards opponent
+            
+            # Turn towards opponent
+            self.turn_towards()
+            
+            # Move towards opponent (or away if too close)
+            if self.distance() > 4*self.missile_radius:
+                self.forward()
+            else:
+                self.backward()
 
-        pass
+            # Shoot if facing opponent
+            if (self.can_shoot == True and
+                abs(self.relative_heading_towards()) <= 10):
+                self.shoot()
+
+        else:
+            # If no line of sight, attempt to navigate around obstacles
+            
+            # Calculate Cartesian coordinates of nose and hand
+            nose = ((self.x + self.nose_rel[0]*
+                     math.cos(math.radians(self.heading)+self.nose_rel[1])),
+                    (self.y - self.nose_rel[0]*
+                     math.sin(math.radians(self.heading)+self.nose_rel[1])))
+            hand = ((self.x + self.hand_rel[0]*
+                     math.cos(math.radians(self.heading)+self.hand_rel[1])),
+                    (self.y - self.hand_rel[0]*
+                     math.sin(math.radians(self.heading)+self.hand_rel[1])))
+            
+            # Determine behavior based on whether nose and hand are clear
+            if self.free_space(nose) == True:
+                # Move forward when clear ahead
+                self.forward()
+            else:
+                if self.free_space(hand) == True:
+                    # If free to left, turn left
+                    self.left()
+                    self.forward()
+                else:
+                    # If blocked ahead and to left, turn right
+                    self.right()
+                    self.forward()
