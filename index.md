@@ -6,7 +6,7 @@ _Combat Turtles_ is meant as a learning tool for intermediate-level [Python](htt
 
 The player can create their own turtle AIs by extending the `TurtleParent` class and overwriting a few key methods. The game is run using discrete step events (at a rate of approximately 30 steps/second), with each turtle defining its actions on a per-step basis. Custom AI submodules (in the form of standalone `.py` files) can be dropped into the `ai/` directory to import the player's AI into the game. Several example and template subclasses are included in this directory to get the player started. See also the [documentation below](#instructions) for a detailed guide to writing custom AIs. Python students might enjoy competing against each other to see whom can come up with the best AI, while Python instructors might consider running a class tournament to encourage students to learn more about object-oriented programming.
 
-The latest release can be found on this project's [itch.io](https://adam-rumpf.itch.io/combat-turtles) page or on the [releases](https://github.com/adam-rumpf/combat-turtles/releases) page.
+The latest release can be found on this project's [itch.io](https://adam-rumpf.itch.io/combat-turtles) page or on the [releases](https://github.com/adam-rumpf/combat-turtles/releases) page. See the author's notes for this project [here](https://adam-rumpf.github.io/programs/combat_turtles.html).
 
 ## Game Overview
 
