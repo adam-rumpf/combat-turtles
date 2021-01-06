@@ -28,7 +28,7 @@ class Block:
         Requires the following positional arguments:
             game (tcgame.TurtleCombatGame) -- game driver object
             left (int) -- smallest x-coordinate (px)
-            right (int) -- lartst x-coordinate (px)
+            right (int) -- largest x-coordinate (px)
             bottom (int) -- smallest y-coordinate (px)
             top (int) -- largest y-coordinate (px)
 

@@ -1,6 +1,7 @@
 """Defines the arena container class."""
 
 import math
+import random
 from .block import Block
 
 class Arena:
@@ -16,6 +17,7 @@ class Arena:
         2 -- four columns near corners
         3 -- wall with a central passage
         4 -- plus sign
+        5 -- randomized
     """
 
     #-------------------------------------------------------------------------
@@ -26,7 +28,7 @@ class Arena:
         """
 
         return ["Empty Arena", "Central Column Arena", "Corner Column Arena",
-                "Doorway Arena", "Plus-Shaped Arena"]
+                "Doorway Arena", "Plus-Shaped Arena", "Randomized Arena"]
 
     #-------------------------------------------------------------------------
 
@@ -117,6 +119,9 @@ class Arena:
         elif layout == 4:
             # Plus sign
             self._plus_blocks()
+        elif layout == 5:
+            # Randomized
+            self._random_blocks()
 
     #-------------------------------------------------------------------------
 
@@ -186,6 +191,62 @@ class Arena:
         self._blocks.append(Block(self.game, math.floor(self.size[0]/3),
                                   math.ceil(2*self.size[0]/3),
                                   (self.size[1]/2)-30, (self.size[1]/2)+30))
+    
+    #-------------------------------------------------------------------------
+
+    def _random_blocks(self):
+        """Arena._random_blocks() -> None
+        Generates a randomized arena.
+        
+        The randomized layout is made up of 3-7 blocks, arranged to have
+        2-fold rotational symmetry about the center, and prohibited from
+        intersecting the turtles' starting coordinates.
+        """
+        
+        # Initialize a random block height and width
+        h = random.randrange(10, 151)
+        w = random.randrange(10, 151)
+        
+        # Decide whether to include a central block
+        if random.random() < 0.5:
+        
+            # Add central block
+            self._blocks.append(Block(self.game, (self.size[0]/2)-w,
+                                (self.size[0]/2)+w, (self.size[1]/2)-h,
+                                (self.size[1]/2)+h))
+        
+        # Determine number of additional blocks on sides
+        num = random.randrange(1, 4)
+        
+        # Generate side blocks
+        iter = 0 # iteration counter
+        while iter < num:
+        
+            # Generate random dimensions and centers
+            h = random.randrange(10, 121)
+            w = random.randrange(10, 121)
+            cx = random.randrange(self.size[0]+1)
+            cy = random.randrange(self.size[1]+1)
+            
+            # Generate tentative blocks
+            self._blocks.append(Block(self.game, cx-w, cx+w, cy-h, cy+h))
+            self._blocks.append(Block(self.game, self.size[0]-cx-w,
+                                      self.size[0]-cx+w, self.size[1]-cy-h,
+                                      self.size[1]-cy+h))
+            
+            # Test whether the starting coordinates are free
+            if (self.blocked(self.get_p1_coords()) or
+                self.blocked(self.get_p2_coords())):
+                
+                # If not, delete the tentative blocks and retry
+                del self._blocks[-1]
+                del self._blocks[-1]
+                continue
+            
+            else:
+                
+                # Otherwise increment the counter
+                iter += 1
 
     #-------------------------------------------------------------------------
 
