@@ -4,6 +4,7 @@ Running this script automatically loads all necessary modules to play a game
 of Turtle Combat and then starts the game.
 """
 
+import argparse
 import inspect
 import game
 import ai
@@ -164,9 +165,31 @@ def _arena_table(arenas):
 
 #=============================================================================
 
-# Execute function (add optional arguments to streamline process)
-# tid1 -- player 1 ID
-# tid2 -- player 2 ID
-# aid -- arena ID
-# cutoff -- game time limit (steps)
-combat_turtles()
+# Define docstrings for command line usage
+_vers = """Combat Turtles v1.1.0
+Copyright (c) 2021 Adam Rumpf <adam-rumpf.github.io>
+Released under MIT License <github.com/adam-rumpf/combat-turtles>
+"""
+_desc = """Initializes a game of Combat Turtles. Command line arguments can be
+supplied to specify player AIs and the arena (see below for details). Excluding
+any of these arguments will prompt the user to specify them on startup.
+
+Note that the player AIs are indexed alphabetically, which may cause indices to
+change as new modules are added to the ai/ directory.
+"""
+_epil = """See full documentation online at
+<adam-rumpf.github.io/combat-turtles>
+"""
+
+# Initialize game (options can be set from command line)
+if __name__ == "__main__":
+
+    # Initialize argument parser
+    parser = argparse.ArgumentParser(description=_desc, epilog=_epil)
+
+    # Execute function (add optional arguments to streamline process)
+    # tid1 -- player 1 ID
+    # tid2 -- player 2 ID
+    # aid -- arena ID
+    # cutoff -- game time limit (steps)
+    combat_turtles()
