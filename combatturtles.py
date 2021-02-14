@@ -15,6 +15,11 @@ def combat_turtles(tid1=-1, tid2=-1, aid=-1, cutoff=-1):
     """combat_turtles() -> None
     Combat Turtles game driver.
 
+    If loading this package as a module this function should be used to
+    initiate a game of Combat Turtles. If running this package as a script (or
+    from the command line) this function is run automatically, with inputs
+    given by the command line.
+
     By default this function will present the user with options for the game
     setup, including which turtle AI modules to use and which arena layout to
     use. Optional keyword arguments can be used to automatically fill these
@@ -166,30 +171,43 @@ def _arena_table(arenas):
 #=============================================================================
 
 # Define docstrings for command line usage
-_vers = """Combat Turtles v1.1.0
+_vers = """
+Combat Turtles v1.1.0
 Copyright (c) 2021 Adam Rumpf <adam-rumpf.github.io>
 Released under MIT License <github.com/adam-rumpf/combat-turtles>
 """
-_desc = """Initializes a game of Combat Turtles. Command line arguments can be
-supplied to specify player AIs and the arena (see below for details). Excluding
-any of these arguments will prompt the user to specify them on startup.
+_desc = """
+Initializes a game of Combat Turtles. Command line arguments can be supplied to
+specify player AIs and the arena (see below for details). Excluding any of these
+arguments will prompt the user to specify them on startup.
 
 Note that the player AIs are indexed alphabetically, which may cause indices to
 change as new modules are added to the ai/ directory.
 """
-_epil = """See full documentation online at
-<adam-rumpf.github.io/combat-turtles>
-"""
+_epil = ("See full documentation online at " +
+         "<adam-rumpf.github.io/combat-turtles>")
 
 # Initialize game (options can be set from command line)
 if __name__ == "__main__":
 
     # Initialize argument parser
-    parser = argparse.ArgumentParser(description=_desc, epilog=_epil)
+    parser = argparse.ArgumentParser(description=_desc, epilog=_epil,
+                                     formatter_class=
+                                     argparse.RawDescriptionHelpFormatter)
 
-    # Execute function (add optional arguments to streamline process)
-    # tid1 -- player 1 ID
-    # tid2 -- player 2 ID
-    # aid -- arena ID
-    # cutoff -- game time limit (steps)
-    combat_turtles()
+    # Define arguments
+    parser.add_argument("-v", "--version", action="version", version=_vers)
+    parser.add_argument("-f", "--first", action="store", default=-1,
+                        type=int, dest="p1", help="player 1 ID")
+    parser.add_argument("-s", "--second", action="store", default=-1,
+                        type=int, dest="p2", help="player 2 ID")
+    parser.add_argument("-a", "--arena", action="store", default=-1,
+                        type=int, dest="a", help="arena ID")
+    parser.add_argument("-c", "--cutoff", action="store", default=-1,
+                        type=int, dest="lim", help="iteration cutoff")
+
+    # Parse command line arguments
+    args = parser.parse_args()
+
+    # Run game
+    combat_turtles(tid1=args.p1, tid2=args.p2, aid=args.a, cutoff=args.lim)
