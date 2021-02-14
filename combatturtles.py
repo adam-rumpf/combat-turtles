@@ -177,15 +177,15 @@ Copyright (c) 2021 Adam Rumpf <adam-rumpf.github.io>
 Released under MIT License <github.com/adam-rumpf/combat-turtles>
 """
 _desc = """
-Initializes a game of Combat Turtles. Command line arguments can be supplied to
-specify player AIs and the arena (see below for details). Excluding any of these
-arguments will prompt the user to specify them on startup.
+Initializes a game of Combat Turtles. Command line arguments can be supplied
+to specify player AIs and the arena (see below for details). Excluding any of
+these arguments will prompt the user to specify them on startup.
 
-Note that the player AIs are indexed alphabetically, which may cause indices to
-change as new modules are added to the ai/ directory.
+Note that the player AIs are indexed alphabetically, which may cause indices
+to change as new modules are added to the ai/ directory.
 """
 _epil = ("See full documentation online at " +
-         "<adam-rumpf.github.io/combat-turtles>")
+         "<adam-rumpf.github.io/combat-turtles>.")
 
 # Initialize game (options can be set from command line)
 if __name__ == "__main__":
@@ -198,13 +198,14 @@ if __name__ == "__main__":
     # Define arguments
     parser.add_argument("-v", "--version", action="version", version=_vers)
     parser.add_argument("-f", "--first", action="store", default=-1,
-                        type=int, dest="p1", help="player 1 ID")
+                        type=int, dest="p1", help="player 1 AI index")
     parser.add_argument("-s", "--second", action="store", default=-1,
-                        type=int, dest="p2", help="player 2 ID")
+                        type=int, dest="p2", help="player 2 AI index")
     parser.add_argument("-a", "--arena", action="store", default=-1,
-                        type=int, dest="a", help="arena ID")
+                        type=int, dest="a", help="arena index")
     parser.add_argument("-c", "--cutoff", action="store", default=-1,
-                        type=int, dest="lim", help="iteration cutoff")
+                        type=int, dest="lim",
+                        help="iteration cutoff (default: unlimited)")
 
     # Parse command line arguments
     args = parser.parse_args()

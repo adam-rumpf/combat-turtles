@@ -65,22 +65,22 @@ Running `combatturtles.py` from the command line automatically initiates a game.
 ```
 usage: combatturtles.py [-h] [-v] [-f P1] [-s P2] [-a A] [-c LIM]
 
-Initializes a game of Combat Turtles. Command line arguments can be supplied to
-specify player AIs and the arena (see below for details). Excluding any of these
-arguments will prompt the user to specify them on startup.
+Initializes a game of Combat Turtles. Command line arguments can be supplied
+to specify player AIs and the arena (see below for details). Excluding any of
+these arguments will prompt the user to specify them on startup.
 
-Note that the player AIs are indexed alphabetically, which may cause indices to
-change as new modules are added to the ai/ directory.
+Note that the player AIs are indexed alphabetically, which may cause indices
+to change as new modules are added to the ai/ directory.
 
 optional arguments:
   -h, --help            show this help message and exit
   -v, --version         show program's version number and exit
-  -f P1, --first P1     player 1 ID
-  -s P2, --second P2    player 2 ID
-  -a A, --arena A       arena ID
-  -c LIM, --cutoff LIM  iteration cutoff
+  -f P1, --first P1     player 1 AI index
+  -s P2, --second P2    player 2 AI index
+  -a A, --arena A       arena index
+  -c LIM, --cutoff LIM  iteration cutoff (default: unlimited)
 
-See full documentation online at <adam-rumpf.github.io/combat-turtles>
+See full documentation online at <adam-rumpf.github.io/combat-turtles>.
 ```
 
 In both cases the turtle AIs are indexed alphabetically beginning with `0`, which may change as more AI modules are added to the `ai/` directory. If a given ID is unspecified or invalid, the user will be asked to specify a value in the text-driven menu.
