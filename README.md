@@ -22,7 +22,7 @@ Turtle AIs are written in Python and imported into the game by adding submodules
 
 This module was developed for Python 3.8.3.
 
-In an effort to maintain portability it uses only modules from the [Python Standard Library](https://docs.python.org/3/library/), including: `glob`, `inspect`, `math`, `os.path`, `random`, `tkinter`
+In an effort to maintain portability it uses only modules from the [Python Standard Library](https://docs.python.org/3/library/), including: `argparse`, `glob`, `inspect`, `math`, `os.path`, `random`, `tkinter`
 
 ## Credits
 
@@ -56,9 +56,34 @@ This section is meant to provide an overview of how the _Combat Turtles_ game wo
 
 ## Running the Game
 
-To begin a game of _Combat Turtles_, run the main driver `combatturtles.py` found in the root of this directory and execute the function `combat_turtles()`. This will take you through a series of command line entries where the available turtle AIs and arenas will be displayed and selected.
+A game of _Combat Turtles_ can be initiated by running the main driver script `combatturtles.py` found at the root level of this directory.
 
-If you already know ahead of time which AIs and arena you wish to load, you can streamline this process by including their indices as arguments of the `combat_turtles()` function. For example, `combat_turtles(0, 1, 2)` would attempt to begin the game with AI `0` playing against AI `1` in arena `2`. Note that the AI indices are based on the alphabetical order of the AI submodules in the `ai/` folder, and thus these indices may change as you add files to this folder.
+The public `combat_turtles()` function within this script begins the game, at which point the user will be taken through a series of text-driven menus to choose from the available turtle AIs and arenas. The keyword arguments of this function can be used to specify AI and arena IDs ahead of time, bypassing the need to select them from a menu. In order, the arguments specify: the player 1 AI, the player 2 AI, and the arena ID, so for example `combat_turtles(1, 5, 3)` would attempt to begin a game with AI `1` (`DirectTurtle` by default) as player 1, AI `5` (`TurretTurtle` by default) as player 2, and taking place in arena `3` (wall with gap by default).
+
+Running `combatturtles.py` from the command line automatically initiates a game. Command line arguments can be used to specify the keyword arguments of the `combat_turtles()` function. The usage is as follows:
+
+```
+usage: combatturtles.py [-h] [-v] [-f P1] [-s P2] [-a A] [-c LIM]
+
+Initializes a game of Combat Turtles. Command line arguments can be supplied to
+specify player AIs and the arena (see below for details). Excluding any of these
+arguments will prompt the user to specify them on startup.
+
+Note that the player AIs are indexed alphabetically, which may cause indices to
+change as new modules are added to the ai/ directory.
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -v, --version         show program's version number and exit
+  -f P1, --first P1     player 1 ID
+  -s P2, --second P2    player 2 ID
+  -a A, --arena A       arena ID
+  -c LIM, --cutoff LIM  iteration cutoff
+
+See full documentation online at <adam-rumpf.github.io/combat-turtles>
+```
+
+In both cases the turtle AIs are indexed alphabetically beginning with `0`, which may change as more AI modules are added to the `ai/` directory. If a given ID is unspecified or invalid, the user will be asked to specify a value in the text-driven menu.
 
 ## Including a Custom AI Submodule
 
