@@ -1,6 +1,6 @@
 # Combat Turtles
 
-<a href="https://adam-rumpf.itch.io/combat-turtles"><img src="https://img.shields.io/badge/download-itch.io-fa5c5c?style=plastic&logo=itch.io&logoColor=white" alt="itch.io page"/></a> <img src="https://img.shields.io/badge/language-python-blue?style=plastic&logo=python&logoColor=white"/> <img src="https://img.shields.io/github/v/release/adam-rumpf/combat-turtles?style=plastic"/> <img src="https://img.shields.io/github/license/adam-rumpf/combat-turtles?style=plastic"/> <img src="https://img.shields.io/maintenance/yes/2021?style=plastic"/>
+<a href="https://adam-rumpf.itch.io/combat-turtles"><img src="https://img.shields.io/badge/download-itch.io-fa5c5c?style=plastic&logo=itch.io&logoColor=white" alt="itch.io page"/></a> <a href="https://github.com/adam-rumpf/combat-turtles/search?l=python"><img src="https://img.shields.io/badge/language-python-blue?style=plastic&logo=python&logoColor=white"/></a> <a href="https://github.com/adam-rumpf/combat-turtles/releases"><img src="https://img.shields.io/github/v/release/adam-rumpf/combat-turtles?style=plastic"/></a> <a href="https://github.com/adam-rumpf/combat-turtles/blob/master/LICENSE"><img src="https://img.shields.io/github/license/adam-rumpf/combat-turtles?style=plastic"/></a> <a href="https://github.com/adam-rumpf/combat-turtles/commits/master"><img src="https://img.shields.io/maintenance/yes/2021?style=plastic"/></a>
 
 <img src="images/logo.png" width="300"/>
 
